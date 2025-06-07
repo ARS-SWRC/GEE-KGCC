@@ -1,6 +1,8 @@
+//This version of WorldClim is already monthly averaged for a reference period of 1960-1990.
+//Therefore, there are only 12 multi-band images.
+//Also, monthly Tavg is already given as a variable, further reducing the required pre-processing.
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
-print(ic);
 
 var ndays_months = ee.List([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]);
 var order_months = ee.List([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
