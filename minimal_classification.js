@@ -7,12 +7,22 @@
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
+var nhemi_geo = ee.Geometry.BBox(-180, 0, 179.9, 89.9);
+
+function clip_fn(im_obj){
+  var im = ee.Image(im_obj);
+  var clip_im = im.clip(nhemi_geo);
+  return clip_im;
+}
+
+var ic_clip = ee.ImageCollection(ic.map(clip_fn));
+
 var ndays_months = ee.List([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]);
 var order_months = ee.List([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 var summr_months = ee.List([4, 5, 6, 7, 8, 9]);
 var wintr_months = ee.List([1, 2, 3, 10, 11, 12]);
 
-var t_scaled_ic = ee.ImageCollection(ic.select('tavg'));
+var t_scaled_ic = ee.ImageCollection(ic_clip.select('tavg'));
 
 function unit_scaling_fn(im_obj){
   var scaled_im = ee.Image(im_obj);
@@ -20,7 +30,7 @@ function unit_scaling_fn(im_obj){
   return im;
 }
 
-var p_ic = ee.ImageCollection(ic.select('prec'));
+var p_ic = ee.ImageCollection(ic_clip.select('prec'));
 var t_ic = ee.ImageCollection(t_scaled_ic.map(unit_scaling_fn));
 
 function weight_temps_fn(month){
@@ -494,3 +504,5 @@ for (var i = 0; i < typeLabels.length; i++){
 }
 
 Map.add(legend);
+
+Map.setCenter(0, 45, 2);
