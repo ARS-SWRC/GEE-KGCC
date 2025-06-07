@@ -1,5 +1,5 @@
 //Reducing the required pre-processing--
-//This version of WorldClim is monthly averaged for a reference period of 1960-1990.
+//this version of WorldClim is monthly averaged for a reference period of 1960-1990.
 //Therefore, there are only 12 multi-band images.
 //Also, monthly Tavg is already given as a variable.
 //For temperature variables, a scaling factor of 10 is applied to the raw values.
