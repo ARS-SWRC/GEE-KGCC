@@ -2,6 +2,8 @@
 //Therefore, there are only 12 multi-band images.
 //Also, monthly Tavg is already given as a variable, further reducing the required pre-processing.
 //For temperature variables, a scaling factor of 10 is applied to the raw values.
+//The output is only for the northern hemisphere;
+//Otherwise, the summer and winter months would need to be flipped.
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
