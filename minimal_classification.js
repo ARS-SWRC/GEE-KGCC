@@ -1,6 +1,7 @@
 //This version of WorldClim is already monthly averaged for a reference period of 1960-1990.
 //Therefore, there are only 12 multi-band images.
 //Also, monthly Tavg is already given as a variable, further reducing the required pre-processing.
+//For temperature variables, a scaling factor of 10 is applied to the raw values.
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
