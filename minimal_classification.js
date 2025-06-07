@@ -1,9 +1,11 @@
-//This version of WorldClim is already monthly averaged for a reference period of 1960-1990.
+//Reducing the required pre-processing--
+//This version of WorldClim is monthly averaged for a reference period of 1960-1990.
 //Therefore, there are only 12 multi-band images.
-//Also, monthly Tavg is already given as a variable, further reducing the required pre-processing.
+//Also, monthly Tavg is already given as a variable.
 //For temperature variables, a scaling factor of 10 is applied to the raw values.
 //The output of this script is only for the northern hemisphere;
-//otherwise, the summer and winter months would need to be flipped.
+//otherwise, the summer and winter months would need to be flipped,
+//and the bound box geometry changed to the southern hemisphere.
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
