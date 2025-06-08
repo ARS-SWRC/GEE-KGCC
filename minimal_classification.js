@@ -5,8 +5,14 @@
 //Also, monthly Tavg is already given as a variable.
 //For temperature variables, a scaling factor of 10 is applied to the raw values.
 //The output of this script is only for the northern hemisphere;
-//otherwise, the summer and winter months would need to be flipped,
+//otherwise, the summer and winter months need to be flipped,
 //and the bounding box geometry changed to the southern hemisphere.
+//The minimal handling of WorldClim means it is not necessary for the 
+//code block where KGCC is caculated to be inside a mapped function that would
+//take variable date ranges, scenarios, GCMs, etc., as arguments.
+//Consequently, the variables, objects and intermediate images in the main block 
+//can be easily inspected by print() or Map.addLayer().
+
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
