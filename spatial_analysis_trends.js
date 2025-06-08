@@ -1,4 +1,5 @@
 
+
 var ic = ee.ImageCollection("NASA/NEX-DCP30");
 
 var selection_list = ee.List([[2000, 'CCSM4', 'rcp45']]);
@@ -489,7 +490,7 @@ var output_list = ee.List(selection_zip_list.map(scenario_fn));
 var chart = ui.Chart.array.values(output_list, 1, dateRng_list)
   .setSeriesNames(['RCP2.6', 'RCP4.5', 'RCP6.0', 'RCP8.5'])
   .setOptions({
-    title:'Percent of contiguous US that is projected to change climate type\n(based on CCSM4)',
+    title:'Percent of contiguous US that is projected to change climate type\n(using NEX-DCP30 and the CCSM4 global climate model)',
     titleTextStyle:{italic:false, bold:true, fontSize:24},
     legend:{position:'top-right'},
     hAxis:{title:'Date Range', titleTextStyle:{italic:false, bold:true}},
