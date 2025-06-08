@@ -1,5 +1,4 @@
 
-
 var ic = ee.ImageCollection("NASA/NEX-DCP30");
 
 var selection_list = ee.List([[2000, 'CCSM4', 'rcp45']]);
