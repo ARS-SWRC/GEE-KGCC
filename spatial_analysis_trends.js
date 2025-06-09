@@ -1,5 +1,9 @@
+//Produces
 
 var ic = ee.ImageCollection("NASA/NEX-DCP30");
+
+//This geometry
+var bbox_geo = ee.Geometry.BBox(-126, 24, -66, 50);
 
 var selection_list = ee.List([[2000, 'CCSM4', 'rcp45']]);
 var dateRng_list = ee.List(['1970-1999', '1980-2009', '1990-2019', '2000-2029', '2010-2039', '2020-2049', '2030-2059', '2040-2069', '2050-2079', '2060-2089', '2070-2099']);
@@ -459,7 +463,6 @@ function main_fn(selection_obj){
 
 
 var scale = ic.first().projection().nominalScale().getInfo();
-var bbox_geo = ee.Geometry.BBox(-126, 24, -66, 50);
 
 function scenario_fn(selection_obj){
   var selection_inside_list = ee.List(selection_obj);
