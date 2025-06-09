@@ -1,4 +1,5 @@
-//Produces timelines of the percent change in land area that changes climate type.
+//Produces timelines of the percent land area that changes climate type
+//for 4 different Representative Concentration Pathways (RCPs).
 //Only a chart output will appear in the console of the Online Code Editor for GEE.
 //The processing can be done for different regions in the US by changing bbox_geo accordingly.
 
