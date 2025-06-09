@@ -1,8 +1,12 @@
-//Produces
+//Produces timelines of the percent change in land area that changes climate type.
+//Only a chart output will appear in the console of the Online Code Editor for GEE.
+//The processing can be done for different regions in the US by changing bbox_geo accordingly.
 
 var ic = ee.ImageCollection("NASA/NEX-DCP30");
 
-//This geometry
+//The processing extent can be changed here, which can involve 
+//e.g., ee.Geometry.Polygon(), ee.Geometry.Rectangle() etc.
+//It is currently a bounding box for the continguous US
 var bbox_geo = ee.Geometry.BBox(-126, 24, -66, 50);
 
 var selection_list = ee.List([[2000, 'CCSM4', 'rcp45']]);
