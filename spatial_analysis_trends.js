@@ -10,6 +10,9 @@ var ic = ee.ImageCollection("NASA/NEX-DCP30");
 //It is currently a bounding box for the continguous US
 var bbox_geo = ee.Geometry.BBox(-126, 24, -66, 50);
 
+//This can be changed to other models in the CMIP5 enseble (33 are available.)
+var model_global = 'CCSM4';
+
 var selection_list = ee.List([[2000, 'CCSM4', 'rcp45']]);
 var dateRng_list = ee.List(['1970-1999', '1980-2009', '1990-2019', '2000-2029', '2010-2039', '2020-2049', '2030-2059', '2040-2069', '2050-2079', '2060-2089', '2070-2099']);
 var scenario_list = ee.List(['rcp26', 'rcp45', 'rcp60', 'rcp85']);
@@ -31,10 +34,6 @@ var ndays_months = ee.List([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]);
 var order_months = ee.List([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 var summr_months = ee.List([4, 5, 6, 7, 8, 9]);
 var wintr_months = ee.List([1, 2, 3, 10, 11, 12]);
-
-
-var model_global = 'CCSM4';
-
 
 function main_fn(selection_obj){
   var s_list = ee.List(selection_obj);
