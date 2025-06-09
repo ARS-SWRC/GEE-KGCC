@@ -11,7 +11,7 @@
 //The minimal handling of WorldClim means it is not necessary for the 
 //code block where KGCC is caculated to be inside a mapped function that would
 //take date ranges, scenarios, GCMs, etc., as arguments.
-//Consequently, the variables, objects and intermediate images in the main block 
+//Consequently, the variables, objects, and intermediate images in the main block 
 //can be easily inspected by print() or Map.addLayer().
 
 
