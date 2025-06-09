@@ -1,3 +1,4 @@
+
 //Reducing the required pre-processing--
 //this version of WorldClim is already monthly averaged 
 //for a reference period of 1960-1990.
@@ -9,15 +10,21 @@
 //and the bounding box geometry changed to the southern hemisphere.
 //The minimal handling of WorldClim means it is not necessary for the 
 //code block where KGCC is caculated to be inside a mapped function that would
-//take variable date ranges, scenarios, GCMs, etc., as arguments.
+//take date ranges, scenarios, GCMs, etc., as arguments.
 //Consequently, the variables, objects and intermediate images in the main block 
 //can be easily inspected by print() or Map.addLayer().
 
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
+//This map extent can be changed, which can involve 
+//e.g., ee.Geometry.Polygon(), ee.Geometry.Rectangle() etc.
 var nhemi_geo = ee.Geometry.BBox(-180, 0, 179.9, 89.9);
 
+//Queue download to Google Drive as geotif by turning to true.
+var download = false;
+
+//Clips image collection to geographic region of interest.
 function clip_fn(im_obj){
   var im = ee.Image(im_obj);
   var clip_im = im.clip(nhemi_geo);
@@ -33,15 +40,19 @@ var wintr_months = ee.List([1, 2, 3, 10, 11, 12]);
 
 var t_scaled_ic = ee.ImageCollection(ic_clip.select('tavg'));
 
+
+//Only needed because temperature variables are scaled.
 function unit_scaling_fn(im_obj){
   var scaled_im = ee.Image(im_obj);
   var im = scaled_im.multiply(0.1);
   return im;
 }
 
+//Monthly averaged precip and temperature (12 images).
 var p_ic = ee.ImageCollection(ic_clip.select('prec'));
 var t_ic = ee.ImageCollection(t_scaled_ic.map(unit_scaling_fn));
 
+//For calculation of average annual temperature.
 function weight_temps_fn(month){
   var month = ee.Number(month);
   var ndays = ee.Number(ndays_months.get(month.subtract(1)));
@@ -515,3 +526,17 @@ for (var i = 0; i < typeLabels.length; i++){
 Map.add(legend);
 
 Map.setCenter(0, 45, 2);
+
+
+if (download === true){
+  var scale = ic.first().projection().nominalScale().getInfo();
+  var type_im = type_im.toDouble();
+  Export.image.toDrive({
+    image:type_im,
+    description:'KG_map',
+    folder:'GEE_Downloads',
+    region:nhemi_geo,
+    scale:scale,
+    crs:'EPSG:4326',
+    maxPixels:1e13});
+}
