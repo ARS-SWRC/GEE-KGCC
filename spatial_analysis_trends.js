@@ -496,11 +496,11 @@ var output_list = ee.List(selection_zip_list.map(scenario_fn));
 var chart = ui.Chart.array.values(output_list, 1, dateRng_list)
   .setSeriesNames(['RCP2.6', 'RCP4.5', 'RCP6.0', 'RCP8.5'])
   .setOptions({
-    title:'Percent of contiguous US that is projected to change climate type\n(using NEX-DCP30 and the CCSM4 global climate model)',
-    titleTextStyle:{italic:false, bold:true, fontSize:24},
+    title:'Percent of contiguous US that is projected to change climate type\n(based on NEX-DCP30 and the CCSM4 global climate model)',
+    titleTextStyle:{italic:false, bold:true, fontSize:26},
     legend:{position:'top-right'},
-    hAxis:{title:'Date Range', titleTextStyle:{italic:false, bold:true}},
-    vAxis:{title:'Percent Land Area (%)', titleTextStyle:{italic:false, bold:true}},
+    hAxis:{title:'Date Range', titleTextStyle:{italic:false, bold:true, fontSize:21}},
+    vAxis:{title:'Percent Land Area (%)', titleTextStyle:{italic:false, bold:true, fontSize:21}},
     colors:['#6a9f58', '#2018ff', '#967662', '#d82424'],
     pointSize: 0,
     lineSize: 3     
