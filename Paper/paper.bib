@@ -1,115 +1,89 @@
----
-title: "gee-kgcc.js: A Google Earth Engine codebase for Köppen-Geiger climate classification"
-tags:
-- JavaScript
-- Google Earth Engine
-- "Köppen-Geiger climate classification"
-- climate
-- ecosystem
-date: "13 August 2017"
-authors:
-- name: Andrew T. Fullhart
-  orcid: "0000-0003-1223-6451"
-  equal-contrib: true
-  affiliation: 1
-- name: Shang Gao
-  orcid: "0000-0001-8641-2433"
-  equal-contrib: true
-  affiliation: 1
-- name: "Guillermo E. Ponce-Campos"
-  orcid: "0000-0003-4332-338X"
-  equal-contrib: true
-  affiliation: 1
-- name: Gerardo Armendariz
-  orcid: "0000-0003-1130-3392"
-  equal-contrib: true
-  affiliation: 2
-affiliations:
-- name: School of Natural Resources and the Environment, University of Arizona, United
-    States
-  index: 1
-- name: "Southwest Watershed Research Center, USDA-ARS, United States"
-  index: 2
-bibliography: paper.bib
----
 
-# Summary
+@article{beck2023,
+  title={High-resolution (1 km) {K{\"o}ppen-Geiger} maps for 1901--2099 based on constrained CMIP6 projections},
+  author={Beck, Hylke E and McVicar, Tim R and Vergopolan, Noemi and Berg, Alexis and Lutsko, Nicholas J and Dufour, Ambroise and Zeng, Zhenzhong and Jiang, Xin and van Dijk, Albert IJM and Miralles, Diego G},
+  journal={Scientific data},
+  volume={10},
+  number={1},
+  pages={724},
+  year={2023},
+  publisher={Nature Publishing Group UK London},
+  url={https://doi.org/10.1038/s41597-023-02549-6}
+}
 
-This work presents a codebase for calculating and visualizing the Köppen-Geiger (KGCC) climate classification in Google Earth Engine (GEE). The KGCC has thirty global climate type definitions that use thresholds of seasonal temperature and precipitation to delineate geographic regions with similar climates. The codebase includes a template for creating a KGCC map that can be applied to several publicly listed data products. The template was used to build a basic web app hosted by GEE, the code for which is provided so that a user may launch their own instance of the app in an Online Code Editor session. The app visualizes KGCC maps derived from climate projections to predict how KGCC regions may change over time based on the high-resolution NEX-DCP30 dataset for the CMIP5 ensemble of global climate models (GCMs) with coverage of the contiguous US. Taking advantage of the ability to process large collections of climate images in GEE, ensemble-based uncertainty maps can be viewed that quantify the likelihood of a climate type existing at a given time and location. In addition to being a generalized characterization of climate, the resulting KGCC visualizations are a means of understanding the range of outcomes given by GCMs and climate scenarios. As an example of a use-case, an analysis was done to estimate the percentage of land in the US that is projected to see a transition in climate type, having implications for land management, agriculture, and other climate dependent sectors.
+@article{belda2014,
+  title={Climate classification revisited: from {K{\"o}ppen} to {Trewartha}},
+  author={Belda, Michal and Holtanov{\'a}, Eva and Halenka, Tom{\'a}{\v{s}} and Kalvov{\'a}, Jaroslava},
+  journal={Climate research},
+  volume={59},
+  number={1},
+  pages={1--13},
+  year={2014},
+  url={https://doi.org/10.3354/cr01204}
+}
 
-# Statement of need
+@article{gorelick2017,
+  title={Google Earth Engine: Planetary-scale geospatial analysis for everyone},
+  author={Gorelick, Noel and Hancher, Matt and Dixon, Mike and Ilyushchenko, Simon and Thau, David and Moore, Rebecca},
+  journal={Remote sensing of Environment},
+  volume={202},
+  pages={18--27},
+  year={2017},
+  publisher={Elsevier},
+  url={https://doi.org/10.1016/j.rse.2017.06.031}
+}
 
-Climate datasets are often very large and require intensive processing to derive factors of interest. However, decision-makers often lack the resources and ability to do such processing. Therefore, it becomes desirable to have a web platform available to access relevant information [@hewitson2017]. The Köppen-Geiger climate classification (KGCC) is one such climate factor that delineates global climate types and provides a general characterization of climate [@beck2023]. The KGCC was developed to be correlative with vegetation communities, therefore often coinciding with ecosystem regions. Also, KGCC is a factor that can be applied in the context of climate change because it is determinable for historical and future periods alike. As such, using KGCC in the decision-making process can allow for incorporation of standardized climate projections and other datasets.
+@article{hewitson2017,
+  title={Climate information websites: an evolving landscape},
+  author={Hewitson, Bruce and Waagsaether, Katinka and Wohland, Jan and Kloppers, Kate and Kara, Teizeen},
+  journal={Wiley Interdisciplinary Reviews: Climate Change},
+  volume={8},
+  number={5},
+  pages={e470},
+  year={2017},
+  publisher={Wiley Online Library},
+  url={https://doi.org/10.1002/wcc.470}
+}
 
-The computational resources of GEE are an advantage by quickly processing large climate datasets, enabling assessment of a range of outcomes given by GCM ensembles and various fossil fuel emission scenarios [@gorelick2017]. This is particularly useful for determining ensemble statistics and deriving uncertainties that allow for a more comprehensive assessment of risk and better justification of decisions. Another benefit of GEE is that all calculations done by this codebase are fast enough to be performed on-the-fly, which means that it is not necessary for client-side storage of outputs.
+@article{hijmans2005,
+  title={Very high resolution interpolated climate surfaces for global land areas},
+  author={Hijmans, Robert J and Cameron, Susan E and Parra, Juan L and Jones, Peter G and Jarvis, Andy},
+  journal={International Journal of Climatology: A Journal of the Royal Meteorological Society},
+  volume={25},
+  number={15},
+  pages={1965--1978},
+  year={2005},
+  publisher={Wiley Online Library},
+  url={https://doi.org/10.1002/joc.1276}
+}
 
-# Köppen-Geiger Climate Classification
+@article{kottek2006,
+  title={World map of the {K{\"o}ppen-Geiger} climate classification updated},
+  author={Kottek, Markus and Grieser, J{\"u}rgen and Beck, Christoph and Rudolf, Bruno and Rubel, Franz},
+  year={2006},
+  url={https://doi.org/10.1127/0941-2948/2006/0130}
+}
 
-The Köppen-Geiger Climate Classification (KGCC) is a widely used global climate classification first developed by Wladimir Köppen in the 19th century and later refined by Rudolf Geiger [@kottek2006]. The KGCC requires input data with at least monthly-scale temporal resolution to calculate 30 global climate types. Generally, a minimum reference period of 30 years should be used in order to represent climate. According to KGCC, there are 5 main divisions of climate: tropical (A), arid (B), temperate (C), continental (D), and polar (E) that correspond to the first letter in the labeling scheme. Then, these are further divided into second and third-order classifications, indicated by the number of letters in their respective labels. Divisions are made using a number of temperature and precipitation thresholds. This requires the data to be statistically reduced in different ways, such as by season, by maximum and minimum monthly or seasonal values, by average annual precipitation, and other intermediate statistical values. Literature works involving KGCC commonly include definitions of individual climate types, e.g., @peel2007 and @beck2023, and additionally, @kottek2006 have good discussion of strategy for calculating the entire classification.
+@article{peel2007,
+  title={Updated world map of the {K{\"o}ppen-Geiger} climate classification},
+  author={Peel, Murray C and Finlayson, Brian L and McMahon, Thomas A},
+  journal={Hydrology and earth system sciences},
+  volume={11},
+  number={5},
+  pages={1633--1644},
+  year={2007},
+  publisher={Copernicus GmbH},
+  url={https://doi.org/10.5194/hess-11-1633-2007}
+}
 
-# The gee-kgcc.js codebase
-
-The [gee-kgcc.js](https://github.com/ARS-SWRC/GEE-KGCC) codebase includes three scripts that use two different high-resolution, monthly-scale climate datasets freely available on the GEE catalog, and other datasets may be applied including datasets with other temporal resolutions, such daily-scale, if they are first aggregated to monthly-scale images. The two climate datasets were selected primarily because they have at least \~1 km spatial resolution, which makes them ideal for showing climate gradients over small distances. The `minimal_classification.js` script makes use of the global WorldClim dataset that, in the GEE catalog, is already monthly averaged for a 31-year period [@hijmans2005]. This reduces the pre-processing steps needed to prepare the data, as well as the number of possible input options to handle (e.g. date range, projection scenario, etc.), which would otherwise necessitate the main code block to be placed inside a function and passing input options as arguments. As such, this script is suitable for demonstration purposes and represents the minimum code needed for use in other applications. Furthermore, the script includes options to queue a download of the resulting map output to Google Drive, as well as to change the spatial extent of the map to different geographic regions of interest. The other two scripts that will be discussed, `spatial_analysis_trends.js` and `viz.js`, involve the second climate dataset, NEX-DCP30, which consists of climate projections for the contiguous US consisting of 33 GCMs from the CMIP5 ensemble [@thrasher2013].
-
-# Determining KGCC by processing climate images
-
-To illustrate the strategy for processing KGCC in GEE, the following code snippet demonstrates how the third-order BSk (cold semi-arid) type is delineated, which is a common type globally that contains rangeland and steppe environments. The snippet shows use of intermediate images for applying the criteria of each type, which will be described in-text. Otherwise, the code snippet shows only the final steps necessary for delineating the higher order types and BSk itself.
-
-```js
-//E
-var e_im = tw_im.lt(10.0);
-
-//B
-var sin_e_im = tw_im.gte(10.0);
-var con_b_im = zero_im.where(pann_im.lt(pthr_im.multiply(10.0)), 1);
-var mix_im = con_b_im.add(sin_e_im);
-var b_im = mix_im.eq(2.0);
-
-//BS  
-var con_bs_im = zero_im.where(pann_im.gt(pthr_im.multiply(5.0)), 1);
-var mix_im = b_im.add(con_bs_im);
-var bs_im = mix_im.eq(2.0);
-
-//BSk
-var con_bsk_im = zero_im.where(tann_im.lt(18.0), 1);
-var mix_im = bs_im.add(con_bsk_im);
-var bsk_im = mix_im.eq(2.0);
-```
-
-The main E division (polar and high mountain climates) is delineated first because its criteria exclude thresholds for precipitation and only a temperature threshold involving the average temperature of the warmest calendar month (`tw_im`) is used, resulting in potential overlap with other types. Therefore, the arid main climate type, B division, is considered present where the criteria for B are met (represented in the binary image, `con_b_im`) and where type E is not already present (the absence of E is represented in the binary image, `sin_e_im`). The integer image, `mix_im`, is the summation of the two binary images, such that type B is present where `mix_im` is equal to 2, and a binary image representing this condition, `b_im`, is created. The `zero_im` image is used as the initial blank binary image with only zero integer values onto which the binary conditions of each division are added.
-
-The first and second-order divisions for B involve thresholds for a seasonal dryness metric, `p_thr_im`, such that BS is defined as having annual precipitation, `pann_im`, between upper and lower limit values of this metric. Finally, the third-order division depends on thresholds for mean annual temperature, `tann_im`. In this way, BSk and the other sub-divisions are delineated by creating binary images representing threshold conditions at each division that are summed to determine overlapping areas where all conditions are met. The map panels in Figure 1 show the binary images that are created for E, B, BS, and BSk in respective panels.
-
-# Spatial analysis with KGCC maps
-
-The `gee-kgcc.js` codebase includes `spatial_analysis_trends.js`, which creates a chart for a basic spatial analysis as an example of one possible way to obtain useful information from the maps in the context of climate change. Shown in Figure 2, the purpose of this analysis is to show a timeline of transitions in climate type within a given area. In this case, the entire coverage area of NEX-DCP30 is analyzed (being the continuous US) and includes the outputs of one GCM and four climate scenarios. Note that it is possible to change the processing extent in `spatial_analysis_trends.js` so that the same analysis can be repeated for a selected area of interest.
-
-By providing a range of trends according to different emission scenarios known as Representative Concentration Pathways (RCPs), uncertainty bounds can be reasonably estimated, aiding the understanding of the range of outcomes. Note that these values are substantially greater than reported in the main results of @beck2023 in their global analysis of KGCC for climate projections because their analysis considered a different dataset and showed change occurring only across the 5 major climate types rather than across any of the 30 sub-order types. It is also possible that the US experiences greater rates of change in climate type than what occurs globally due to the high diversity of climates. Although, in the eastern US, some have noted lack of specificity in KGCC definitions for temperate and humid climates, and modified climate classifications, such as the Köppen–Trewartha climate classification, have been developed to address this issue [@belda2014].
-
-# Web Application
-
-The GEE platform has basic widgets in its API for creating the features of a web application that uses GEE as a backend. We include a script, `viz.js`, showing the code used to make the app hosted at [https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map](https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map), which visualizes climate change projections from NEX-DCP30. Additionally, the script can be launched from the online GEE code editor, which results in the same maps and widgets appearing as in the web app. The app features are aimed at enabling the user to do basic analysis for an area of interest and understanding the GCM ensemble and related uncertainties.
-
-The following are the main features included in the app:
-
-* Selection of a 30-year date range.  
-* Selection of RCP emission scenarios.  
-* Selection of GCM.  
-* Uncertainties based on percentage of agreement of GCMs for each climate type given the selected date range and emission scenario.  
-* Clickable map layer to show a timeline of KGCC types at the point clicked.  
-* Tool to define polygon for which a timeline is produced of change in KGCC types by land area.  
-* Toggle EPA Level IV Ecoregions base layer.
-
-# Figures
-
-![BSk-demo](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/259aa0e9c0e062c69d427dca7e3915ac364d8117/Paper/BSk-Demo.png)
-Figure 1: Example of BSk delineation showing intermediate maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map. 
-
-![ee-chart](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/259aa0e9c0e062c69d427dca7e3915ac364d8117/Paper/ee-chart.png)
-Figure 2: Timeline of the percentage of land area that changes its climate type over a 130 year reference period with different RCPs represented.
-
-# Acknowledgements
-
-We acknowledge providers of open-access climate data, which were relied on to produce this work.
-
-# References
+@article{thrasher2013,
+  title={Downscaled climate projections suitable for resource management},
+  author={Thrasher, Bridget and Xiong, Jun and Wang, Weile and Melton, Forrest and Michaelis, Andrew and Nemani, Ramakrishna},
+  journal={Eos, Transactions American Geophysical Union},
+  volume={94},
+  number={37},
+  pages={321--323},
+  year={2013},
+  publisher={Wiley Online Library},
+  url={https://doi.org/10.1002/2013EO370002}
+}
