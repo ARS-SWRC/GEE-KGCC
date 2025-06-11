@@ -19,6 +19,7 @@ var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
 //This map extent can be changed, which can involve 
 //e.g., ee.Geometry.Polygon(), ee.Geometry.Rectangle() etc.
+//It is currently a bounding box for the northern hemisphere.
 var nhemi_geo = ee.Geometry.BBox(-180, 0, 179.9, 89.9);
 
 //Queue download to Google Drive as geotif by turning to true.
