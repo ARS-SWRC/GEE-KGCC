@@ -7,6 +7,18 @@ tags:
 - climate
 - ecosystem
 date: "13 August 2017"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+affiliations:
+- name: School of Natural Resources and the Environment, University of Arizona, United
+    States
+  index: 1
+- name: "Southwest Watershed Research Center, USDA-ARS, United States"
+  index: 2
+bibliography: paper.bib
 authors:
 - name: Andrew T. Fullhart
   orcid: "0000-0003-1223-6451"
@@ -24,13 +36,6 @@ authors:
   orcid: "0000-0003-1130-3392"
   equal-contrib: true
   affiliation: 2
-affiliations:
-- name: School of Natural Resources and the Environment, University of Arizona, United
-    States
-  index: 1
-- name: "Southwest Watershed Research Center, USDA-ARS, United States"
-  index: 2
-bibliography: paper.bib
 ---
 
 # Summary
