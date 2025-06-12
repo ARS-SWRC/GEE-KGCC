@@ -443,7 +443,7 @@ var type_ic = ee.ImageCollection(type_ic.cast({B1:'int64'}, ['B1']));
 var type_im = type_ic.reduce(ee.Reducer.sum());
 
 var typePalette = [
-  '#0000FF', '#0078FF', '#46FAAA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
+  '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
   '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
   '#C8FF50', '#64FF50', '#32C800', '#FF00FF', '#C800C8', '#963296', '#966496',
   '#AAAFFF', '#5A78DC', '#4B50B4', '#320087', '#00FFFF', '#37C8FF', '#007D7D', '#00465F',
