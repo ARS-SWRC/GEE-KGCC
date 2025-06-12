@@ -376,13 +376,15 @@ var af_im = mix_im.eq(2.0);
 
 //Am
 var sin_af_im = af_im.eq(0.0);
-var con_am_im = zero_im.where(pann_im.lte(ee.Image(pd_im.subtract(100.0)).multiply(-25.0)), 1);
+var hundred_im = zero_im.where(pann_im.gte(0.0), 100.0);
+var con_am_im = zero_im.where(pd_im.gte(hundred_im.subtract(pann_im.divide(25.0))), 1);
 var mix_im = con_am_im.add(sin_af_im).add(a_im);
 var am_im = mix_im.eq(3.0);
 
 //Aw
 var sin_af_im = af_im.eq(0.0);
-var con_aw_im = zero_im.where(pann_im.gt(ee.Image(pd_im.subtract(100.0)).multiply(-25.0)), 1);
+var hundred_im = zero_im.where(pann_im.gte(0.0), 100.0);
+var con_aw_im = zero_im.where(pd_im.lt(hundred_im.subtract(pann_im.divide(25.0))), 1);
 var mix_im = con_aw_im.add(sin_af_im).add(a_im);
 var aw_im = mix_im.eq(3.0);
 
