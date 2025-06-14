@@ -107,7 +107,7 @@ The following are the main features included in the app:
 
 # Figures
 
-![BSk-demo](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/d088cb886cd7aad4f71e5a351011e2b9d4a6ebcb/Paper/BSk-Demo.png)
+![BSk-demo](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/d088cb886cd7aad4f71e5a351011e2b9d4a6ebcb/Paper/BSk-demo.png)
 Figure 1: Example of BSk delineation showing intermediate maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map. 
 
 ![EE-chart](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/f89e39f8ab2be10e19b19bfee2c85db791e89d43/Paper/EE-chart.png)
