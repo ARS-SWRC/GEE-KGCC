@@ -127,9 +127,8 @@ function main_fn(selection_obj){
   var warm_ic = ee.ImageCollection(t_ic.map(count_warm_months_fn));
   var warm_mo_ct_im = warm_ic.reduce(ee.Reducer.sum());
   var warm_mo_im = warm_mo_ct_im.gte(4);
-  
-  
-  
+
+
   //E
   var e_im = tw_im.lt(10.0);
    
@@ -395,8 +394,7 @@ function main_fn(selection_obj){
   var con_aw_im = zero_im.where(pd_im.lt(60.0), 1);
   var mix_im = con_aw_im.add(sin_am_im).add(a_im).add(pd_in_wintr_im);
   var aw_im = mix_im.eq(4.0);
-  
-  
+    
   
   //Type value assignments
   var af_im = af_im.where(af_im.eq(1.0), 1);
@@ -718,18 +716,24 @@ var clickCheck = ui.Checkbox({
   style:checkStyle
 });
 
+
 ui.root.setLayout(ui.Panel.Layout.absolute());
 var checkboxPanel = ui.Panel([clickCheck], null, panelStyle);
 ui.root.add(checkboxPanel);
 
 var timelinePanelStyle = {
-  position:'bottom-center', 
-  stretch:'vertical', 
-  margin:'39px 40px'};
+  position:'top-center', 
+  stretch:'vertical',
+  height:'400px',
+  width:'400px',
+  margin:'10px 10px'};
 
-var timelinePanel = ui.Panel([], null, timelinePanelStyle);
+var timelinePanel = ui.Panel({style:timelinePanelStyle});
 
 function clickCallback(clickInfo_obj){
+
+  timelinePanel = ui.Panel({widgets:[], style:timelinePanelStyle});
+
   var lat = clickInfo_obj.lat;
   var lon = clickInfo_obj.lon;
   var pt = ee.Geometry.Point([lon, lat]);
@@ -738,30 +742,72 @@ function clickCallback(clickInfo_obj){
     return ee.List([d, model_global, scenario_global]);
   }
   var click_selection_list = ee.List(dateRng_list.map(click_zipper_fn));
+  
   var click_ic = ee.ImageCollection(click_selection_list.map(main_fn));  
-  var type_list = click_ic.getRegion({geometry:pt, scale:scale}).getInfo();
+  var prop_sample_list = click_ic.getRegion({geometry:pt, scale:scale}).getInfo();
   
   var js_type_list = [];
-  for (var i = 1; i < type_list.length; i++){
-    var type_str = class_list.get(type_list[i][4] - 1).getInfo();
+  for (var i = 1; i < prop_sample_list.length; i++){
+    var type_str = class_list.get(prop_sample_list[i][4] - 1).getInfo();
     js_type_list.push(type_str);
   }
 
-  var type_str = ''
-  var daterng_str = ''
-  for (var i = 0; i < type_list.length; i++){
+  var typelabel_list = [];
+  var daterng_list = [];
+  for (var i = 0; i < js_type_list.length; i++){
     var type = js_type_list[i];
     var date = dateRng_list.getInfo()[i];
-    var type_str = type_str + '       ' + type;
-    var daterng_str = daterng_str + ' ' + date;
+    typelabel_list.push(type);
+    daterng_list.push(date);
   }
-  var timeline_str = type_str + '\n' + daterng_str;
-  ui.root.setLayout(ui.Panel.Layout.absolute());
-  var label = ui.Label({value:timeline_str, style:{
-    position:'bottom-center'
-  }});
-  var timelinePanel = ui.Panel([label], null, timelinePanelStyle);
+  
+  for (var i = 0; i < js_type_list.length; i++){
+    print(js_type_list[i]);
+    var type_index = class_list.indexOf(ee.String(js_type_list[i])).getInfo();
+    print(type_index);
+    print(typePalette[type_index]);
+    var colorBox = ui.Label({
+      style:{
+        backgroundColor:typePalette[type_index],
+        padding:'6px',
+        margin:'0px',
+        border:'1px solid black',
+        position:'middle-right',
+        fontSize:'10px'
+      }
+    });
+  
+    var datelabel = ui.Label({
+      value:daterng_list[i],
+      style:{
+        padding:'1px',
+        margin:'0px',
+        position:'middle-right',
+        fontSize:'12px'
+      }
+    });
+
+    var typelabel = ui.Label({
+      value:typelabel_list[i],
+      style:{
+        padding:'1px',
+        margin:'0px',
+        position:'middle-right',
+        fontSize:'12px'
+      }
+    });
+
+    // Create a row with color and label
+    var row = ui.Panel({
+      widgets:[datelabel, colorBox, typelabel],
+      layout:ui.Panel.Layout.Flow('horizontal')
+    });
+  
+    timelinePanel.add(row);
+  }
+  
   ui.root.add(timelinePanel);
+
 }
 
 function renderTimelinebox(bool_obj){
