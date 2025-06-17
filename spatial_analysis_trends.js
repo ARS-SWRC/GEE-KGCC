@@ -7,13 +7,13 @@ var ic = ee.ImageCollection("NASA/NEX-DCP30");
 
 //The processing extent can be changed here, which can involve 
 //e.g., ee.Geometry.Polygon(), ee.Geometry.Rectangle() etc.
-//It is currently a bounding box for the continguous US.
+//It is currently a bounding box for the continguous US
 var bbox_geo = ee.Geometry.BBox(-126, 24, -66, 50);
 
-//This can be changed to other models in the CMIP5 ensemble.
+//This can be changed to other models in the CMIP5 ensemble (33 are available.)
 var model_global = 'CCSM4';
 
-var dateRng_list = ee.List(['1970-1999', '1980-2009', '1990-2019', '2000-2029', '2010-2039', '2020-2049', '2030-2059', '2040-2069', '2050-2079', '2060-2089', '2070-2099']);
+var dateRng_list = ee.List(['1960-1999', '1970-2009', '1980-2019', '1990-2029', '2000-2039', '2010-2049', '2020-2059', '2030-2069', '2040-2079', '2050-2089', '2060-2099']);
 var scenario_list = ee.List(['rcp26', 'rcp45', 'rcp60', 'rcp85']);
 
 function zipper_fn(scenario_obj){
@@ -461,9 +461,11 @@ function main_fn(selection_obj){
 
 
 
+//Chart showing percent change for any climate type
+
 var scale = ic.first().projection().nominalScale().getInfo();
 
-function scenario_fn(selection_obj){
+function any_scenario_fn(selection_obj){
   var selection_inside_list = ee.List(selection_obj);
   var scenario_ic = ee.ImageCollection(selection_inside_list.map(main_fn));
   var scenario_ic_list = scenario_ic.toList(999).slice(1);
@@ -485,13 +487,12 @@ function scenario_fn(selection_obj){
   return counts_list; 
 }
 
-var output_list = ee.List(selection_zip_list.map(scenario_fn));
+var any_output_list = ee.List(selection_zip_list.map(any_scenario_fn));
 
-
-var chart = ui.Chart.array.values(output_list, 1, dateRng_list)
+var any_chart = ui.Chart.array.values(any_output_list, 1, dateRng_list)
   .setSeriesNames(['RCP2.6', 'RCP4.5', 'RCP6.0', 'RCP8.5'])
   .setOptions({
-    title:'Percent of contiguous US that is projected to change climate type\n(based on NEX-DCP30 and the CCSM4 global climate model)',
+    title:'Percentage of contiguous US land area projected to change KGCC\n(based on NEX-DCP30 and the CCSM4 global climate model)',
     titleTextStyle:{italic:false, bold:true, fontSize:26},
     legend:{position:'top-right'},
     hAxis:{title:'Date Range', titleTextStyle:{italic:false, bold:true, fontSize:21}},
@@ -501,5 +502,50 @@ var chart = ui.Chart.array.values(output_list, 1, dateRng_list)
     lineSize: 3     
 });
 
+print(any_chart);
 
-print(chart);
+
+
+//Chart showing percent change for B type
+
+var scale = ic.first().projection().nominalScale().getInfo();
+
+function arid_scenario_fn(selection_obj){
+  var selection_inside_list = ee.List(selection_obj);
+  var scenario_ic = ee.ImageCollection(selection_inside_list.map(main_fn));
+  var scenario_ic_list = scenario_ic.toList(999);
+  var zero_im = scenario_ic.first().select('B1_sum').lt(0.0);
+  var ref_im = ee.Image(scenario_ic.first());
+  var nonNull_im = ref_im.gt(0.0);
+  var ct_dict = nonNull_im.reduceRegion({reducer:ee.Reducer.count(), geometry:bbox_geo, scale:scale, maxPixels:1000000000});
+  var ref_num = ee.Number(ct_dict.get('B1_sum'));
+
+  function differencing_fn(im_obj){
+    var next_im = ee.Image(im_obj);
+    var next_im = zero_im.where(next_im.gte(4).and(next_im.lte(7)), 1);
+    var ct_dict = next_im.reduceRegion({reducer:ee.Reducer.sum(), geometry:bbox_geo, scale:scale, maxPixels:1000000000});
+    var ct_num = ee.Number(ct_dict.get('B1_sum'));
+    return ee.Number(ct_num).divide(ref_num).multiply(100.0);
+  }
+  
+  var counts_list = ee.List(scenario_ic_list.map(differencing_fn));
+  return counts_list; 
+}
+
+var arid_output_list = ee.List(selection_zip_list.map(arid_scenario_fn));
+
+var arid_chart = ui.Chart.array.values(arid_output_list, 1, dateRng_list)
+  .setSeriesNames(['RCP2.6', 'RCP4.5', 'RCP6.0', 'RCP8.5'])
+  .setOptions({
+    title:'Percentage of contiguous US land area projected to have class B, arid and semi-arid climates\n(based on NEX-DCP30 and the CCSM4 global climate model)',
+    titleTextStyle:{italic:false, bold:true, fontSize:26},
+    legend:{position:'top-right'},
+    hAxis:{title:'Date Range', titleTextStyle:{italic:false, bold:true, fontSize:21}},
+    vAxis:{title:'Percent Land Area (%)', titleTextStyle:{italic:false, bold:true, fontSize:21}},
+    colors:['#6a9f58', '#2018ff', '#967662', '#d82424'],
+    pointSize: 0,
+    lineSize: 3     
+});
+
+print(arid_chart);
+
