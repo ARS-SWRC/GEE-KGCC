@@ -7,10 +7,10 @@ var ic = ee.ImageCollection("NASA/NEX-DCP30");
 
 //The processing extent can be changed here, which can involve 
 //e.g., ee.Geometry.Polygon(), ee.Geometry.Rectangle() etc.
-//It is currently a bounding box for the continguous US
+//It is currently a bounding box for the continguous US.
 var bbox_geo = ee.Geometry.BBox(-126, 24, -66, 50);
 
-//This can be changed to other models in the CMIP5 ensemble (33 are available.)
+//This can be changed to other models in the CMIP5 ensemble.
 var model_global = 'CCSM4';
 
 var dateRng_list = ee.List(['1960-1999', '1970-2009', '1980-2019', '1990-2029', '2000-2039', '2010-2049', '2020-2059', '2030-2069', '2040-2079', '2050-2089', '2060-2099']);
