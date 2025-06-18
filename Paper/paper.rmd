@@ -108,10 +108,10 @@ The following are the main features included in the app:
 # Figures
 
 ![BSk-demo](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/f0ce3153b0995ebdf4e46364f0f3100b083763aa/Paper/BSk-Demo.png)
-Figure 1: Example of BSk delineation showing intermediate maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map. 
+Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
 
-![EE-chart](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/5134298528444570177f7c8085b13b06c5a93de0/Paper/Timeseries.png)
-Figure 2: Rates of change in KGCC for 140 year reference period with different RCPs represented; (top) timeline of change in any climate type in the KGCC; (bottom) timeline of expansion for class B climate type. The areas that undergo a change in climate type may be expected to see a corresponding change in ecosystem condition. Areas that transition to a class B climate may be more likely to experience aridification.
+![EE-chart](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/a79652811fd4abbf9eca9637318cf93381a0ed46/Paper/KGCC-Timeseries.png)
+Figure 2: Rates of change in KGCC for a 140 year reference period with different RCPs represented; (top) timeline of change in any climate type in the KGCC; (bottom) timeline of expansion for class B climate type. The areas that undergo a change in climate type may be expected to see a corresponding change in ecosystem condition. Areas that transition to a class B climate may be more likely to experience aridification.
 
 # Acknowledgements
 
