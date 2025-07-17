@@ -498,8 +498,8 @@ var any_chart = ui.Chart.array.values(any_output_list, 1, dateRng_list)
     hAxis:{title:'Date Range', titleTextStyle:{italic:false, bold:true, fontSize:21}},
     vAxis:{title:'Percent Land Area (%)', titleTextStyle:{italic:false, bold:true, fontSize:21}},
     colors:['#6a9f58', '#2018ff', '#967662', '#d82424'],
-    pointSize: 0,
-    lineSize: 3     
+    pointSize:0,
+    lineSize:3     
 });
 
 print(any_chart);
