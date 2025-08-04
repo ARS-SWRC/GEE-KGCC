@@ -1,5 +1,4 @@
 exports.main_fn = function(selection_obj,ic, order_months,ndays_months,summr_months,wintr_months) { 
-
   var in_list = ee.List(selection_obj);
   var start_year = ee.Number(in_list.get(0));
   var model = ee.String(in_list.get(1));
@@ -104,7 +103,8 @@ exports.main_fn = function(selection_obj,ic, order_months,ndays_months,summr_mon
   var warm_ic = ee.ImageCollection(t_ic.map(count_warm_months_fn));
   var warm_mo_ct_im = warm_ic.reduce(ee.Reducer.sum());
   var warm_mo_im = warm_mo_ct_im.gte(4);
-  
+
+
   //E
   var e_im = tw_im.lt(10.0);
    
@@ -370,8 +370,7 @@ exports.main_fn = function(selection_obj,ic, order_months,ndays_months,summr_mon
   var con_aw_im = zero_im.where(pd_im.lt(60.0), 1);
   var mix_im = con_aw_im.add(sin_am_im).add(a_im).add(pd_in_wintr_im);
   var aw_im = mix_im.eq(4.0);
-  
-  
+    
   
   //Type value assignments
   var af_im = af_im.where(af_im.eq(1.0), 1);

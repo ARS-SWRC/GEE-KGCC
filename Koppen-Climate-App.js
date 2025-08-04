@@ -9,8 +9,14 @@ var scale = ic.first().projection().nominalScale().getInfo();
 /*******************************************************
   DICTIONARIES and LISTS
 */
-var scenario_list = ee.List(['rcp26', 'rcp45', 'rcp60', 'rcp85']);
-var model_list = ee.List(['ACCESS1-0', 'bcc-csm1-1', 'bcc-csm1-1-m', 'BNU-ESM', 'CanESM2', 'CCSM4', 'CESM1-BGC', 'CESM1-CAM5', 'CMCC-CM', 'CNRM-CM5', 'CSIRO-Mk3-6-0', 'FGOALS-g2', 'FIO-ESM', 'GFDL-CM3', 'GFDL-ESM2G', 'GFDL-ESM2M', 'GISS-E2-H-CC', 'GISS-E2-R', 'GISS-E2-R-CC', 'HadGEM2-AO', 'HadGEM2-CC', 'HadGEM2-ES', 'inmcm4', 'IPSL-CM5A-LR', 'IPSL-CM5A-MR', 'IPSL-CM5B-LR', 'MIROC5', 'MIROC-ESM', 'MIROC-ESM-CHEM', 'MPI-ESM-LR', 'MPI-ESM-MR', 'MRI-CGCM3', 'NorESM1-M']);
+var scenarioModelDict = {
+  'rcp26': ['bcc-csm1-1','BNU-ESM','CanESM2','CCSM4','CESM1-CAM5','CSIRO-Mk3-6-0','FGOALS-g2','FIO-ESM','GFDL-CM3','GFDL-ESM2G','GFDL-ESM2M','GISS-E2-R','HadGEM2-AO','HadGEM2-ES','IPSL-CM5A-LR','IPSL-CM5A-MR','MIROC5','MIROC-ESM','MIROC-ESM-CHEM','MPI-ESM-LR','MPI-ESM-MR','MRI-CGCM3','NorESM1-M'],
+  'rcp45': ['ACCESS1-0','bcc-csm1-1','bcc-csm1-1-m','BNU-ESM','CanESM2','CCSM4','CESM1-BGC','CESM1-CAM5','CMCC-CM','CNRM-CM5','CSIRO-Mk3-6-0','FGOALS-g2','FIO-ESM','GFDL-CM3','GFDL-ESM2G','GFDL-ESM2M','GISS-E2-H-CC','GISS-E2-R','GISS-E2-R-CC','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','inmcm4','IPSL-CM5A-LR','IPSL-CM5A-MR','IPSL-CM5B-LR','MIROC5','MIROC-ESM','MIROC-ESM-CHEM','MPI-ESM-LR','MPI-ESM-MR','MRI-CGCM3','NorESM1-M'],
+  'rcp60': ['bcc-csm1-1','CCSM4','CESM1-CAM5','CSIRO-Mk3-6-0','FIO-ESM','GFDL-CM3','GFDL-ESM2G','GFDL-ESM2M','GISS-E2-R','HadGEM2-AO','HadGEM2-ES','IPSL-CM5A-LR','IPSL-CM5A-MR','MIROC5','MIROC-ESM','MIROC-ESM-CHEM','NorESM1-M'],
+  'rcp85': ['ACCESS1-0','bcc-csm1-1','bcc-csm1-1-m','BNU-ESM','CanESM2','CCSM4','CESM1-BGC','CESM1-CAM5','CMCC-CM','CNRM-CM5','CSIRO-Mk3-6-0','FGOALS-g2','FIO-ESM','GFDL-CM3','GFDL-ESM2G','GFDL-ESM2M','GISS-E2-R','HadGEM2-AO','HadGEM2-CC','HadGEM2-ES','inmcm4','IPSL-CM5A-LR','IPSL-CM5A-MR','IPSL-CM5B-LR','MIROC5','MIROC-ESM','MIROC-ESM-CHEM','MPI-ESM-LR','MPI-ESM-MR','MRI-CGCM3','NorESM1-M']
+};
+var scenario_list = Object.keys(scenarioModelDict);
+
 var dateRng_list = ee.List(['1970-1999', '1980-2009', '1990-2019', '2000-2029', '2010-2039', '2020-2049', '2030-2059', '2040-2069', '2050-2079', '2060-2089', '2070-2099']);
 var class_list = ee.List(['Af', 'Am', 'Aw', 'BWh', 'BWk', 'BSh', 'BSk', 'Csa', 'Csb', 'Csc', 'Cwa', 'Cwb', 'Cwc', 'Cfa', 'Cfb', 'Cfc', 'Dsa', 'Dsb', 'Dsc', 'Dsd', 'Dwa', 'Dwb', 'Dwc', 'Dwd', 'Dfa', 'Dfb', 'Dfc', 'Dfd', 'ET', 'EF']);
 
@@ -26,7 +32,6 @@ var order_months = ee.List([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
 var summr_months = ee.List([4, 5, 6, 7, 8, 9]);
 var wintr_months = ee.List([1, 2, 3, 10, 11, 12]);
-
 
 /*******************************************************
   UI
@@ -134,7 +139,20 @@ function createInfoPanelContent() {
   var makeHeader = function(text) { return ui.Label({value: text, style: {fontWeight: 'bold', fontSize: '20px', margin: '10px 5px'}}); };
   var makeParagraph = function(text) { return ui.Label({value: text, style: {margin: '0 0 8px 8px'}}); };
   var makeDefinitionItem = function(term, definition) { return ui.Panel([ui.Label(term, {fontWeight: 'bold'}), ui.Label(definition)], ui.Panel.Layout.flow('horizontal')); };
-
+  var logo = ee.Image('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/University_of_Arizona_logo.svg/2560px-University_of_Arizona_logo.svg.png').visualize({
+    bands:  ['b1', 'b2', 'b3'],
+    min: 0,
+    max: 255
+    });
+  var makeLogo = function(){return ui.Thumbnail({
+    image: logo,
+    params: {
+        dimensions: '642x291',
+        format: 'png'
+        },
+    style: {height: '127px', width: '280px',padding :'0'}
+    })   };
+  
   return [
     makeHeader('Overview'),
     makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the Contiguous United States. The default selections are RCP4.5 / CCSM4 / 2000-2029.'),
@@ -162,7 +180,7 @@ var infoPanel = ui.Panel({
 
 // Create the legend panel.
 var legendPanel = ui.Panel({
-  style: { position: 'top-right', padding: '8px 15px', shown: true, backgroundColor: 'rgba(255, 255, 255, 0.85)', border: '1px solid black' }
+  style: { position: 'top-right', padding: '8px 15px', margin:'75px 0 0 0', shown: true, backgroundColor: 'rgba(255, 255, 255, 0.85)', border: '1px solid black' }
 });
 var legendTitle = ui.Label('Köppen-Geiger Classification', {fontWeight: 'bold', fontSize: '14px', margin: '0 0 4px 0', padding: '0'});
 legendPanel.add(legendTitle);
@@ -186,18 +204,27 @@ for (var i = 0; i < typeLabels.length; i++) { legendPanel.add(makeLegendRow(type
 var hideLoading = function() { loadingOverlay.style().set('shown', false); };
 
 var scenarioADrop = ui.Select({
-  items: scenario_list.getInfo(),
+  items: scenario_list,
   value: scenarioA.scenario,
   onChange: function(val) {
     loadingOverlay.style().set('shown', true);
     scenarioA.scenario = val;
+    
+    // Dynamically update model list
+    var models = scenarioModelDict[val];
+    modelADrop.items().reset(models);
+    
+    // Reset current model to first in new list
+    scenarioA.model = models[0];
+    modelADrop.setValue(models[0], false);
+    
     updateMainMap(hideLoading);
   },
   style: {stretch: 'horizontal'}
 });
 
 var modelADrop = ui.Select({
-  items: model_list.getInfo(),
+  items: scenarioModelDict[scenarioA.scenario],
   value: scenarioA.model,
   onChange: function(val) {
     loadingOverlay.style().set('shown', true);
@@ -206,6 +233,7 @@ var modelADrop = ui.Select({
   },
   style: {stretch: 'horizontal'}
 });
+modelADrop.items().reset(scenarioModelDict[scenarioA.scenario]); // set initial model list value
 
 var dateADrop = ui.Select({
   items: dateRng_list.getInfo(),
@@ -219,26 +247,34 @@ var dateADrop = ui.Select({
 });
 
 var scenarioBDrop = ui.Select({
-  items: scenario_list.getInfo(),
+  items: scenario_list,
   value: scenarioB.scenario,
   onChange: function(val) {
     loadingOverlay.style().set('shown', true);
     scenarioB.scenario = val;
+    
+    var models = scenarioModelDict[val];
+    modelBDrop.items().reset(models);
+    scenarioB.model = models[0];
+    modelBDrop.setValue(models[0], false);
+  
     updateSplitMap(hideLoading);
   },
   style: {stretch: 'horizontal'}
 });
 
 var modelBDrop = ui.Select({
-  items: model_list.getInfo(),
+  items: scenarioModelDict[scenarioB.scenario],
   value: scenarioB.model,
   onChange: function(val) {
     loadingOverlay.style().set('shown', true);
+    
     scenarioB.model = val;
     updateSplitMap(hideLoading);
   },
   style: {stretch: 'horizontal'}
 });
+modelBDrop.items().reset(scenarioModelDict[scenarioB.scenario]); // set initial model list value
 
 var dateBDrop = ui.Select({
   items: dateRng_list.getInfo(),
@@ -255,9 +291,196 @@ var dateBDrop = ui.Select({
 var infoCheckbox = ui.Checkbox({ label: 'Show/Hide App Information', value: false, onChange: function(checked) { infoPanel.style().set('shown', checked); } });
 var legendCheckbox = ui.Checkbox({ label: 'Show/Hide Legend', value: true, onChange: function(checked) { legendPanel.style().set('shown', checked); } });
 var basemapSelect = ui.Select({ items: ['roadmap', 'satellite', 'terrain', 'hybrid'], value: 'roadmap', onChange: function(value) { mainMap.setOptions(value); splitMap.setOptions(value); }, style: {stretch: 'horizontal'} });
-var compareCheckbox = ui.Checkbox({ label: 'Compare scenarios', value: false });
+var compareCheckbox = ui.Checkbox({ label: 'Compare scenarios', onChange:createCompareSplitUI, value: false });
+var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTimelinebox, style:{ position:'top-left', fontSize:'14px' }});
 
-// Assemble control panels
+/*******************************************************
+  POP-UP TIMELINE LOGIC
+*/
+
+// globals for timeseries functionality
+var timelinePanel;
+var clickedPointLayer = null; 
+
+
+// timeline loading message
+var timelineLoadingPanel = ui.Panel({
+  widgets: [
+    ui.Label('Loading timeline...', {
+      fontWeight: 'bold',
+      fontSize: '20px',
+      color: 'black',
+      textAlign: 'center'
+    })
+  ],
+  style: {
+    position: 'top-center',
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    padding: '12px',
+    border: '1px solid black',
+    shown: false
+  }
+});
+
+function renderTimelineboxCallback(clickInfo_obj){
+  // disable compare functionality
+  compareCheckbox.setValue(false, false);
+  
+  if (timelinePanel) {
+    ui.root.remove(timelinePanel);
+  }
+  timelineLoadingPanel.style().set('shown', true); // show loading panel immediately
+
+  // Use setTimeout to let the UI update first
+  ui.util.setTimeout(function() {
+    timelinePanel = ui.Panel({widgets:[], style:{position:'top-center', stretch:'vertical', height:'390px', width:'370px', margin:'10px 10px'}});
+  
+    var lat = clickInfo_obj.lat;
+    var lon = clickInfo_obj.lon;
+    var pt = ee.Geometry.Point([lon, lat]);
+    
+    // Add a visual marker for the clicked point
+    
+    // Remove the previous point layer if it exists
+    if (clickedPointLayer) {
+      mainMap.remove(clickedPointLayer);
+    }
+    // Define the visualization for the new point
+    var pointVisParams = {
+      color: '000000', // Red color in HEX format
+      pointSize: 10,     // Size of the point in pixels
+    };
+    // Create a new map layer with the point and visualization
+    clickedPointLayer = ui.Map.Layer(pt, pointVisParams, 'Clicked Location');
+    // Add the new layer to the main map
+    mainMap.add(clickedPointLayer); 
+
+    function click_zipper_fn(date_obj){
+      var d = ee.Number.parse(ee.String(date_obj).split('-').get(0));
+      return ee.List([d, scenarioA.model, scenarioA.scenario]);
+    }
+
+    var click_selection_list = ee.List(dateRng_list.map(click_zipper_fn));
+
+    function main_fn_wrapper(triple) {
+      return kcModule.main_fn(triple, ic, order_months, ndays_months, summr_months, wintr_months);
+    }
+
+    var click_ic = ee.ImageCollection(click_selection_list.map(main_fn_wrapper));
+
+    var prop_sample_list = click_ic.getRegion({geometry: pt, scale: scale}).getInfo();
+
+    var js_type_list = [];
+    for (var i = 1; i < prop_sample_list.length; i++) {
+      var type_str = class_list.get(prop_sample_list[i][4] - 1).getInfo();
+      js_type_list.push(type_str);
+    }
+
+    var typelabel_list = [];
+    var daterng_list = [];
+    for (var i = 0; i < js_type_list.length; i++) {
+      var type = js_type_list[i];
+      var date = dateRng_list.getInfo()[i];
+      typelabel_list.push(type);
+      daterng_list.push(date);
+    }
+
+    var titlelabel = ui.Label({
+        value: "Timeline of Köppen-Geiger Classes",
+        style: {
+          padding: '1px',
+          margin: '0px 10px 0px 10px',
+          position: 'top-center',
+          fontSize: '20px', 
+          fontWeight:'bold'
+        }
+      });
+      var subTitlelabel = ui.Label({
+        value: "(for the selected point)",
+        style: {
+          padding: '1px',
+          margin: '0px 10px 20px 90px',
+          position: 'top-center',
+          fontSize: '13px'
+        }
+    });
+    var row = ui.Panel({
+      widgets: [titlelabel,subTitlelabel],
+      layout: ui.Panel.Layout.Flow('vertical')
+    });
+  
+    timelinePanel.add(row);
+    for (var i = 0; i < js_type_list.length; i++) {
+      var type_index = class_list.indexOf(ee.String(js_type_list[i])).getInfo();
+    
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: typePalette[type_index],
+          padding: '6px',
+          margin: '0px 0px 5px ',
+          border: '1px solid black',
+          position: 'middle-right',
+          fontSize: '20px'
+        }
+      });
+
+      var datelabel = ui.Label({
+        value: daterng_list[i],
+        style: {
+          padding: '1px',
+          margin: '0px 10px 0px 80px',
+          position: 'middle-right',
+          fontSize: '20px'
+        }
+      });
+
+      var typelabel = ui.Label({
+        value: typelabel_list[i],
+        style: {
+          padding: '1px',
+          margin: '0px',
+          position: 'middle-right',
+          fontSize: '20px'
+        }
+      });
+
+      var row = ui.Panel({
+        widgets: [datelabel, colorBox, typelabel],
+        layout: ui.Panel.Layout.Flow('horizontal')
+      });
+
+      timelinePanel.add(row);
+    }
+
+    ui.root.add(timelinePanel);
+    timelineLoadingPanel.style().set('shown', false); // hide loading panel after done
+  }, 100); // Delay allows UI to show loading indicator
+}
+
+
+function renderTimelinebox(bool_obj){
+  if (bool_obj == true){
+    mainMap.style().set('cursor', 'crosshair'); 
+    mainMap.onClick(renderTimelineboxCallback);
+  }
+  else{
+    // Remove the previous point layer if it exists
+    if (clickedPointLayer) {
+      mainMap.remove(clickedPointLayer);
+    }
+    mainMap.style().set('cursor', 'hand'); 
+    
+    if(timelinePanel){
+      ui.root.remove(timelinePanel);
+    }
+  }
+}
+
+
+
+/*******************************************************
+  ASSEMBLE CONTROL PANELS
+*/
 var controlPanelA = ui.Panel({
   widgets: [
     infoCheckbox, legendCheckbox,
@@ -281,7 +504,7 @@ var controlPanelB = ui.Panel({
   style: {stretch: 'vertical', shown: false}
 });
 
-var mainControlPanel = ui.Panel({ widgets: [controlPanelA, compareCheckbox, controlPanelB], style: {width: '300px', padding: '8px'} });
+var mainControlPanel = ui.Panel({ widgets: [controlPanelA, timelineCheckbox, compareCheckbox, controlPanelB], style: {width: '300px', padding: '8px'} });
 
 // Assemble main layout
 var linker = ui.Map.Linker([mainMap, splitMap]);
@@ -289,10 +512,24 @@ var splitPanel = ui.SplitPanel({ firstPanel: mainMap, secondPanel: splitMap, wip
 var masterPanel = ui.Panel({ widgets: [mainControlPanel, mainMap], layout: ui.Panel.Layout.flow('horizontal'), style: {stretch: 'both'} });
 
 // Set up logic for comparison checkbox
-compareCheckbox.onChange(function(checked) {
-  controlPanelB.style().set('shown', checked);
-  masterPanel.widgets().set(1, checked ? splitPanel : mainMap);
-});
+function createCompareSplitUI(bool_obj){
+  controlPanelB.style().set('shown', bool_obj);
+  masterPanel.widgets().set(1, bool_obj ? splitPanel : mainMap);
+
+  if (bool_obj) { // If "Compare scenarios" is checked
+    // If "Timeline on click" is currently bool_obj, uncheck it
+    if (timelineCheckbox.getValue() === true) {
+      timelineCheckbox.setValue(false, false); // false for value, false to prevent onChange from firing
+    }
+    // Also, ensure the map click handler is removed when enabling compare mode
+    mainMap.onClick(null);
+  } else { // If "Compare scenarios" is unchecked (returning to single map view)
+    // If "Timeline on click" was previously checked, re-apply its click handler
+    if (timelineCheckbox.getValue() === true) { // Check its state after potential uncheck by previous logic
+      mainMap.onClick(renderTimelineboxCallback);
+    }
+  }
+};
 
 /*******************************************************
   FINAL UI LAYOUT SETUP
@@ -303,3 +540,4 @@ ui.root.add(masterPanel);
 ui.root.add(infoPanel);
 ui.root.add(legendPanel);
 ui.root.add(loadingOverlay); // Add the loading panel to the root so it can float over everything
+ui.root.add(timelineLoadingPanel);
