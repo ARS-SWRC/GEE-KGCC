@@ -41,19 +41,152 @@ var typePalette = [
   '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
   '#C8FF50', '#64FF50', '#32C800', '#FF00FF', '#C800C8', '#963296', '#966496',
   '#AAAFFF', '#5A78DC', '#4B50B4', '#320087', '#00FFFF', '#37C8FF', '#007D7D', '#00465F',
-  '#B2B2B2', '#666666'
-];
+  '#B2B2B2', '#666666'];
 
 var visParams = {
-  min: 1,
-  max: 30,
-  palette: typePalette
-};
+  min:1,
+  max:30,
+  palette:typePalette};
 
 /*******************************************************
   MAIN FUNCTION
 */
 var kcModule = require('users/gerardo/default:KOPPEN/Koppen-Climate-MainFunc');
+
+/*******************************************************
+  Styles
+*/
+var loadinglabelStyle = {
+  fontSize:'24px',
+  color:'white',
+  // --- KEY FIX: Make the label's background transparent ---
+  backgroundColor:'rgba(0, 0, 0, 0)'};
+
+var loadingpanelStyle = {
+  position:'top-center',
+  backgroundColor:'rgba(0,0,0,0.7)',
+  padding:'20px',
+  shown:false, // Start hidden
+  border:'1px solid black'};
+
+var thumbnailStyle = {
+  height:'127px', 
+  width:'280px', 
+  padding:'0'};
+
+var headerlabelStyle = {
+  fontWeight:'bold', 
+  fontSize:'20px', 
+  margin:'10px 5px'};
+
+var paragraphlabelStyle = {margin:'0 0 8px 8px'};
+
+var termlabelStyle = {fontWeight:'bold'};
+
+var infopanelStyle = {
+  width:'35%', 
+  position:'top-center', 
+  margin:'5% 0 0 0', 
+  shown:false, 
+  backgroundColor:'rgba(255, 255, 255, 0.95)',
+  border:'1px solid black',
+  padding:'10px'};
+
+var legendpanelStyle = { 
+  position:'top-right', 
+  padding:'8px 15px', 
+  margin:'75px 0 0 0', 
+  shown:true, 
+  backgroundColor:'rgba(255, 255, 255, 0.85)',
+  border:'1px solid black'};
+
+var legendlabelStyle = {
+  fontWeight:'bold', 
+  fontSize:'14px',
+  margin:'0 0 4px 0', 
+  padding:'0'};
+
+var colorlabelStyle = {
+  backgroundColor:null, 
+  padding:'8px', 
+  margin:'0 0 4px 0'};
+
+var classlabelStyle = {margin:'0 0 4px 6px'};
+
+var dropStyle = {stretch:'horizontal'};
+
+var timelineboxStyle = {
+  position:'top-left', 
+  fontSize:'14px'};
+
+var loadingtimelinepanelStyle = {
+  position:'top-center',
+  backgroundColor:'rgba(255,255,255,0.9)',
+  padding:'12px',
+  border:'1px solid black',
+  shown:false};
+
+var loadingtimelinelabelStyle = {
+  fontWeight:'bold',
+  fontSize:'20px',
+  color:'black',
+  textAlign:'center'};
+
+var timelinepanelStyle = {
+  position:'top-center', 
+  stretch:'vertical', 
+  height:'390px', 
+  width:'370px', 
+  margin:'10px 10px'};
+
+var timelinetitlelabelStyle = {
+  padding:'1px',
+  margin:'0px 10px 0px 10px',
+  position:'top-center',
+  fontSize:'20px', 
+  fontWeight:'bold'};
+
+var timelinesubtitlelabelStyle = {
+  padding:'1px',
+  margin:'0px 10px 20px 90px',
+  position:'top-center',
+  fontSize:'13px'};
+
+var timelinecolorlabelStyle = {
+  backgroundColor:null,
+  padding:'6px',
+  margin:'0px 0px 5px ',
+  border:'1px solid black',
+  position:'middle-right',
+  fontSize:'20px'};
+
+var datelabelStyle = {
+  padding:'1px',
+  margin:'0px 10px 0px 80px',
+  position:'middle-right',
+  fontSize:'20px'};
+
+var timelinetypelabelStyle = {
+  padding:'1px',
+  margin:'0px',
+  position:'middle-right',
+  fontSize:'20px'};
+
+var dropheaderlabelStyle = {
+  fontWeight:'bold', 
+  margin: '8px 0 0 0'};
+
+var compareApanelStyle = {stretch:'vertical'};
+
+var compareBpanelStyle = {
+  stretch:'vertical', 
+  shown: false};
+
+var mainpanelStyle = {
+  width:'300px', 
+  padding:'8px'};
+
+var splitpanelStyle = {stretch:'both'};
 
 
 /*******************************************************
@@ -66,35 +199,34 @@ splitMap.setCenter(-100, 38, 4);
 
 // Selection state for both maps
 var scenarioA = {
-  year: 2000,
-  model: 'CCSM4',
-  scenario: 'rcp45'
-};
-var scenarioB = {
-  year: 2000,
-  model: 'CCSM4',
-  scenario: 'rcp85'
-};
+  year:2000,
+  model:'CCSM4',
+  scenario:'rcp45'};
 
-function updateMainMap(onCompleteCallback) {
+var scenarioB = {
+  year:2000,
+  model:'CCSM4',
+  scenario:'rcp85'};
+
+function updateMainMap(onCompleteCallback){
   var im = kcModule.main_fn([scenarioA.year, scenarioA.model, scenarioA.scenario],ic, order_months,ndays_months,summr_months,wintr_months);
   mainMap.layers().reset();
   mainMap.addLayer(im, visParams, 'Scenario A');
   // A cheap server call to trigger the callback when processing is done.
-  im.projection().nominalScale().evaluate(function(scale, error) {
-    if (error) {
+  im.projection().nominalScale().evaluate(function(scale, error){
+    if (error){
       print('Error during Scenario A map update:', error);
     }
     onCompleteCallback();
   });
 }
 
-function updateSplitMap(onCompleteCallback) {
+function updateSplitMap(onCompleteCallback){
   var im = kcModule.main_fn([scenarioB.year, scenarioB.model, scenarioB.scenario],ic, order_months,ndays_months,summr_months,wintr_months);
   splitMap.layers().reset();
   splitMap.addLayer(im, visParams, 'Scenario B');
-  im.projection().nominalScale().evaluate(function(scale, error) {
-     if (error) {
+  im.projection().nominalScale().evaluate(function(scale, error){
+     if (error){
        print('Error during Scenario B map update:', error);
      }
     onCompleteCallback();
@@ -102,8 +234,8 @@ function updateSplitMap(onCompleteCallback) {
 }
 
 // Initial rendering (with a dummy callback)
-updateMainMap(function() {});
-updateSplitMap(function() {});
+updateMainMap(function(){});
+updateSplitMap(function(){});
 
 
 /*******************************************************
@@ -112,46 +244,27 @@ updateSplitMap(function() {});
 
 // A floating panel to show while the map is loading ---
 var loadingOverlay = ui.Panel({
-    widgets: [
-      ui.Label({
-        value: 'Processing...',
-        style: {
-          fontSize: '24px',
-          color: 'white',
-          // --- KEY FIX: Make the label's background transparent ---
-          backgroundColor: 'rgba(0, 0, 0, 0)'
-        }
-      })
-    ],
-    style: {
-        position: 'top-center',
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        padding: '20px',
-        shown: false, // Start hidden
-        border: '1px solid black'
-    }
-});
-
+  widgets:[ui.Label({value: 'Processing...', style:loadinglabelStyle})],
+  style:loadingpanelStyle});
 
 // Function to build the info panel content from styled widgets
-function createInfoPanelContent() {
+function createInfoPanelContent(){
   // Helper functions to create styled UI elements
-  var makeHeader = function(text) { return ui.Label({value: text, style: {fontWeight: 'bold', fontSize: '20px', margin: '10px 5px'}}); };
-  var makeParagraph = function(text) { return ui.Label({value: text, style: {margin: '0 0 8px 8px'}}); };
-  var makeDefinitionItem = function(term, definition) { return ui.Panel([ui.Label(term, {fontWeight: 'bold'}), ui.Label(definition)], ui.Panel.Layout.flow('horizontal')); };
+  var makeHeader = function(text) {return ui.Label({value:text, style:headerlabelStyle}); };
+  var makeParagraph = function(text) {return ui.Label({value:text, style:paragraphlabelStyle});};
+  var makeDefinitionItem = function(term, definition) { return ui.Panel([ui.Label(term, termlabelStyle), ui.Label(definition)], ui.Panel.Layout.flow('horizontal')); };
   var logo = ee.Image('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/University_of_Arizona_logo.svg/2560px-University_of_Arizona_logo.svg.png').visualize({
-    bands:  ['b1', 'b2', 'b3'],
-    min: 0,
-    max: 255
-    });
+    bands:['b1', 'b2', 'b3'],
+    min:0,
+    max:255
+  });
   var makeLogo = function(){return ui.Thumbnail({
-    image: logo,
-    params: {
-        dimensions: '642x291',
-        format: 'png'
-        },
-    style: {height: '127px', width: '280px',padding :'0'}
-    })   };
+    image:logo,
+    params:{
+      dimensions:'642x291',
+      format:'png'},
+    style:thumbnailStyle
+  })};
   
   return [
     makeHeader('Overview'),
@@ -173,40 +286,40 @@ function createInfoPanelContent() {
 
 // Info panel that will be shown/hidden.
 var infoPanel = ui.Panel({
-  widgets: createInfoPanelContent(),
-  layout: ui.Panel.Layout.flow('vertical'),
-  style: { width: '35%', position: 'top-center', margin: '5% 0 0 0', shown: false, backgroundColor: 'rgba(255, 255, 255, 0.95)', border: '1px solid black', padding: '10px' }
-});
+  widgets:createInfoPanelContent(),
+  layout:ui.Panel.Layout.flow('vertical'),
+  style:infopanelStyle});
 
 // Create the legend panel.
-var legendPanel = ui.Panel({
-  style: { position: 'top-right', padding: '8px 15px', margin:'75px 0 0 0', shown: true, backgroundColor: 'rgba(255, 255, 255, 0.85)', border: '1px solid black' }
-});
-var legendTitle = ui.Label('Köppen-Geiger Classification', {fontWeight: 'bold', fontSize: '14px', margin: '0 0 4px 0', padding: '0'});
+var legendPanel = ui.Panel({style:legendpanelStyle});
+var legendTitle = ui.Label({value:'Köppen-Geiger Classification', style:legendlabelStyle});
 legendPanel.add(legendTitle);
 var typeLabels = [
   'Af - Tropical, Rainforest', 'Am - Tropical, Monsoon', 'Aw - Tropical, Savanna', 'Bwh - Arid, Desert, Hot', 'Bwk - Arid, Desert, Cold', 'Bsh - Semi-Arid, Steppe, Hot', 'Bsk - Semi-Arid, Steppe, Cold',
   'Csa - Temperate, Dry Summer, Hot Summer', 'Csb - Temperate, Dry Summer, Warm Summer', 'Csc - Temperate, Dry Summer, Cold Summer', 'Cwa - Temperate, Dry Winter, Hot Summer', 'Cwb - Temperate, Dry Winter, Warm Summer', 'Cwc - Temperate, Dry Winter, Cold Summer',
   'Cfa - Temperate, No Dry Season, Hot Summer', 'Cfb - Temperate, No Dry Season, Warm Summer', 'Cfc - Temperate, No Dry Season, Cold Summer', 'Dsa - Cold, Dry Summer, Hot Summer', 'Dsb - Cold, Dry Summer, Warm Summer', 'Dsc - Cold, Dry Summer, Cold Summer', 'Dsd - Cold, Dry Summer, Very Cold Winter',
   'Dwa - Cold, Dry Winter, Hot Summer', 'Dwb - Cold, Dry Winter, Warm Summer', 'Dwc - Cold, Dry Winter, Cold Summer', 'Dwd - Cold, Dry Winter, Very Cold Winter', 'Dfa - Cold, No Dry Season, Hot Summer', 'Dfb - Cold, No Dry Season, Warm summer', 'Dfc - Cold, No Dry season, Cold Summer', 'Dfd - Cold, No Dry Season, Very Cold Winter',
-  'Et - Polar Tundra', 'Ef - Polar Ice Cap'
-];
-var makeLegendRow = function(color, name) {
-  var colorBox = ui.Label({style: {backgroundColor: color, padding: '8px', margin: '0 0 4px 0'}});
-  var description = ui.Label({value: name, style: {margin: '0 0 4px 6px'}});
+  'Et - Polar Tundra', 'Ef - Polar Ice Cap'];
+  
+var makeLegendRow = function(color, name){
+  var labelStyle = colorlabelStyle;
+  labelStyle.backgroundColor = color;
+  var colorBox = ui.Label({style:labelStyle});
+  var description = ui.Label({value:name, style:classlabelStyle});
   return ui.Panel({widgets: [colorBox, description], layout: ui.Panel.Layout.Flow('horizontal')});
 };
-for (var i = 0; i < typeLabels.length; i++) { legendPanel.add(makeLegendRow(typePalette[i], typeLabels[i])); }
+
+for (var i = 0; i < typeLabels.length; i++) {legendPanel.add(makeLegendRow(typePalette[i], typeLabels[i]));}
 
 // --- Create all the control widgets ---
 
 // MODIFIED: All dropdowns now show the loading overlay and use the callback.
-var hideLoading = function() { loadingOverlay.style().set('shown', false); };
+var hideLoading = function() {loadingOverlay.style().set('shown', false);};
 
 var scenarioADrop = ui.Select({
-  items: scenario_list,
-  value: scenarioA.scenario,
-  onChange: function(val) {
+  items:scenario_list,
+  value:scenarioA.scenario,
+  onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioA.scenario = val;
     
@@ -220,79 +333,69 @@ var scenarioADrop = ui.Select({
     
     updateMainMap(hideLoading);
   },
-  style: {stretch: 'horizontal'}
+  style:dropStyle
 });
 
 var modelADrop = ui.Select({
-  items: scenarioModelDict[scenarioA.scenario],
-  value: scenarioA.model,
-  onChange: function(val) {
+  items:scenarioModelDict[scenarioA.scenario],
+  value:scenarioA.model,
+  onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioA.model = val;
     updateMainMap(hideLoading);
   },
-  style: {stretch: 'horizontal'}
+  style:dropStyle
 });
 modelADrop.items().reset(scenarioModelDict[scenarioA.scenario]); // set initial model list value
 
 var dateADrop = ui.Select({
-  items: dateRng_list.getInfo(),
-  value: '2000-2029',
-  onChange: function(val) {
+  items:dateRng_list.getInfo(),
+  value:'2000-2029',
+  onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioA.year = parseInt(val.split('-')[0]);
-    updateMainMap(hideLoading);
-  },
-  style: {stretch: 'horizontal'}
-});
+    updateMainMap(hideLoading);},
+  style:dropStyle});
 
 var scenarioBDrop = ui.Select({
-  items: scenario_list,
-  value: scenarioB.scenario,
-  onChange: function(val) {
+  items:scenario_list,
+  value:scenarioB.scenario,
+  onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioB.scenario = val;
-    
     var models = scenarioModelDict[val];
     modelBDrop.items().reset(models);
     scenarioB.model = models[0];
     modelBDrop.setValue(models[0], false);
-  
-    updateSplitMap(hideLoading);
-  },
-  style: {stretch: 'horizontal'}
-});
+    updateSplitMap(hideLoading);},
+  style:dropStyle});
 
 var modelBDrop = ui.Select({
-  items: scenarioModelDict[scenarioB.scenario],
-  value: scenarioB.model,
-  onChange: function(val) {
+  items:scenarioModelDict[scenarioB.scenario],
+  value:scenarioB.model,
+  onChange:function(val){
     loadingOverlay.style().set('shown', true);
-    
     scenarioB.model = val;
-    updateSplitMap(hideLoading);
-  },
-  style: {stretch: 'horizontal'}
-});
+    updateSplitMap(hideLoading);},
+  style:dropStyle});
+
 modelBDrop.items().reset(scenarioModelDict[scenarioB.scenario]); // set initial model list value
 
 var dateBDrop = ui.Select({
-  items: dateRng_list.getInfo(),
-  value: '2000-2029',
-  onChange: function(val) {
+  items:dateRng_list.getInfo(),
+  value:'2000-2029',
+  onChange:function(val) {
     loadingOverlay.style().set('shown', true);
     scenarioB.year = parseInt(val.split('-')[0]);
-    updateSplitMap(hideLoading);
-  },
-  style: {stretch: 'horizontal'}
-});
+    updateSplitMap(hideLoading);},
+  style:dropStyle});
 
 // Other control widgets
-var infoCheckbox = ui.Checkbox({ label: 'Show/Hide App Information', value: false, onChange: function(checked) { infoPanel.style().set('shown', checked); } });
-var legendCheckbox = ui.Checkbox({ label: 'Show/Hide Legend', value: true, onChange: function(checked) { legendPanel.style().set('shown', checked); } });
-var basemapSelect = ui.Select({ items: ['roadmap', 'satellite', 'terrain', 'hybrid'], value: 'roadmap', onChange: function(value) { mainMap.setOptions(value); splitMap.setOptions(value); }, style: {stretch: 'horizontal'} });
-var compareCheckbox = ui.Checkbox({ label: 'Compare scenarios', onChange:createCompareSplitUI, value: false });
-var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTimelinebox, style:{ position:'top-left', fontSize:'14px' }});
+var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) { infoPanel.style().set('shown', checked);}});
+var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) { legendPanel.style().set('shown', checked);}});
+var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid'], value:'roadmap', onChange:function(value){mainMap.setOptions(value); splitMap.setOptions(value);}, style:dropStyle});
+var compareCheckbox = ui.Checkbox({label:'Compare scenarios', onChange:createCompareSplitUI, value:false});
+var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTimelinebox, style:timelineboxStyle});
 
 /*******************************************************
   POP-UP TIMELINE LOGIC
@@ -300,27 +403,12 @@ var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTi
 
 // globals for timeseries functionality
 var timelinePanel;
-var clickedPointLayer = null; 
-
+var clickedPointLayer = null;
 
 // timeline loading message
 var timelineLoadingPanel = ui.Panel({
-  widgets: [
-    ui.Label('Loading timeline...', {
-      fontWeight: 'bold',
-      fontSize: '20px',
-      color: 'black',
-      textAlign: 'center'
-    })
-  ],
-  style: {
-    position: 'top-center',
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    padding: '12px',
-    border: '1px solid black',
-    shown: false
-  }
-});
+  widgets:[ui.Label({value:'Loading timeline...', style:loadingtimelinelabelStyle})],
+  style:loadingtimelinepanelStyle});
 
 function renderTimelineboxCallback(clickInfo_obj){
   // disable compare functionality
@@ -333,7 +421,7 @@ function renderTimelineboxCallback(clickInfo_obj){
 
   // Use setTimeout to let the UI update first
   ui.util.setTimeout(function() {
-    timelinePanel = ui.Panel({widgets:[], style:{position:'top-center', stretch:'vertical', height:'390px', width:'370px', margin:'10px 10px'}});
+    timelinePanel = ui.Panel({widgets:[], style:timelinepanelStyle});
   
     var lat = clickInfo_obj.lat;
     var lon = clickInfo_obj.lon;
@@ -347,8 +435,8 @@ function renderTimelineboxCallback(clickInfo_obj){
     }
     // Define the visualization for the new point
     var pointVisParams = {
-      color: '000000', // Red color in HEX format
-      pointSize: 10,     // Size of the point in pixels
+      color:'000000', // Red color in HEX format
+      pointSize:10,     // Size of the point in pixels
     };
     // Create a new map layer with the point and visualization
     clickedPointLayer = ui.Map.Layer(pt, pointVisParams, 'Clicked Location');
@@ -371,14 +459,14 @@ function renderTimelineboxCallback(clickInfo_obj){
     var prop_sample_list = click_ic.getRegion({geometry: pt, scale: scale}).getInfo();
 
     var js_type_list = [];
-    for (var i = 1; i < prop_sample_list.length; i++) {
+    for (var i = 1; i < prop_sample_list.length; i++){
       var type_str = class_list.get(prop_sample_list[i][4] - 1).getInfo();
       js_type_list.push(type_str);
     }
 
     var typelabel_list = [];
     var daterng_list = [];
-    for (var i = 0; i < js_type_list.length; i++) {
+    for (var i = 0; i < js_type_list.length; i++){
       var type = js_type_list[i];
       var date = dateRng_list.getInfo()[i];
       typelabel_list.push(type);
@@ -386,69 +474,26 @@ function renderTimelineboxCallback(clickInfo_obj){
     }
 
     var titlelabel = ui.Label({
-        value: "Timeline of Köppen-Geiger Classes",
-        style: {
-          padding: '1px',
-          margin: '0px 10px 0px 10px',
-          position: 'top-center',
-          fontSize: '20px', 
-          fontWeight:'bold'
-        }
-      });
-      var subTitlelabel = ui.Label({
-        value: "(for the selected point)",
-        style: {
-          padding: '1px',
-          margin: '0px 10px 20px 90px',
-          position: 'top-center',
-          fontSize: '13px'
-        }
-    });
+      value:"Timeline of Köppen-Geiger Classes",
+      style:timelinetitlelabelStyle});
+        
+    var subTitlelabel = ui.Label({
+      value:"(for the selected point)",
+      style:timelinesubtitlelabelStyle});
+      
     var row = ui.Panel({
       widgets: [titlelabel,subTitlelabel],
-      layout: ui.Panel.Layout.Flow('vertical')
-    });
+      layout: ui.Panel.Layout.Flow('vertical')});
   
     timelinePanel.add(row);
-    for (var i = 0; i < js_type_list.length; i++) {
+    for (var i = 0; i < js_type_list.length; i++){
       var type_index = class_list.indexOf(ee.String(js_type_list[i])).getInfo();
-    
-      var colorBox = ui.Label({
-        style: {
-          backgroundColor: typePalette[type_index],
-          padding: '6px',
-          margin: '0px 0px 5px ',
-          border: '1px solid black',
-          position: 'middle-right',
-          fontSize: '20px'
-        }
-      });
-
-      var datelabel = ui.Label({
-        value: daterng_list[i],
-        style: {
-          padding: '1px',
-          margin: '0px 10px 0px 80px',
-          position: 'middle-right',
-          fontSize: '20px'
-        }
-      });
-
-      var typelabel = ui.Label({
-        value: typelabel_list[i],
-        style: {
-          padding: '1px',
-          margin: '0px',
-          position: 'middle-right',
-          fontSize: '20px'
-        }
-      });
-
-      var row = ui.Panel({
-        widgets: [datelabel, colorBox, typelabel],
-        layout: ui.Panel.Layout.Flow('horizontal')
-      });
-
+      var colorboxStyle = timelinecolorlabelStyle;
+      colorboxStyle.backgroundColor = typePalette[type_index];
+      var colorBox = ui.Label({style:colorboxStyle});
+      var datelabel = ui.Label({value:daterng_list[i], style:datelabelStyle});
+      var typelabel = ui.Label({value:typelabel_list[i], style:timelinetypelabelStyle});
+      var row = ui.Panel({widgets:[datelabel, colorBox, typelabel], layout:ui.Panel.Layout.Flow('horizontal')});
       timelinePanel.add(row);
     }
 
@@ -457,7 +502,6 @@ function renderTimelineboxCallback(clickInfo_obj){
   }, 100); // Delay allows UI to show loading indicator
 }
 
-
 function renderTimelinebox(bool_obj){
   if (bool_obj == true){
     mainMap.style().set('cursor', 'crosshair'); 
@@ -465,7 +509,7 @@ function renderTimelinebox(bool_obj){
   }
   else{
     // Remove the previous point layer if it exists
-    if (clickedPointLayer) {
+    if (clickedPointLayer){
       mainMap.remove(clickedPointLayer);
     }
     mainMap.style().set('cursor', 'hand'); 
@@ -477,39 +521,34 @@ function renderTimelinebox(bool_obj){
 }
 
 
-
 /*******************************************************
   ASSEMBLE CONTROL PANELS
 */
 var controlPanelA = ui.Panel({
-  widgets: [
+  widgets:[
     infoCheckbox, legendCheckbox,
-    ui.Label('Basemap Selection', {fontWeight: 'bold', margin: '8px 0 0 0'}),
+    ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}),
     basemapSelect,
-    ui.Label('Scenario A', {fontWeight: 'bold', margin: '8px 0 0 0'}),
+    ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
     ui.Label('GCM Model:'), modelADrop,
-    ui.Label('Date Range:'), dateADrop,
-  ],
-  style: {stretch: 'vertical'}
-});
+    ui.Label('Date Range:'), dateADrop],
+  style:compareApanelStyle});
 
 var controlPanelB = ui.Panel({
   widgets: [
-    ui.Label('Scenario B', {fontWeight: 'bold', margin: '8px 0 0 0'}),
+    ui.Label({value:'Scenario B', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioBDrop,
     ui.Label('GCM Model:'), modelBDrop,
-    ui.Label('Date Range:'), dateBDrop
-  ],
-  style: {stretch: 'vertical', shown: false}
-});
+    ui.Label('Date Range:'), dateBDrop],
+  style:compareBpanelStyle});
 
-var mainControlPanel = ui.Panel({ widgets: [controlPanelA, timelineCheckbox, compareCheckbox, controlPanelB], style: {width: '300px', padding: '8px'} });
+var mainControlPanel = ui.Panel({widgets:[controlPanelA, timelineCheckbox, compareCheckbox, controlPanelB], style:mainpanelStyle});
 
 // Assemble main layout
 var linker = ui.Map.Linker([mainMap, splitMap]);
-var splitPanel = ui.SplitPanel({ firstPanel: mainMap, secondPanel: splitMap, wipe: true, style: {stretch: 'both'} });
-var masterPanel = ui.Panel({ widgets: [mainControlPanel, mainMap], layout: ui.Panel.Layout.flow('horizontal'), style: {stretch: 'both'} });
+var splitPanel = ui.SplitPanel({ firstPanel: mainMap, secondPanel: splitMap, wipe: true, style:splitpanelStyle});
+var masterPanel = ui.Panel({widgets:[mainControlPanel, mainMap], layout:ui.Panel.Layout.flow('horizontal'), style:splitpanelStyle});
 
 // Set up logic for comparison checkbox
 function createCompareSplitUI(bool_obj){
