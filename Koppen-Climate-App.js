@@ -245,7 +245,7 @@ var loadingOverlay = ui.Panel({
 // Function to build the info panel content from styled widgets
 function createInfoPanelContent(){
   // Helper functions to create styled UI elements
-  var makeHeader = function(text) {return ui.Label({value:text, style:headerlabelStyle}); };
+  var makeHeader = function(text) {return ui.Label({value:text, style:headerlabelStyle});};
   var makeParagraph = function(text) {return ui.Label({value:text, style:paragraphlabelStyle});};
   var makeDefinitionItem = function(term, definition) { return ui.Panel([ui.Label(term, termlabelStyle), ui.Label(definition)], ui.Panel.Layout.flow('horizontal')); };
   
@@ -398,7 +398,8 @@ function renderTimelineboxCallback(clickInfo_obj){
 
   // Use setTimeout to let the UI update first
   ui.util.setTimeout(function(){
-    timelinePanel = ui.Panel({widgets:[], style:timelinepanelStyle});
+
+    timelinePanel = ui.Panel({style:timelinepanelStyle});
   
     var lat = clickInfo_obj.lat;
     var lon = clickInfo_obj.lon;
@@ -457,7 +458,6 @@ function renderTimelineboxCallback(clickInfo_obj){
       var row = ui.Panel({widgets:[datelabel, colorBox, typelabel], layout:ui.Panel.Layout.Flow('horizontal')});
       timelinePanel.add(row);
     }
-
     ui.root.add(timelinePanel);
     timelineLoadingPanel.style().set('shown', false); // hide loading panel after done
   }, 100); // Delay allows UI to show loading indicator
@@ -503,7 +503,7 @@ var mainControlPanel = ui.Panel({widgets:[controlPanelA, timelineCheckbox, compa
 
 // Assemble main layout
 var linker = ui.Map.Linker([mainMap, splitMap]);
-var splitPanel = ui.SplitPanel({ firstPanel: mainMap, secondPanel: splitMap, wipe: true, style:splitpanelStyle});
+var splitPanel = ui.SplitPanel({firstPanel:mainMap, secondPanel:splitMap, wipe:true, style:splitpanelStyle});
 var masterPanel = ui.Panel({widgets:[mainControlPanel, mainMap], layout:ui.Panel.Layout.flow('horizontal'), style:splitpanelStyle});
 
 // Set up logic for comparison checkbox
