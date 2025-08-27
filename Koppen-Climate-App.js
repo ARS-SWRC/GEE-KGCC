@@ -305,19 +305,14 @@ var scenarioADrop = ui.Select({
   onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioA.scenario = val;
-    
     // Dynamically update model list
     var models = scenarioModelDict[val];
     modelADrop.items().reset(models);
-    
     // Reset current model to first in new list
     scenarioA.model = models[0];
     modelADrop.setValue(models[0], false);
-    
-    updateMainMap(hideLoading);
-  },
-  style:dropStyle
-});
+    updateMainMap(hideLoading);},
+  style:dropStyle});
 
 var modelADrop = ui.Select({
   items:scenarioModelDict[scenarioA.scenario],
@@ -325,10 +320,9 @@ var modelADrop = ui.Select({
   onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioA.model = val;
-    updateMainMap(hideLoading);
-  },
-  style:dropStyle
-});
+    updateMainMap(hideLoading);},
+  style:dropStyle});
+  
 modelADrop.items().reset(scenarioModelDict[scenarioA.scenario]); // set initial model list value
 
 var dateADrop = ui.Select({
@@ -386,7 +380,6 @@ var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTi
 
 // globals for timeseries functionality
 var timelinePanel;
-var clickedPointLayer = null;
 
 // timeline loading message
 var timelineLoadingPanel = ui.Panel({
@@ -410,22 +403,6 @@ function renderTimelineboxCallback(clickInfo_obj){
     var lat = clickInfo_obj.lat;
     var lon = clickInfo_obj.lon;
     var pt = ee.Geometry.Point([lon, lat]);
-    
-    // Add a visual marker for the clicked point
-    
-    // Remove the previous point layer if it exists
-    if (clickedPointLayer) {
-      mainMap.remove(clickedPointLayer);
-    }
-    // Define the visualization for the new point
-    var pointVisParams = {
-      color:'000000', // Red color in HEX format
-      pointSize:10,     // Size of the point in pixels
-    };
-    // Create a new map layer with the point and visualization
-    clickedPointLayer = ui.Map.Layer(pt, pointVisParams, 'Clicked Location');
-    // Add the new layer to the main map
-    mainMap.add(clickedPointLayer); 
 
     function click_zipper_fn(date_obj){
       var d = ee.Number.parse(ee.String(date_obj).split('-').get(0));
@@ -487,18 +464,13 @@ function renderTimelineboxCallback(clickInfo_obj){
 }
 
 function renderTimelinebox(bool_obj){
-  if (bool_obj == true){
+  if (bool_obj === true){
     mainMap.style().set('cursor', 'crosshair'); 
     mainMap.onClick(renderTimelineboxCallback);
   }
   else{
     mainMap.unlisten();
-    // Remove the previous point layer if it exists
-    if (clickedPointLayer){
-      mainMap.remove(clickedPointLayer);
-    }
     mainMap.style().set('cursor', 'hand'); 
-    
     if(timelinePanel){
       ui.root.remove(timelinePanel);
     }
@@ -539,17 +511,16 @@ var masterPanel = ui.Panel({widgets:[mainControlPanel, mainMap], layout:ui.Panel
 function createCompareSplitUI(bool_obj){
   controlPanelB.style().set('shown', bool_obj);
   masterPanel.widgets().set(1, bool_obj ? splitPanel : mainMap);
-
-  if (bool_obj) { // If "Compare scenarios" is checked
+  if (bool_obj){ // If "Compare scenarios" is checked
     // If "Timeline on click" is currently bool_obj, uncheck it
-    if (timelineCheckbox.getValue() === true) {
+    if (timelineCheckbox.getValue() === true){
       timelineCheckbox.setValue(false, false); // false for value, false to prevent onChange from firing
     }
     // Also, ensure the map click handler is removed when enabling compare mode
     mainMap.onClick(null);
-  } else { // If "Compare scenarios" is unchecked (returning to single map view)
+  }else{ // If "Compare scenarios" is unchecked (returning to single map view)
     // If "Timeline on click" was previously checked, re-apply its click handler
-    if (timelineCheckbox.getValue() === true) { // Check its state after potential uncheck by previous logic
+    if (timelineCheckbox.getValue() === true){ // Check its state after potential uncheck by previous logic
       mainMap.onClick(renderTimelineboxCallback);
     }
   }
