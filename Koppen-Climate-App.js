@@ -69,11 +69,6 @@ var loadingpanelStyle = {
   shown:false, // Start hidden
   border:'1px solid black'};
 
-var thumbnailStyle = {
-  height:'127px', 
-  width:'280px', 
-  padding:'0'};
-
 var headerlabelStyle = {
   fontWeight:'bold', 
   fontSize:'20px', 
@@ -253,18 +248,6 @@ function createInfoPanelContent(){
   var makeHeader = function(text) {return ui.Label({value:text, style:headerlabelStyle}); };
   var makeParagraph = function(text) {return ui.Label({value:text, style:paragraphlabelStyle});};
   var makeDefinitionItem = function(term, definition) { return ui.Panel([ui.Label(term, termlabelStyle), ui.Label(definition)], ui.Panel.Layout.flow('horizontal')); };
-  var logo = ee.Image('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/University_of_Arizona_logo.svg/2560px-University_of_Arizona_logo.svg.png').visualize({
-    bands:['b1', 'b2', 'b3'],
-    min:0,
-    max:255
-  });
-  var makeLogo = function(){return ui.Thumbnail({
-    image:logo,
-    params:{
-      dimensions:'642x291',
-      format:'png'},
-    style:thumbnailStyle
-  })};
   
   return [
     makeHeader('Overview'),
@@ -414,9 +397,10 @@ function renderTimelineboxCallback(clickInfo_obj){
   // disable compare functionality
   compareCheckbox.setValue(false, false);
   
-  if (timelinePanel) {
+  if (timelinePanel){
     ui.root.remove(timelinePanel);
   }
+
   timelineLoadingPanel.style().set('shown', true); // show loading panel immediately
 
   // Use setTimeout to let the UI update first
@@ -508,6 +492,7 @@ function renderTimelinebox(bool_obj){
     mainMap.onClick(renderTimelineboxCallback);
   }
   else{
+    mainMap.unlisten();
     // Remove the previous point layer if it exists
     if (clickedPointLayer){
       mainMap.remove(clickedPointLayer);
