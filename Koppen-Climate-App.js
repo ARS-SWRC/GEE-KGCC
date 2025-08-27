@@ -379,7 +379,7 @@ var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTi
 */
 
 // globals for timeseries functionality
-var timelinePanel;
+var timelinePanel = ui.Panel({style:timelinepanelStyle});
 
 // timeline loading message
 var timelineLoadingPanel = ui.Panel({
@@ -397,7 +397,7 @@ function renderTimelineboxCallback(clickInfo_obj){
   timelineLoadingPanel.style().set('shown', true); // show loading panel immediately
 
   // Use setTimeout to let the UI update first
-  ui.util.setTimeout(function() {
+  ui.util.setTimeout(function(){
     timelinePanel = ui.Panel({widgets:[], style:timelinepanelStyle});
   
     var lat = clickInfo_obj.lat;
@@ -411,7 +411,7 @@ function renderTimelineboxCallback(clickInfo_obj){
 
     var click_selection_list = ee.List(dateRng_list.map(click_zipper_fn));
 
-    function main_fn_wrapper(triple) {
+    function main_fn_wrapper(triple){
       return kcModule.main_fn(triple, ic, order_months, ndays_months, summr_months, wintr_months);
     }
 
@@ -471,9 +471,8 @@ function renderTimelinebox(bool_obj){
   else{
     mainMap.unlisten();
     mainMap.style().set('cursor', 'hand'); 
-    if(timelinePanel){
-      ui.root.remove(timelinePanel);
-    }
+    ui.root.remove(timelinePanel);
+    timelinePanel = ui.Panel({style:timelinepanelStyle});
   }
 }
 
