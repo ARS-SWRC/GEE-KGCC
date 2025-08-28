@@ -388,10 +388,6 @@ var timelineLoadingPanel = ui.Panel({
 
 function renderTimelineboxCallback(clickInfo_obj){
 
-  if (timelinePanel){
-    ui.root.remove(timelinePanel);
-  }
-
   timelineLoadingPanel.style().set('shown', true); // show loading panel immediately
 
   // Use setTimeout to let the UI update first
