@@ -387,9 +387,7 @@ var timelineLoadingPanel = ui.Panel({
   style:loadingtimelinepanelStyle});
 
 function renderTimelineboxCallback(clickInfo_obj){
-  // disable compare functionality
-  compareCheckbox.setValue(false, false);
-  
+
   if (timelinePanel){
     ui.root.remove(timelinePanel);
   }
@@ -483,8 +481,7 @@ function renderTimelinebox(bool_obj){
 var controlPanelA = ui.Panel({
   widgets:[
     infoCheckbox, legendCheckbox,
-    ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}),
-    basemapSelect,
+    ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}), basemapSelect,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
     ui.Label('GCM Model:'), modelADrop,
@@ -492,7 +489,7 @@ var controlPanelA = ui.Panel({
   style:compareApanelStyle});
 
 var controlPanelB = ui.Panel({
-  widgets: [
+  widgets:[
     ui.Label({value:'Scenario B', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioBDrop,
     ui.Label('GCM Model:'), modelBDrop,
@@ -510,19 +507,6 @@ var masterPanel = ui.Panel({widgets:[mainControlPanel, mainMap], layout:ui.Panel
 function createCompareSplitUI(bool_obj){
   controlPanelB.style().set('shown', bool_obj);
   masterPanel.widgets().set(1, bool_obj ? splitPanel : mainMap);
-  if (bool_obj){ // If "Compare scenarios" is checked
-    // If "Timeline on click" is currently bool_obj, uncheck it
-    if (timelineCheckbox.getValue() === true){
-      timelineCheckbox.setValue(false, false); // false for value, false to prevent onChange from firing
-    }
-    // Also, ensure the map click handler is removed when enabling compare mode
-    mainMap.onClick(null);
-  }else{ // If "Compare scenarios" is unchecked (returning to single map view)
-    // If "Timeline on click" was previously checked, re-apply its click handler
-    if (timelineCheckbox.getValue() === true){ // Check its state after potential uncheck by previous logic
-      mainMap.onClick(renderTimelineboxCallback);
-    }
-  }
 };
 
 /*******************************************************
