@@ -2,7 +2,6 @@
   IMPORTS
 */
 var ic = ee.ImageCollection('NASA/NEX-DCP30');
-
 var scale = ic.first().projection().nominalScale().getInfo();
 
 
@@ -34,7 +33,15 @@ var summr_months = ee.List([4, 5, 6, 7, 8, 9]);
 var wintr_months = ee.List([1, 2, 3, 10, 11, 12]);
 
 /*******************************************************
+  MAIN FUNCTION
+*/
+var kcModule = require('users/andrewfullhart/KOPPEN:Koppen-Climate-MainFunc');
+
+/*******************************************************
   UI
+*/
+/*******************************************************
+  Styles
 */
 var typePalette = [
   '#0000FF', '#0078FF', '#46FAAA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
@@ -48,14 +55,18 @@ var visParams = {
   max:30,
   palette:typePalette};
 
-/*******************************************************
-  MAIN FUNCTION
-*/
-var kcModule = require('users/gerardo/default:KOPPEN/Koppen-Climate-MainFunc');
+//https://eltos.github.io/gradient/#0:000000-5:FF0000-50:D7481D-90:59F720-95:800080
+var uncertGrad = 
+  '<RasterSymbolizer>' + 
+    '<ColorMap type="ramp">' + 
+      '<ColorMapEntry quantity="0" color="#000000"/>' + 
+      '<ColorMapEntry quantity="5" color="#FF0000"/>' +
+      '<ColorMapEntry quantity="50" color="#D7481D"/>' +
+      '<ColorMapEntry quantity="90" color="#59F720"/>' +
+      '<ColorMapEntry quantity="95" color="#800080"/>' +
+    '</ColorMap>' +
+  '</RasterSymbolizer>';
 
-/*******************************************************
-  Styles
-*/
 var loadinglabelStyle = {
   fontSize:'24px',
   color:'white',
@@ -176,6 +187,17 @@ var compareApanelStyle = {stretch:'vertical'};
 var compareBpanelStyle = {
   stretch:'vertical', 
   shown: false};
+
+var clrgradlabelStyle = {
+  fontWeight:'bold', 
+  fontSize:'16px',
+  margin:'0 0 4px 0',
+  padding:'0'};
+
+var clrgradpanelStyle = {width:'100px',
+ height:'300px',
+ position:'bottom-left', 
+ padding:'8px 15px'};
 
 var mainpanelStyle = {
   width:'300px', 
@@ -368,11 +390,13 @@ var dateBDrop = ui.Select({
   style:dropStyle});
 
 // Other control widgets
-var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) { infoPanel.style().set('shown', checked);}});
-var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) { legendPanel.style().set('shown', checked);}});
+var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) {infoPanel.style().set('shown', checked);}});
+var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) {legendPanel.style().set('shown', checked);}});
 var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid'], value:'roadmap', onChange:function(value){mainMap.setOptions(value); splitMap.setOptions(value);}, style:dropStyle});
+var uncertSelect = ui.Select({items:class_list.getInfo(), placeholder:'Select Uncertainty', onChange:renderUncertainty, style:dropStyle});
 var compareCheckbox = ui.Checkbox({label:'Compare scenarios', onChange:createCompareSplitUI, value:false});
 var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTimelinebox, style:timelineboxStyle});
+
 
 /*******************************************************
   POP-UP TIMELINE LOGIC
@@ -471,6 +495,93 @@ function renderTimelinebox(bool_obj){
 }
 
 
+
+/*******************************************************
+  UNCERTAINTIES 
+*/
+
+function renderUncertainty(class_str_obj){
+  
+  mainMap.layers().reset();
+
+  var model_list = scenarioModelDict[scenarioA.scenario];
+  var selections = [];
+  for (var i = 0; i < model_list.length; i++){
+    selections.push([scenarioA.year, model_list[i], scenarioA.scenario]);
+  }
+
+  var uncert_selection_list = ee.List(selections);
+  
+  function main_fn_wrapper(triple){
+    return kcModule.main_fn(triple, ic, order_months, ndays_months, summr_months, wintr_months);
+  }
+
+  var model_ic = ee.ImageCollection(uncert_selection_list.map(main_fn_wrapper));
+  
+  var class_str = ee.String(class_str_obj);
+  var selected_class_num = class_list.indexOf(class_str);
+  
+  function uncert_fn(class_num_obj){
+
+    var class_num = ee.Number(class_num_obj);
+    
+    function check_fn(im_obj){
+      var im = ee.Image(im_obj);
+      var check_im = im.eq(class_num);
+      return check_im;
+    }
+    
+    var check_ic = ee.ImageCollection(model_ic.map(check_fn));
+    
+    function change_band_name_fn(im){
+      var bLabel = im.bandNames().get(0);
+      return im.select([bLabel],['B1']);
+    }
+    
+    var check_ic = ee.ImageCollection(check_ic.map(change_band_name_fn));
+    var check_ic = ee.ImageCollection(check_ic.cast({B1:'int64'}, ['B1']));
+    var count_im = check_ic.reduce(ee.Reducer.sum());
+    var uncert_im = count_im.divide(model_ic.size()).multiply(100.0);
+    return uncert_im;
+  }
+  
+  var uncert_ic = ee.ImageCollection(class_seq_list.map(uncert_fn));
+  mainMap.addLayer(ee.Image(uncert_ic.toList(999).get(selected_class_num)).sldStyle(uncertGrad));
+  
+  var clrgrad_panel = ui.Panel({style:clrgradpanelStyle});
+  
+  var clrgradTitle = ui.Label({
+    value:'% of GCM Ensemble',
+    style:clrgradlabelStyle
+  });
+  
+  var clrgradmaxLabel = ui.Label({
+    value:'100%',
+    style:clrgradlabelStyle
+  });
+
+  var clrgradminLabel = ui.Label({
+    value:'0%',
+    style:clrgradlabelStyle
+  });
+  
+  var lat = ee.Image.pixelLonLat().select('latitude');
+  var gradient = lat.multiply(1.0);
+  var legendImage = gradient.sldStyle(uncertGrad);
+  var thumbnail = ui.Thumbnail({
+    image:legendImage,
+    params:{bbox:'0,0,10,100', dimensions:'50x200'}, 
+    style:{position:'bottom-right', stretch:'vertical', margin:'0px 8px', maxHeight:'200px'}
+  });
+  
+  clrgrad_panel.add(clrgradTitle);
+  clrgrad_panel.add(clrgradmaxLabel);
+  clrgrad_panel.add(thumbnail);
+  clrgrad_panel.add(clrgradminLabel);
+  mainMap.add(clrgrad_panel);
+}
+
+
 /*******************************************************
   ASSEMBLE CONTROL PANELS
 */
@@ -478,6 +589,7 @@ var controlPanelA = ui.Panel({
   widgets:[
     infoCheckbox, legendCheckbox,
     ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}), basemapSelect,
+    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
     ui.Label('GCM Model:'), modelADrop,
