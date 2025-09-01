@@ -3,6 +3,7 @@
 */
 var ic = ee.ImageCollection('NASA/NEX-DCP30');
 var scale = ic.first().projection().nominalScale().getInfo();
+var proj = ic.first().projection();
 
 
 /*******************************************************
@@ -66,6 +67,10 @@ var uncertGrad =
       '<ColorMapEntry quantity="95" color="#800080"/>' +
     '</ColorMap>' +
   '</RasterSymbolizer>';
+
+var clrgradVis = {
+  bbox:'0,0,10,100', 
+  dimensions:'50x200'};
 
 var loadinglabelStyle = {
   fontSize:'24px',
@@ -199,6 +204,27 @@ var clrgradpanelStyle = {width:'100px',
  position:'bottom-left', 
  padding:'8px 15px'};
 
+var clrgradthumbStyle = {
+  position:'bottom-right', 
+  stretch:'vertical', 
+  margin:'0px 8px', 
+  maxHeight:'200px'};
+
+var pixellabelStyle = {
+  height:'50px',
+  width:'50px',
+  padding:'0px',
+  margin:'0px',
+  position:'top-center',
+  fontSize:'16px',
+  fontWeight: 'bold'};
+
+var pixelpanelStyle = {
+  height:'100px',
+  width:'100px',
+  position:'bottom-center',
+  margin:'10px 10px'};
+
 var mainpanelStyle = {
   width:'300px', 
   padding:'8px'};
@@ -318,7 +344,7 @@ for (var i = 0; i < typeLabels.length; i++) {legendPanel.add(makeLegendRow(typeP
 
 // --- Create all the control widgets ---
 
-// MODIFIED: All dropdowns now show the loading overlay and use the callback.
+// Uncertainty dropdown should be moved here
 var hideLoading = function() {loadingOverlay.style().set('shown', false);};
 
 var scenarioADrop = ui.Select({
@@ -396,7 +422,7 @@ var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid
 var uncertSelect = ui.Select({items:class_list.getInfo(), placeholder:'Select Uncertainty', onChange:renderUncertainty, style:dropStyle});
 var compareCheckbox = ui.Checkbox({label:'Compare scenarios', onChange:createCompareSplitUI, value:false});
 var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTimelinebox, style:timelineboxStyle});
-
+var inspectCheckbox = ui.Checkbox({label:'Pixel Value on Click', onChange:renderInspector});
 
 /*******************************************************
   POP-UP TIMELINE LOGIC
@@ -436,7 +462,7 @@ function renderTimelineboxCallback(clickInfo_obj){
 
     var click_ic = ee.ImageCollection(click_selection_list.map(main_fn_wrapper));
 
-    var prop_sample_list = click_ic.getRegion({geometry: pt, scale: scale}).getInfo();
+    var prop_sample_list = click_ic.getRegion({geometry:pt, scale:scale}).getInfo();
 
     var js_type_list = [];
     for (var i = 1; i < prop_sample_list.length; i++){
@@ -493,8 +519,6 @@ function renderTimelinebox(bool_obj){
     timelinePanel = ui.Panel({style:timelinepanelStyle});
   }
 }
-
-
 
 /*******************************************************
   UNCERTAINTIES 
@@ -567,11 +591,11 @@ function renderUncertainty(class_str_obj){
   
   var lat = ee.Image.pixelLonLat().select('latitude');
   var gradient = lat.multiply(1.0);
-  var legendImage = gradient.sldStyle(uncertGrad);
+  var clrgradImage = gradient.sldStyle(uncertGrad);
   var thumbnail = ui.Thumbnail({
-    image:legendImage,
-    params:{bbox:'0,0,10,100', dimensions:'50x200'}, 
-    style:{position:'bottom-right', stretch:'vertical', margin:'0px 8px', maxHeight:'200px'}
+    image:clrgradImage,
+    params:clrgradVis, 
+    style:clrgradthumbStyle
   });
   
   clrgrad_panel.add(clrgradTitle);
@@ -581,13 +605,60 @@ function renderUncertainty(class_str_obj){
   mainMap.add(clrgrad_panel);
 }
 
+/*******************************************************
+  PIXEL VALUE ON CLICK
+*/
+
+var pixel_panel = ui.Panel({style:pixelpanelStyle});
+
+function makepixelLabel(point_geo){
+  var im_to_sample = mainMap.layers().get(0).get("eeObject");
+  var point_fc = im_to_sample.sample(point_geo, scale, proj);
+  var prop_ft = point_fc.first();
+  var prop_names = prop_ft.propertyNames();
+  var sys_index_idx = prop_names.getInfo().indexOf('system:index');
+  var prop_idx = 1 - sys_index_idx;
+  var prop_val = ee.Number(prop_ft.get(prop_names.get(prop_idx)));
+  var prop_val = class_list.get(prop_val.subtract(1));
+  var pixel_label = ui.Label({
+    value:'Pixel Value:'.concat('\n').concat(prop_val.getInfo()),
+    style:pixellabelStyle
+  });
+  return pixel_label;
+}
+
+function clickCallbackC(clickInfo_obj){
+  mainMap.remove(pixel_panel);
+  var lat = clickInfo_obj.lat;
+  var lon = clickInfo_obj.lon;
+  var pt = ee.Geometry.Point([lon, lat]);
+  var pixel_label = makepixelLabel(pt);
+  pixel_panel = ui.Panel({
+    widgets:pixel_label,
+    layout:ui.Panel.Layout.Flow('horizontal'),
+    style:pixelpanelStyle
+  });
+  mainMap.add(pixel_panel);
+}
+
+function renderInspector(checkbox_bool){
+  if (checkbox_bool === true){
+    mainMap.onClick(clickCallbackC);
+  }
+  else{
+    mainMap.unlisten();
+    mainMap.remove(pixel_panel);
+    pixel_panel = ui.Panel({style:pixelpanelStyle});
+  }
+}
 
 /*******************************************************
   ASSEMBLE CONTROL PANELS
 */
+
 var controlPanelA = ui.Panel({
   widgets:[
-    infoCheckbox, legendCheckbox,
+    infoCheckbox, legendCheckbox, inspectCheckbox,
     ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}), basemapSelect,
     ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
@@ -620,6 +691,7 @@ function createCompareSplitUI(bool_obj){
 /*******************************************************
   FINAL UI LAYOUT SETUP
 */
+
 ui.root.setLayout(ui.Panel.Layout.absolute());
 ui.root.clear();
 ui.root.add(masterPanel);
