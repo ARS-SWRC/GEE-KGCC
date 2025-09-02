@@ -5,7 +5,6 @@ var ic = ee.ImageCollection('NASA/NEX-DCP30');
 var scale = ic.first().projection().nominalScale().getInfo();
 var proj = ic.first().projection();
 
-
 /*******************************************************
   DICTIONARIES and LISTS
 */
@@ -45,7 +44,7 @@ var kcModule = require('users/andrewfullhart/KOPPEN:Koppen-Climate-MainFunc');
   Styles
 */
 var typePalette = [
-  '#0000FF', '#0078FF', '#46FAAA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
+  '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
   '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
   '#C8FF50', '#64FF50', '#32C800', '#FF00FF', '#C800C8', '#963296', '#966496',
   '#AAAFFF', '#5A78DC', '#4B50B4', '#320087', '#00FFFF', '#37C8FF', '#007D7D', '#00465F',
@@ -61,10 +60,10 @@ var uncertGrad =
   '<RasterSymbolizer>' + 
     '<ColorMap type="ramp">' + 
       '<ColorMapEntry quantity="0" color="#000000"/>' + 
-      '<ColorMapEntry quantity="5" color="#FF0000"/>' +
+      '<ColorMapEntry quantity="10" color="#FF0000"/>' +
       '<ColorMapEntry quantity="50" color="#D7481D"/>' +
       '<ColorMapEntry quantity="90" color="#59F720"/>' +
-      '<ColorMapEntry quantity="95" color="#800080"/>' +
+      '<ColorMapEntry quantity="100" color="#800080"/>' +
     '</ColorMap>' +
   '</RasterSymbolizer>';
 
@@ -211,8 +210,8 @@ var clrgradthumbStyle = {
   maxHeight:'200px'};
 
 var pixellabelStyle = {
-  height:'50px',
-  width:'50px',
+  height:'80px',
+  width:'80px',
   padding:'0px',
   margin:'0px',
   position:'top-center',
@@ -223,7 +222,7 @@ var pixelpanelStyle = {
   height:'100px',
   width:'100px',
   position:'bottom-center',
-  margin:'10px 10px'};
+  margin:'1px 1px'};
 
 var mainpanelStyle = {
   width:'300px', 
@@ -254,6 +253,7 @@ var scenarioB = {
 function updateMainMap(onCompleteCallback){
   var im = kcModule.main_fn([scenarioA.year, scenarioA.model, scenarioA.scenario],ic, order_months,ndays_months,summr_months,wintr_months);
   mainMap.layers().reset();
+  mainMap.widgets().reset();
   mainMap.addLayer(im, visParams, 'Scenario A');
   // A cheap server call to trigger the callback when processing is done.
   im.projection().nominalScale().evaluate(function(scale, error){
@@ -267,6 +267,7 @@ function updateMainMap(onCompleteCallback){
 function updateSplitMap(onCompleteCallback){
   var im = kcModule.main_fn([scenarioB.year, scenarioB.model, scenarioB.scenario],ic, order_months,ndays_months,summr_months,wintr_months);
   splitMap.layers().reset();
+  splitMap.widgets().reset();
   splitMap.addLayer(im, visParams, 'Scenario B');
   im.projection().nominalScale().evaluate(function(scale, error){
      if (error){
@@ -527,6 +528,7 @@ function renderTimelinebox(bool_obj){
 function renderUncertainty(class_str_obj){
   
   mainMap.layers().reset();
+  mainMap.widgets().reset();
 
   var model_list = scenarioModelDict[scenarioA.scenario];
   var selections = [];
@@ -571,7 +573,7 @@ function renderUncertainty(class_str_obj){
   
   var uncert_ic = ee.ImageCollection(class_seq_list.map(uncert_fn));
   mainMap.addLayer(ee.Image(uncert_ic.toList(999).get(selected_class_num)).sldStyle(uncertGrad));
-  
+
   var clrgrad_panel = ui.Panel({style:clrgradpanelStyle});
   
   var clrgradTitle = ui.Label({
@@ -609,6 +611,58 @@ function renderUncertainty(class_str_obj){
   PIXEL VALUE ON CLICK
 */
 
+//PRINT RGB VALUES FOR UNCERTAINTY VALUE LOOK-UP
+// function hex2rgb(hex){
+//   var cleanHex = hex.slice(1);
+//   var r = parseInt(cleanHex.substring(0, 2), 16);
+//   var g = parseInt(cleanHex.substring(2, 4), 16);
+//   var b = parseInt(cleanHex.substring(4, 6), 16);
+//   return [r, g, b];
+// }
+// print(hex2rgb('#000000'));
+// print(hex2rgb('#FF0000'));
+// print(hex2rgb('#D7481D'));
+// print(hex2rgb('#59F720'));
+// print(hex2rgb('#800080'));
+
+function rgb2value(r, g, b){
+  //the band with the biggest difference is used
+  //#value of zero
+  if (r + b + g === 0){
+    var perc = 0.0;
+    return perc;
+  }
+  //value between 0% and 10%
+  if (g === 0 && b === 0){
+    var frac = r/255.0;
+    var perc = frac*10.0;
+    return perc
+  }
+  //value between 10% and 50%
+  if (b < 29.0){
+    var frac = g/72.0;
+    var perc = (frac*40.0) + 10.0;
+    return perc;
+  }
+  //value between 50% and 90%
+  if (b < 32){
+    var frac = (175.0 - (247.0 - g))/175.0;
+    var perc = (frac*40.0) + 50.0;
+    return perc;
+  }
+  //value between 90% and 100%
+  if (b >= 32){
+    var frac = (247.0 - g)/247.0;
+    var perc = (frac*10.0) + 90.0;
+    return perc;
+  }
+  //value of 100%
+  if (r == 128 && g === 0 && b == 128){
+    var perc = 100.0;
+    return perc;
+  }
+}
+
 var pixel_panel = ui.Panel({style:pixelpanelStyle});
 
 function makepixelLabel(point_geo){
@@ -616,15 +670,27 @@ function makepixelLabel(point_geo){
   var point_fc = im_to_sample.sample(point_geo, scale, proj);
   var prop_ft = point_fc.first();
   var prop_names = prop_ft.propertyNames();
-  var sys_index_idx = prop_names.getInfo().indexOf('system:index');
-  var prop_idx = 1 - sys_index_idx;
-  var prop_val = ee.Number(prop_ft.get(prop_names.get(prop_idx)));
-  var prop_val = class_list.get(prop_val.subtract(1));
-  var pixel_label = ui.Label({
-    value:'Pixel Value:'.concat('\n').concat(prop_val.getInfo()),
-    style:pixellabelStyle
-  });
-  return pixel_label;
+  if (prop_names.getInfo().length < 3){
+    var sys_index_idx = prop_names.getInfo().indexOf('system:index');
+    var prop_idx = 1 - sys_index_idx;
+    var prop_val = ee.Number(prop_ft.get(prop_names.get(prop_idx)));
+    var prop_val = class_list.get(prop_val.subtract(1));
+    var pixel_label = ui.Label({
+      value:'Pixel Value:'.concat('\n').concat(prop_val.getInfo()),
+      style:pixellabelStyle
+    });
+    return pixel_label;
+  }else{
+    var r_val = prop_ft.get('vis-red').getInfo();
+    var g_val = prop_ft.get('vis-green').getInfo();
+    var b_val = prop_ft.get('vis-blue').getInfo();
+    var prop_val = rgb2value(r_val, g_val, b_val).toFixed(1);
+    var pixel_label = ui.Label({
+      value:'Pixel Value:'.concat('\n').concat(prop_val).concat('%'),
+      style:pixellabelStyle
+    });
+    return pixel_label;
+  }
 }
 
 function clickCallbackC(clickInfo_obj){
@@ -660,11 +726,11 @@ var controlPanelA = ui.Panel({
   widgets:[
     infoCheckbox, legendCheckbox, inspectCheckbox,
     ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}), basemapSelect,
-    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
     ui.Label('GCM Model:'), modelADrop,
-    ui.Label('Date Range:'), dateADrop],
+    ui.Label('Date Range:'), dateADrop,
+    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect],
   style:compareApanelStyle});
 
 var controlPanelB = ui.Panel({
