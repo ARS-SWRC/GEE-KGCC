@@ -436,7 +436,7 @@ var timelinePanel = ui.Panel({style:timelinepanelStyle});
 
 // timeline loading message
 var timelineLoadingPanel = ui.Panel({
-  widgets:[ui.Label({value:'Loading timeline...', style:loadingtimelinelabelStyle})],
+  widgets:[ui.Label({value:'Loading ...', style:loadingtimelinelabelStyle})],
   style:loadingtimelinepanelStyle});
 
 function renderTimelineboxCallback(clickInfo_obj){
