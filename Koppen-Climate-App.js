@@ -417,13 +417,15 @@ var dateBDrop = ui.Select({
   style:dropStyle});
 
 // Other control widgets
+var appTitle = ui.Label({value:'Koppen Climate Viewer', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'2px', textAlign:'left', fontSize:'20px', fontWeight:'bold' }});
+var appSubTitle = ui.Label({value:'Köppen-Geiger Climate Classifications/NEX-DCP30 Climate Viewer', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'1px 2px 10px 2px', textAlign:'left', fontSize:'12px', width: '230px',whiteSpace: 'normal' }});
 var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) {infoPanel.style().set('shown', checked);}});
 var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) {legendPanel.style().set('shown', checked);}});
-var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid'], value:'roadmap', onChange:function(value){mainMap.setOptions(value); splitMap.setOptions(value);}, style:dropStyle});
+//var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid'], value:'roadmap', onChange:function(value){mainMap.setOptions(value); splitMap.setOptions(value);}, style:dropStyle});
 var uncertSelect = ui.Select({items:class_list.getInfo(), placeholder:'Select Uncertainty', onChange:renderUncertainty, style:dropStyle});
-var compareCheckbox = ui.Checkbox({label:'Compare scenarios', onChange:createCompareSplitUI, value:false});
-var timelineCheckbox = ui.Checkbox({label:'Timeline on click', onChange:renderTimelinebox, style:timelineboxStyle});
-var inspectCheckbox = ui.Checkbox({label:'Pixel Value on Click', onChange:renderInspector});
+var compareCheckbox = ui.Checkbox({label:'Compare Scenarios', onChange:createCompareSplitUI, value:false});
+var timelineCheckbox = ui.Checkbox({label:'Timeline On Click', onChange:renderTimelinebox, style:timelineboxStyle});
+var inspectCheckbox = ui.Checkbox({label:'Pixel Value On Click', onChange:renderPixelInspector});
 
 /*******************************************************
   POP-UP TIMELINE LOGIC
@@ -440,7 +442,8 @@ var timelineLoadingPanel = ui.Panel({
 function renderTimelineboxCallback(clickInfo_obj){
 
   timelineLoadingPanel.style().set('shown', true); // show loading panel immediately
-
+  timelinePanel.style().set('shown', false);
+  
   // Use setTimeout to let the UI update first
   ui.util.setTimeout(function(){
 
@@ -504,6 +507,8 @@ function renderTimelineboxCallback(clickInfo_obj){
       timelinePanel.add(row);
     }
     ui.root.add(timelinePanel);
+    timelinePanel.style().set('shown', true);
+    
     timelineLoadingPanel.style().set('shown', false); // hide loading panel after done
   }, 100); // Delay allows UI to show loading indicator
 }
@@ -520,6 +525,132 @@ function renderTimelinebox(bool_obj){
     timelinePanel = ui.Panel({style:timelinepanelStyle});
   }
 }
+
+
+/*******************************************************
+  PIXEL VALUE ON CLICK
+*/
+
+//PRINT RGB VALUES FOR UNCERTAINTY VALUE LOOK-UP
+// function hex2rgb(hex){
+//   var cleanHex = hex.slice(1);
+//   var r = parseInt(cleanHex.substring(0, 2), 16);
+//   var g = parseInt(cleanHex.substring(2, 4), 16);
+//   var b = parseInt(cleanHex.substring(4, 6), 16);
+//   return [r, g, b];
+// }
+// print(hex2rgb('#000000'));
+// print(hex2rgb('#FF0000'));
+// print(hex2rgb('#D7481D'));
+// print(hex2rgb('#59F720'));
+// print(hex2rgb('#800080'));
+
+function rgb2value(r, g, b){
+  //the band with the biggest difference is used
+  //#value of zero
+  if (r + b + g === 0){
+    var perc = 0.0;
+    return perc;
+  }
+  //value between 0% and 10%
+  if (g === 0 && b === 0){
+    var frac = r/255.0;
+    var perc = frac*10.0;
+    return perc
+  }
+  //value between 10% and 50%
+  if (b < 29.0){
+    var frac = g/72.0;
+    var perc = (frac*40.0) + 10.0;
+    return perc;
+  }
+  //value between 50% and 90%
+  if (b < 32){
+    var frac = (175.0 - (247.0 - g))/175.0;
+    var perc = (frac*40.0) + 50.0;
+    return perc;
+  }
+  //value between 90% and 100%
+  if (b >= 32){
+    var frac = (247.0 - g)/247.0;
+    var perc = (frac*10.0) + 90.0;
+    return perc;
+  }
+  //value of 100%
+  if (r == 128 && g === 0 && b == 128){
+    var perc = 100.0;
+    return perc;
+  }
+}
+
+var pixel_panel = ui.Panel({style:pixelpanelStyle});
+
+function makepixelLabel(point_geo){
+  var im_to_sample = mainMap.layers().get(0).get("eeObject");
+  var point_fc = im_to_sample.sample(point_geo, scale, proj);
+  var prop_ft = point_fc.first();
+  var prop_names = prop_ft.propertyNames();
+  if (prop_names.getInfo().length < 3){
+    var sys_index_idx = prop_names.getInfo().indexOf('system:index');
+    var prop_idx = 1 - sys_index_idx;
+    var prop_val = ee.Number(prop_ft.get(prop_names.get(prop_idx)));
+    var prop_val = class_list.get(prop_val.subtract(1));
+    var pixel_label = ui.Label({
+      value:'Pixel Value:'.concat('\n').concat(prop_val.getInfo()),
+      style:pixellabelStyle
+    });
+    return pixel_label;
+  }else{
+    var r_val = prop_ft.get('vis-red').getInfo();
+    var g_val = prop_ft.get('vis-green').getInfo();
+    var b_val = prop_ft.get('vis-blue').getInfo();
+    var prop_val = rgb2value(r_val, g_val, b_val).toFixed(1);
+    var pixel_label = ui.Label({
+      value:'Pixel Value:'.concat('\n').concat(prop_val).concat('%'),
+      style:pixellabelStyle
+    });
+    return pixel_label;
+  }
+}
+
+function renderPixelInspectorCallback(clickInfo_obj){
+  
+  timelineLoadingPanel.style().set('shown', true); // show loading panel immediately
+  pixel_panel.style().set('shown', false);
+  
+  // Use setTimeout to let the UI update first
+  ui.util.setTimeout(function(){
+    mainMap.remove(pixel_panel);
+    var lat = clickInfo_obj.lat;
+    var lon = clickInfo_obj.lon;
+    var pt = ee.Geometry.Point([lon, lat]);
+    
+    var pixel_label = makepixelLabel(pt);
+    pixel_panel = ui.Panel({
+      widgets:pixel_label,
+      layout:ui.Panel.Layout.Flow('horizontal'),
+      style:pixelpanelStyle
+    });
+    
+    mainMap.add(pixel_panel);
+    timelineLoadingPanel.style().set('shown', false);
+    pixel_panel.style().set('shown', true);
+  }, 100); // Delay allows UI to show loading indicator
+}
+
+function renderPixelInspector(checkbox_bool){
+  if (checkbox_bool === true){
+    mainMap.style().set('cursor', 'crosshair');
+    mainMap.onClick(renderPixelInspectorCallback);
+  }
+  else{
+    mainMap.style().set('cursor', 'hand');
+    mainMap.unlisten();
+    mainMap.remove(pixel_panel);
+    pixel_panel = ui.Panel({style:pixelpanelStyle});
+  }
+}
+
 
 /*******************************************************
   UNCERTAINTIES 
@@ -608,129 +739,20 @@ function renderUncertainty(class_str_obj){
 }
 
 /*******************************************************
-  PIXEL VALUE ON CLICK
-*/
-
-//PRINT RGB VALUES FOR UNCERTAINTY VALUE LOOK-UP
-// function hex2rgb(hex){
-//   var cleanHex = hex.slice(1);
-//   var r = parseInt(cleanHex.substring(0, 2), 16);
-//   var g = parseInt(cleanHex.substring(2, 4), 16);
-//   var b = parseInt(cleanHex.substring(4, 6), 16);
-//   return [r, g, b];
-// }
-// print(hex2rgb('#000000'));
-// print(hex2rgb('#FF0000'));
-// print(hex2rgb('#D7481D'));
-// print(hex2rgb('#59F720'));
-// print(hex2rgb('#800080'));
-
-function rgb2value(r, g, b){
-  //the band with the biggest difference is used
-  //#value of zero
-  if (r + b + g === 0){
-    var perc = 0.0;
-    return perc;
-  }
-  //value between 0% and 10%
-  if (g === 0 && b === 0){
-    var frac = r/255.0;
-    var perc = frac*10.0;
-    return perc
-  }
-  //value between 10% and 50%
-  if (b < 29.0){
-    var frac = g/72.0;
-    var perc = (frac*40.0) + 10.0;
-    return perc;
-  }
-  //value between 50% and 90%
-  if (b < 32){
-    var frac = (175.0 - (247.0 - g))/175.0;
-    var perc = (frac*40.0) + 50.0;
-    return perc;
-  }
-  //value between 90% and 100%
-  if (b >= 32){
-    var frac = (247.0 - g)/247.0;
-    var perc = (frac*10.0) + 90.0;
-    return perc;
-  }
-  //value of 100%
-  if (r == 128 && g === 0 && b == 128){
-    var perc = 100.0;
-    return perc;
-  }
-}
-
-var pixel_panel = ui.Panel({style:pixelpanelStyle});
-
-function makepixelLabel(point_geo){
-  var im_to_sample = mainMap.layers().get(0).get("eeObject");
-  var point_fc = im_to_sample.sample(point_geo, scale, proj);
-  var prop_ft = point_fc.first();
-  var prop_names = prop_ft.propertyNames();
-  if (prop_names.getInfo().length < 3){
-    var sys_index_idx = prop_names.getInfo().indexOf('system:index');
-    var prop_idx = 1 - sys_index_idx;
-    var prop_val = ee.Number(prop_ft.get(prop_names.get(prop_idx)));
-    var prop_val = class_list.get(prop_val.subtract(1));
-    var pixel_label = ui.Label({
-      value:'Pixel Value:'.concat('\n').concat(prop_val.getInfo()),
-      style:pixellabelStyle
-    });
-    return pixel_label;
-  }else{
-    var r_val = prop_ft.get('vis-red').getInfo();
-    var g_val = prop_ft.get('vis-green').getInfo();
-    var b_val = prop_ft.get('vis-blue').getInfo();
-    var prop_val = rgb2value(r_val, g_val, b_val).toFixed(1);
-    var pixel_label = ui.Label({
-      value:'Pixel Value:'.concat('\n').concat(prop_val).concat('%'),
-      style:pixellabelStyle
-    });
-    return pixel_label;
-  }
-}
-
-function clickCallbackC(clickInfo_obj){
-  mainMap.remove(pixel_panel);
-  var lat = clickInfo_obj.lat;
-  var lon = clickInfo_obj.lon;
-  var pt = ee.Geometry.Point([lon, lat]);
-  var pixel_label = makepixelLabel(pt);
-  pixel_panel = ui.Panel({
-    widgets:pixel_label,
-    layout:ui.Panel.Layout.Flow('horizontal'),
-    style:pixelpanelStyle
-  });
-  mainMap.add(pixel_panel);
-}
-
-function renderInspector(checkbox_bool){
-  if (checkbox_bool === true){
-    mainMap.onClick(clickCallbackC);
-  }
-  else{
-    mainMap.unlisten();
-    mainMap.remove(pixel_panel);
-    pixel_panel = ui.Panel({style:pixelpanelStyle});
-  }
-}
-
-/*******************************************************
   ASSEMBLE CONTROL PANELS
 */
 
 var controlPanelA = ui.Panel({
   widgets:[
-    infoCheckbox, legendCheckbox, inspectCheckbox,
-    ui.Label({value:'Basemap Selection', style:dropheaderlabelStyle}), basemapSelect,
+    appTitle,appSubTitle,
+    ui.Label({value:'About/Legend', style:dropheaderlabelStyle}), infoCheckbox, legendCheckbox,
+    ui.Label({value:'Click Tools', style:dropheaderlabelStyle}), inspectCheckbox, timelineCheckbox,
+    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect,
+    ui.Label({value:'Compare', style:dropheaderlabelStyle}), compareCheckbox,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
     ui.Label('GCM Model:'), modelADrop,
-    ui.Label('Date Range:'), dateADrop,
-    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect],
+    ui.Label('Date Range:'), dateADrop],
   style:compareApanelStyle});
 
 var controlPanelB = ui.Panel({
@@ -741,7 +763,7 @@ var controlPanelB = ui.Panel({
     ui.Label('Date Range:'), dateBDrop],
   style:compareBpanelStyle});
 
-var mainControlPanel = ui.Panel({widgets:[controlPanelA, timelineCheckbox, compareCheckbox, controlPanelB], style:mainpanelStyle});
+var mainControlPanel = ui.Panel({widgets:[controlPanelA, controlPanelB], style:mainpanelStyle});
 
 // Assemble main layout
 var linker = ui.Map.Linker([mainMap, splitMap]);
