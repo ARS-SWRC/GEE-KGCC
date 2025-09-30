@@ -9,7 +9,7 @@ This Python-based package creates KGCC maps from monthly climate images prepared
 ## Requirements
 - Google Account
 - Google Earth Engine Account
-- Python 3.9 minimum
+- Python 3
 - earthengine-api
 - geemap (optional for visualization)
 
