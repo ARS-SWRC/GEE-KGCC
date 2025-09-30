@@ -46,21 +46,33 @@ The user must provide ee image collections of long-term average monthly precipit
 
 The following methods are included in geekgcc: `classify()`, `download()`, and `get_vis_params()`.
 
+**Classification from monthly precipitation and tempearture raster images:**
+`geekgcc.KGCC.classify()`
 
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| p_ic | ee.ImageCollection() | 12 monthly precipitation images |
+| t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
-Valid GCM strings:
-```sh
-CCSM4, CanESM2, MIROC5
-```
+**Download classified image to Google Drive:**
+`geekgcc.KGCC.download()`
 
-Valid year window strings:
-```sh
-1974_2013, 2000_2029, 2010_2039, 2020_2049, 2030_2059, 2040_2069, 2050_2079, 2060_2089, 2070_2099
-```
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| p_ic | ee.ImageCollection() | 12 monthly precipitation images |
+| t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
-Valid wind options:
-```sh
-Search, <some_custom_wind_string_name>
-```
+**Get visualization parameters:**
+`geekgcc.KGCC.get_vis_params()`
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| p_ic | ee.ImageCollection() | 12 monthly precipitation images |
+| t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
+
 ## Running
 The PyInstaller command used to create the EXEs has the windowless option enabled. This means that the created EXEs run in the background. The EXEs were ran successfully if the outputs specified in list.txt appear in either the pars folder or the maps_out folder, depending on which EXE was used. If the expected outputs don't appear, check for errors in the formatting in list.txt and that the directory structure is correct.
+
