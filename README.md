@@ -14,7 +14,7 @@ This Python-based package creates KGCC maps from monthly climate images prepared
 - geemap (optional for visualization)
 
 ## Setup
-In Google Colab, all setup requirements are already met. The earthengine-api (ee) depency is automatically installed with geekgcc and Colab. When using Colab, prepend an exclamation mark (!) to the beginning of the following two code lines.
+In Google Colab, all setup requirements are already met for installing geekgcc. The earthengine-api (ee) depency is automatically installed with geekgcc and Colab. When using Colab, prepend an exclamation mark (!) to the beginning of the following two code lines.
 **To install the geekgcc Python package using Git and Pip:**
 ```bash
 git clone https://github.com/ARS-SWRC/GEE-KGCC
