@@ -53,6 +53,7 @@ The following methods are included in geekgcc: `classify()`, `download()`, and `
 | ------ | ------ | ------ |
 | p_ic | ee.ImageCollection() | 12 monthly precipitation images |
 | t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+
 Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
 **Download classified image to Google Drive:**
@@ -62,6 +63,7 @@ Returns a classified ee.Image() object. Possible output values are in the range 
 | ------ | ------ | ------ |
 | p_ic | ee.ImageCollection() | 12 monthly precipitation images |
 | t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+
 Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
 **Get visualization parameters:**
@@ -71,6 +73,7 @@ Returns a classified ee.Image() object. Possible output values are in the range 
 | ------ | ------ | ------ |
 | p_ic | ee.ImageCollection() | 12 monthly precipitation images |
 | t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+
 Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
 ## Running
