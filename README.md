@@ -6,8 +6,6 @@ https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map
 ## Description
 This Python-based package creates KGCC maps from monthly climate images prepared by the user. The gee dependency handles these images as Earth Engine image collection objects. Besides loading resulting KGCC maps to memory, the package can download KGCC geotif maps to Google Drive. Additionally, when the geemap library is installed, the maps may be visualized. 
 
-While this tool kit is useful for doing batch queries, a website for querying single locations can be accessed at: https://apps.tucson.ars.ag.gov/cligenpar
-
 ## Requirements
 - Google Account
 - Google Earth Engine Account
@@ -53,6 +51,7 @@ The following methods are included in geekgcc: `classify()`, `download()`, and `
 | ------ | ------ | ------ |
 | p_ic | ee.ImageCollection() | 12 monthly precipitation images |
 | t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+| hemi | string | "north" or "south" hemisphere |
 
 Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
