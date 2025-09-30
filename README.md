@@ -72,9 +72,9 @@ Returns None. Spawns a download task to Google Drive in geotif format. Download 
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| None | | |
+| None | - | - |
 
-Returns visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC.
+Returns visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC. Only needed when visualizing with geemaps.
 
 ## Running
 The PyInstaller command used to create the EXEs has the windowless option enabled. This means that the created EXEs run in the background. The EXEs were ran successfully if the outputs specified in list.txt appear in either the pars folder or the maps_out folder, depending on which EXE was used. If the expected outputs don't appear, check for errors in the formatting in list.txt and that the directory structure is correct.
