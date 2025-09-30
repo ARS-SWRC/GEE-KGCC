@@ -60,10 +60,12 @@ Returns a classified ee.Image() object. Possible output values are in the range 
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| p_ic | ee.ImageCollection() | 12 monthly precipitation images |
-| t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+| type_image | ee.Image() | classified image |
+| geo | ee.Geometry() | bounding box geometry |
+| scale | float | scale/resolution of downloaded image |
+| filename | ee.String() | downloaded file name |
 
-Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
+Returns None. Spawns a download task for Google Drive download in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
 **Get visualization parameters:**
 `geekgcc.KGCC.get_vis_params()`
