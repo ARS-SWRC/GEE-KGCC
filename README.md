@@ -46,6 +46,7 @@ The user must provide ee image collections of long-term average monthly precipit
 The following methods are included in geekgcc: `classify()`, `download()`, and `get_vis_params()`.
 
 **Classification from monthly precipitation and tempearture raster images:**
+
 `geekgcc.KGCC.classify()`
 
 | Parameter | Type | Description |
@@ -57,6 +58,7 @@ The following methods are included in geekgcc: `classify()`, `download()`, and `
 Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
 
 **Download classified image to Google Drive:**
+
 `geekgcc.KGCC.download()`
 
 | Parameter | Type | Description |
@@ -69,6 +71,7 @@ Returns a classified ee.Image() object. Possible output values are in the range 
 Returns None. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
 **Get visualization parameters:**
+
 `geekgcc.KGCC.get_vis_params()`
 
 | Parameter | Type | Description |
