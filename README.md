@@ -33,7 +33,7 @@ https://geemap.org/
 import ee
 #This will open a web browser for log-in steps.
 ee.Authenticate()
-geeusername = 'andrewfullhart' #Enter your GEE username.
+geeusername = 'yourusername' #Enter your GEE username.
 ee.Initialize(project='ee-' + geeusername)
 #ee should be initialized before importing geekgcc.
 import geekgcc
