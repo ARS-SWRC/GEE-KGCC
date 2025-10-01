@@ -29,6 +29,7 @@ pip install .
 ```
 **For visualization, additionally install the geemaps library. In Colab, this library is pre-installed.**
 
+Installation instructions may be found at:
 https://geemap.org/
 
 **To authenticate ee and import necessary libraries, use the following steps.** Start by importing, authenticating, and initializing ee, then import geekgcc.
