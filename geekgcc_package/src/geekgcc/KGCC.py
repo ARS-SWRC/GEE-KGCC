@@ -412,7 +412,7 @@ class KGCC:
     return {'min':1, 'max':30, 'palette':typePalette}
   
   @classmethod
-  def download(cls, type_image=None, geo=None, scale=None, file_name=ee.String('KG_map')):
+  def download(cls, type_image=None, geo=None, scale=None, file_name='KG_map'):
     type_im = type_image.toDouble()
     task = ee.batch.Export.image.toDrive(
       image=type_im,
