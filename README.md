@@ -70,7 +70,7 @@ Returns a classified `ee.Image()` object. Possible output values are in the rang
 | type_image | ee.Image() | classified image |
 | geo | ee.Geometry() | bounding box geometry |
 | scale | float | scale/resolution of downloaded image |
-| filename | ee.String() | downloaded file name |
+| filename | string | downloaded file name |
 
 Returns `None`. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
