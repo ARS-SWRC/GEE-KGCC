@@ -51,7 +51,7 @@ The following methods are included in geekgcc: `classify()`, `download()`, and `
 
 **Classification from monthly precipitation and tempearture raster images:**
 
-`geekgcc.KGCC.classify()`
+`geekgcc.KGCC.classify(p_ic, t_ic, hemi)`
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
@@ -63,7 +63,7 @@ Returns a classified ee.Image() object. Possible output values are in the range 
 
 **Download classified image to Google Drive:**
 
-`geekgcc.KGCC.download()`
+`geekgcc.KGCC.download(type_image, geo, scale, filename)`
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
@@ -80,7 +80,7 @@ Returns None. Spawns a download task to Google Drive in geotif format. Download 
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| None | - | - |
+| - | - | - |
 
 Returns visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC. Only needed when visualizing with geemaps.
 
