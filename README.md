@@ -45,7 +45,7 @@ import geekgcc
 The string argument for ee.Initialize() assumes the default project name assigned by Earth Engine. If some other project name is used, modify the code accordingly. The web browser log-in steps may assist with creating and choosing a project, or a project may be created using the online ee code editor.
 
 ## Usage Notes
-The user must provide ee image collections of long-term average monthly precipitation and temperature (12 images each). These should be overlapping images and should exist enitrely within a hemisphere (i.e., not in both hemispheres, such that at least two operations are needed to produce global coverage). WGS84 coordinate system is assumed in geekgcc, so climate images should be reprojected if they are in some other coordinate system.
+The user must provide ee image collections of long-term average monthly precipitation and temperature (12 images each). These should be overlapping images and should exist enitrely within a hemisphere (i.e., not in both hemispheres, such that at least two operations are needed to produce global coverage). WGS84 coordinate system is assumed in geekgcc. Climate images should be reprojected if they are in some other coordinate system.
 
 The following methods are included in geekgcc: `classify()`, `download()`, and `get_vis_params()`.
 
