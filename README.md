@@ -59,7 +59,7 @@ The following methods are included in geekgcc: `classify()`, `download()`, and `
 | t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
 | hemi | string | "north" or "south" hemisphere |
 
-Returns a classified ee.Image() object. Possible output values are in the range from 1 to 30.
+Returns a classified `ee.Image()` object. Possible output values are in the range from 1 to 30.
 
 **Download classified image to Google Drive:**
 
@@ -82,7 +82,7 @@ Returns `None`. Spawns a download task to Google Drive in geotif format. Downloa
 | ------ | ------ | ------ |
 | - | - | - |
 
-Returns a map of visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC. Only needed when visualizing with geemaps.
+Returns a `dict` of visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC. Only needed when visualizing with geemaps.
 
 ## Test Example
 The `geekgcc_test.ipynb` notebook is available to test the functionality of geekgcc.
