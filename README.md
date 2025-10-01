@@ -72,7 +72,7 @@ Returns a classified ee.Image() object. Possible output values are in the range 
 | scale | float | scale/resolution of downloaded image |
 | filename | ee.String() | downloaded file name |
 
-Returns None. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
+Returns `None`. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
 **Get visualization parameters:**
 
