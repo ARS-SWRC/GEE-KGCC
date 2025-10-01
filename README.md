@@ -1,4 +1,7 @@
 # GEEKGCC
+
+![](Images/LandingImage.png)
+
 GEEKGCC is a code base for calculating the Koppen-Geiger Climate Classification (KGCC), a widely used global climate classification, using the Google Earth Engine API (gee). The inputs are long-term average monthly precipitation and temperature. A simple Earth Engine package using the Python gee API is presented here, along with code for a web-based demonstration using an Earth Engine hosted website. The following website uses geekgcc code and has potential for adaptation to other features and climate datasets.
 
 https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map
