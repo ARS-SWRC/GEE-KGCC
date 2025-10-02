@@ -84,6 +84,16 @@ Returns `None`. Spawns a download task to Google Drive in geotif format. Downloa
 
 Returns a `dict` of visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC. Only needed when visualizing with geemaps.
 
+**Get class look-up dictionary:**
+
+`geekgcc.KGCC.get_class_index()`
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| - | - | - |
+
+Returns a `dict` of class names and labels, along with corresponding numerical index values.
+
 ## Test Example
 The `geekgcc_test.ipynb` notebook is available for testing functionality of geekgcc.
 
