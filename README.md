@@ -49,7 +49,7 @@ The user must provide `ee.ImageCollection` objects of long-term average monthly 
 
 **The following methods are included in geekgcc**: `classify()`, `download()`, `get_class_index()`, and `get_vis_params()`.
 
-**Classification from monthly precipitation and tempearture raster images:**
+**Classification from monthly precipitation and temperature raster images:**
 
 `geekgcc.KGCC.classify(p_ic, t_ic, hemi)`
 
