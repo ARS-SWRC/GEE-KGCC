@@ -13,8 +13,8 @@ A Python-based package creates KGCC maps from monthly climate images prepared by
 - Google Account
 - Google Earth Engine Account
 - Python 3
-- earthengine-api
-- geemap (optional for visualization)
+- earthengine-api library
+- geemap library (optional for visualization)
 
 ## Setup
 In a default Google Colab environment, setup requirements are already met for installing geekgcc. The earthengine-api (ee) depency is automatically installed with geekgcc and in Colab. When using Colab, prepend an exclamation mark (!) to the beginning of the following two code lines.
