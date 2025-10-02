@@ -109,10 +109,11 @@ The main features are:
 - View classification uncertainty.
 - View classification timelines.
 
-Launching an instance of the app in the online code editor can be done in a two-step process. In the editor, paste the contents of Koppen-Climate-App.js and Koppen-Climate-MainFunc.js from the WebApp folder into the editor and save them as separate scripts using the same file names. The latter script is imported by the former script, and therefore, a line in Koppen-Climate-App.js needs to be modified to have a custom path.
+Launching an instance of the app in the online code editor can be done in a two-step process. In the editor, paste the contents of Koppen-Climate-App.js and Koppen-Climate-MainFunc.js from the WebApp folder into the editor and save them as separate scripts using the same file names. The latter script is imported by the former script, and therefore, a line in Koppen-Climate-App.js needs to be modified to have a custom path. The line that needs modified is currently:
 
 ```js
 line 38: var kcModule = require('users/gerardo/default:KOPPEN/Koppen-Climate-MainFunc');
 ```
 
+The path argument should be changed to the following format `users/yourusername/repo:path`. For example, if a user's repo is called KOPPEN, the path should be `users/yourusername/KOPPEN:Koppen-Climate-MainFunc`.
 
