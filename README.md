@@ -55,11 +55,11 @@ The user must provide ee image collections of long-term average monthly precipit
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| p_ic | ee.ImageCollection() | 12 monthly precipitation images |
-| t_ic | ee.ImageCollection() | 12 monthly mean temperature images |
+| p_ic | ee.ImageCollection | 12 monthly precipitation images |
+| t_ic | ee.ImageCollection | 12 monthly mean temperature images |
 | hemi | string | "north" or "south" hemisphere |
 
-Returns a classified `ee.Image()` object. Possible output values are in the range from 1 to 30.
+Returns a classified `ee.Image` object. Possible output values are in the range from 1 to 30.
 
 **Download classified image to Google Drive:**
 
@@ -67,8 +67,8 @@ Returns a classified `ee.Image()` object. Possible output values are in the rang
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| type_image | ee.Image() | classified image |
-| geo | ee.Geometry() | bounding box geometry |
+| type_image | ee.Image | classified image |
+| geo | ee.Geometry | bounding box geometry |
 | scale | float | scale/resolution of downloaded image |
 | filename | string | downloaded file name |
 
