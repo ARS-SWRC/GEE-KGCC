@@ -100,12 +100,13 @@ The `geekgcc_test.ipynb` notebook is available for testing functionality of geek
 ## Website Demonstration
 The Earth Engine hosted website linked at the top was developed using entirely built-in functions available in the JavaScript version of earthengine-api through the online code editor: https://code.earthengine.google.com
 
-This makes it possible for a user to paste the code from this website into the editor and launch their own instance of the app, perhaps with modifications to adapt a different climate dataset, or even to the app's features.
+This makes it possible for a user to paste the code from this website into the editor and launch their own instance of the app, perhaps with modifications to adapt a different climate dataset, or even with modifications to the app's features.
 
 The main features are:
-- Google Account
-- Google Earth Engine Account
-- Python 3
-- earthengine-api
-- geemap (optional for visualization)
+- Visualization of NEX-DCP30 U.S. Ensemble Climate Projections.
+- Ability to select GCM and climate trajectory. 
+- Ability to select date range windows.
+- View classification uncertainty.
+- View classification timelines.
 
+Launching an instance of the app in the online code editor can be done in a two-step process.
