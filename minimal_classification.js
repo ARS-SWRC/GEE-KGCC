@@ -17,13 +17,16 @@
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
 //Processing will be done only for the northern hemisphere.
-//Summer and winter months are 
-var nhemi_geo = ee.Geometry.BBox(-180, 0, 179.99, 89.99);
+//Northern hemisphere
+var custom_geo = ee.Geometry.BBox(-180.00, 0.00, 179.99, 89.99)
+//Southern hemisphere
+//var custom_geo = ee.Geometry.BBox(-180.00, 0.00, 179.99, -89.99)
+
 
 //Clips image collection to geographic region of interest.
 function clip_fn(im_obj){
   var im = ee.Image(im_obj);
-  var clip_im = im.clip(nhemi_geo);
+  var clip_im = im.clip(custom_geo);
   return clip_im;
 }
 
