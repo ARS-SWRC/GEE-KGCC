@@ -115,5 +115,5 @@ Launching an instance of the app in the online code editor can be done in a two-
 line 38: var kcModule = require('users/gerardo/default:KOPPEN/Koppen-Climate-MainFunc');
 ```
 
-The path argument should be changed to the following format `users/yourusername/repo:path`. For example, if a user's repo is called KOPPEN, the path should be `users/yourusername/KOPPEN:Koppen-Climate-MainFunc`.
+The path argument should be changed to the following format `users/yourusername/repo:path`. For example, if the two scripts are saved to user's repo called KOPPEN, the path should be `users/yourusername/KOPPEN:Koppen-Climate-MainFunc`.
 
