@@ -400,17 +400,7 @@ class KGCC:
     type_im = type_ic.reduce(ee.Reducer.sum())
   
     return type_im
-  
-  @classmethod
-  def get_vis_params(cls):
-    typePalette = [
-    '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
-    '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
-    '#C8FF50', '#64FF50', '#32C800', '#FF00FF', '#C800C8', '#963296', '#966496',
-    '#AAAFFF', '#5A78DC', '#4B50B4', '#320087', '#00FFFF', '#37C8FF', '#007D7D', '#00465F',
-    '#B2B2B2', '#666666']
-    return {'min':1, 'max':30, 'palette':typePalette}
-  
+
   @classmethod
   def download(cls, type_image=None, geo=None, scale=None, file_name='KG_map'):
     type_im = type_image.toDouble()
@@ -422,6 +412,25 @@ class KGCC:
       crs='EPSG:4326',
       maxPixels=1e13)
     task.start()
-  
 
+  @classmethod
+  def get_vis_params(cls):
+    typePalette = [
+      '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
+      '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
+      '#C8FF50', '#64FF50', '#32C800', '#FF00FF', '#C800C8', '#963296', '#966496',
+      '#AAAFFF', '#5A78DC', '#4B50B4', '#320087', '#00FFFF', '#37C8FF', '#007D7D', '#00465F',
+      '#B2B2B2', '#666666']
+    return {'min':1, 'max':30, 'palette':typePalette}
+  
+  @classmethod
+  def get_class_index(cls):
+    typeLabels = [
+      'Af - Tropical, Rainforest', 'Am - Tropical, Monsoon', 'Aw - Tropical, Savanna', 'Bwh - Arid, Desert, Hot', 'Bwk - Arid, Desert, Cold', 'Bsh - Semi-Arid, Steppe, Hot', 'Bsk - Semi-Arid, Steppe, Cold',
+      'Csa - Temperate, Dry Summer, Hot Summer', 'Csb - Temperate, Dry Summer, Warm Summer', 'Csc - Temperate, Dry Summer, Cold Summer', 'Cwa - Temperate, Dry Winter, Hot Summer', 'Cwb - Temperate, Dry Winter, Warm Summer', 'Cwc - Temperate, Dry Winter, Cold Summer',
+      'Cfa - Temperate, No Dry Season, Hot Summer', 'Cfb - Temperate, No Dry Season, Warm Summer', 'Cfc - Temperate, No Dry Season, Cold Summer', 'Dsa - Cold, Dry Summer, Hot Summer', 'Dsb - Cold, Dry Summer, Warm Summer', 'Dsc - Cold, Dry Summer, Cold Summer', 'Dsd - Cold, Dry Summer, Very Cold Winter',
+      'Dwa - Cold, Dry Winter, Hot Summer', 'Dwb - Cold, Dry Winter, Warm Summer', 'Dwc - Cold, Dry Winter, Cold Summer', 'Dwd - Cold, Dry Winter, Very Cold Winter', 'Dfa - Cold, No Dry Season, Hot Summer', 'Dfb - Cold, No Dry Season, Warm summer', 'Dfc - Cold, No Dry season, Cold Summer', 'Dfd - Cold, No Dry Season, Very Cold Winter',
+      'Et - Polar Tundra', 'Ef - Polar Ice Cap'] 
+    return {range(1, 31):typeLabels}
+  
 
