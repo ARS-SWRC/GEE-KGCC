@@ -98,7 +98,7 @@ Returns a `dict` of class names and labels, along with corresponding numerical i
 The `geekgcc_test.ipynb` notebook is available for testing functionality of geekgcc.
 
 ## Website Demonstration
-The Earth Engine hosted website linked at the top was developed using entirely built-in functions available in the JavaScript version of the earthengine-api library through the online code editor: https://code.earthengine.google.com
+The Earth Engine hosted website linked at the top was developed using entirely built-in functions available in the JavaScript version of earthengine-api through the online code editor: https://code.earthengine.google.com
 
 This makes it possible for a user to paste the code from this website into the editor and launch their own instance of the app, perhaps with modifications to adapt a different climate dataset, or even to the app's features.
 
