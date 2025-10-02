@@ -1,28 +1,24 @@
-
+//Paste this JavaScript code into the online code editor
+//https://code.earthengine.google.com
+//The code produces a KGCC map for the northern hemisphere.
+//The two primary inputs are p_ic and t_ic, which are collections
+//of long-term monthly average precipitation and temperature.
 //Reducing the required pre-processing--
-//this version of WorldClim is already monthly averaged 
-//for a reference period of 1960-1990.
+//a version of the WorldClim dataset is applied that is already 
+//monthly averaged for a reference period of 1960-1990.
 //Therefore, there are only 12 multi-band images.
 //Also, monthly Tavg is already given as a variable.
-//For temperature variables, a scaling factor of 10 is applied to the raw values.
+//For temperature variables, the raw WORDCLIM values
+//have a scaling factor of 10.
 //The output of this script is only for the northern hemisphere;
 //otherwise, the summer and winter months need to be flipped,
 //and the bounding box geometry changed to the southern hemisphere.
-//The minimal handling of WorldClim means it is not necessary for the 
-//code block where KGCC is caculated to be inside a mapped function that would
-//take date ranges, scenarios, GCMs, etc., as arguments.
-//Consequently, the variables, objects, and intermediate images in the main block 
-//can be easily inspected by print() or Map.addLayer().
-
 
 var ic = ee.ImageCollection("WORLDCLIM/V1/MONTHLY");
 
-//This map extent can be changed, which can involve 
-//e.g., ee.Geometry.Polygon(), ee.Geometry.Rectangle() etc.
-var nhemi_geo = ee.Geometry.BBox(-180, 0, 179.9, 89.9);
-
-//Queue download to Google Drive as geotif by turning to true.
-var download = false;
+//Processing will be done only for the northern hemisphere.
+//Summer and winter months are 
+var nhemi_geo = ee.Geometry.BBox(-180, 0, 179.99, 89.99);
 
 //Clips image collection to geographic region of interest.
 function clip_fn(im_obj){
@@ -51,6 +47,8 @@ function unit_scaling_fn(im_obj){
 //Monthly averaged precip and temperature (12 images).
 var p_ic = ee.ImageCollection(ic_clip.select('prec'));
 var t_ic = ee.ImageCollection(t_scaled_ic.map(unit_scaling_fn));
+
+//Everything below can be applied to any input dataset in the same way.
 
 //For calculation of average annual temperature.
 function weight_temps_fn(month){
@@ -460,8 +458,6 @@ var singleBandVis = {
 
 Map.addLayer(type_im, singleBandVis);
 
-
-
 var legend = ui.Panel({
   style:{
     position:'middle-right',
@@ -528,16 +524,3 @@ Map.add(legend);
 
 Map.setCenter(0, 45, 2);
 
-
-if (download === true){
-  var scale = ic.first().projection().nominalScale().getInfo();
-  var type_im = type_im.toDouble();
-  Export.image.toDrive({
-    image:type_im,
-    description:'KG_map',
-    folder:'GEE_Downloads',
-    region:nhemi_geo,
-    scale:scale,
-    crs:'EPSG:4326',
-    maxPixels:1e13});
-}
