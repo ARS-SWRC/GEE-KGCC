@@ -97,3 +97,15 @@ Returns a `dict` of class names and labels, along with corresponding numerical i
 ## Test Example
 The `geekgcc_test.ipynb` notebook is available for testing functionality of geekgcc.
 
+## Website Demonstration
+The Earth Engine hosted website was developed using entirely built-in functions available in the JavaScript version of the earthengine-api library through the online code editor: https://code.earthengine.google.com
+
+This makes it possible for a user to paste the code from this website into the editor and launch their own instance of the app, perhaps with a different dataset, or even with modifications to the app's features.
+
+The main features are:
+- Google Account
+- Google Earth Engine Account
+- Python 3
+- earthengine-api
+- geemap (optional for visualization)
+
