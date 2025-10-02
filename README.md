@@ -92,7 +92,7 @@ Returns a `dict` of visualization parameters including the minimum value (1), ma
 | ------ | ------ | ------ |
 | - | - | - |
 
-Returns a `dict` of class names and labels, along with corresponding numerical index values.
+Returns a `dict` of class names and labels, along with corresponding numerical index values for 30 climate classes.
 
 ## Test Example
 The `geekgcc_test.ipynb` notebook is available for testing functionality of geekgcc.
