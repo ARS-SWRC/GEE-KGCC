@@ -51,7 +51,7 @@ function unit_scaling_fn(im_obj){
 var p_ic = ee.ImageCollection(ic_clip.select('prec'));
 var t_ic = ee.ImageCollection(t_scaled_ic.map(unit_scaling_fn));
 
-//Everything below can be applied to any input dataset in the same way.
+//Everything below here can be applied to any input dataset in the same way.
 
 //For calculation of average annual temperature.
 function weight_temps_fn(month){
