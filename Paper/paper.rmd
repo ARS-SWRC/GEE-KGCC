@@ -93,7 +93,9 @@ By providing a range of trends according to different emission scenarios known a
 
 # Web application
 
-The GEE platform has basic widgets in its API for creating the features of a web application that uses GEE as a backend. We include a script, `viz.js`, showing the code used to make the app hosted at [https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map](https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map), which visualizes climate change projections from NEX-DCP30. Additionally, the script can be launched from the online GEE code editor, which results in the same maps and widgets appearing as in the web app. The app features are aimed at enabling the user to do basic analysis for an area of interest and understanding the GCM ensemble and related uncertainties.
+The GEE online code editor platform has basic widgets in its API for creating an Earth Engine hosted web application. Included code demonstrates this possiblility and was used to produce the following application:
+[https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map](https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map). 
+This application visualizes U.S. ensemble climate change projections in the NEX-DCP30 dataset. The script can be launched from the online GEE code editor, which results in the same maps and widgets appearing as in the web app. The app features are aimed at enabling the user to do basic analysis for an area of interest and understanding the GCM ensemble and related uncertainties.
 
 The following are the main features included in the app:
 
