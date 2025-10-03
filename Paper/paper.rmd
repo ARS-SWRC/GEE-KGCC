@@ -94,18 +94,18 @@ By providing a range of trends according to different emission scenarios known a
 # Web application
 
 The GEE online code editor platform has basic widgets in its API for creating an Earth Engine hosted web application. Included code demonstrates this possiblility and was used to produce the following application:
+
 [https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map](https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map). 
-This application visualizes U.S. ensemble climate change projections in the NEX-DCP30 dataset. The script can be launched from the online GEE code editor, which results in the same maps and widgets appearing as in the web app. The app features are aimed at enabling the user to do basic analysis for an area of interest and understanding the GCM ensemble and related uncertainties.
+
+This application visualizes U.S. ensemble climate change projections in the NEX-DCP30 dataset. An instance of the application can also be launched in the online GEE code editor, giving the user the ability to modify the code to adapt other climate datasets or features. The app features are aimed at enabling the user to do basic analysis for an area of interest and understanding the GCM ensemble and related uncertainties.
 
 The following are the main features included in the app:
+- Visualization of NEX-DCP30 U.S. Ensemble Climate Projections.
+- Ability to select GCM and climate trajectory. 
+- Ability to select date range windows.
+- View classification uncertainty.
+- View classification timelines.
 
-* Selection of a 30-year date range.  
-* Selection of RCP emission scenarios.  
-* Selection of GCM.  
-* Uncertainties based on percentage of agreement of GCMs for each climate type given the selected date range and emission scenario.  
-* Clickable map layer to show a timeline of KGCC types at the point clicked.  
-* Tool to define polygon for which a timeline is produced of change in KGCC types by land area.  
-* Toggle EPA Level IV Ecoregions base layer.
 
 # Figures
 
