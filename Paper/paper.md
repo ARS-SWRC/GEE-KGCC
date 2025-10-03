@@ -1,5 +1,5 @@
 ---
-title: "gee-kgcc.js: A Google Earth Engine codebase for Köppen-Geiger climate classification"
+title: "GEE-KGCC: A Google Earth Engine codebase for Köppen-Geiger climate classification"
 tags:
 - JavaScript
 - Google Earth Engine
@@ -52,9 +52,9 @@ The computational resources of GEE are an advantage by quickly processing large 
 
 The Köppen-Geiger Climate Classification (KGCC) is a widely used global climate classification first developed by Wladimir Köppen in the 19th century and later refined by Rudolf Geiger [@kottek2006]. The KGCC requires input data with at least monthly-scale temporal resolution to calculate 30 global climate types. Generally, a minimum reference period of 30 years should be used in order to represent climate. According to KGCC, there are 5 main divisions of climate: tropical (A), arid (B), temperate (C), continental (D), and polar (E) that correspond to the first letter in the labeling scheme. Then, these are further divided into second and third-order classifications (indicated by the number of letters in their respective labels). Divisions are made using a number of temperature and precipitation thresholds in monthly and annual factors. This requires the data to be statistically reduced in different ways, such as by season, by maximum and minimum monthly or seasonal values, by average annual precipitation, and other intermediate statistical values. Literature works involving KGCC commonly include definitions of individual climate types, e.g., @peel2007 and @beck2023, and additionally, @kottek2006 have good discussion of strategy for calculating the entire classification. In minor instances where published KGCC criteria differ from one another, the criteria of @beck2023 were used.
 
-# The gee-kgcc codebase
+# The GEE-KGCC codebase
 
-The [gee-kgcc](https://github.com/ARS-SWRC/GEE-KGCC) codebase includes a Python package for creating KGCC maps using the GEE API and related scripts for processing different high-resolution, monthly-scale climate datasets freely available on the GEE catalog. Other datasets may be similarly applied including datasets with other temporal resolutions, such daily-scale, if they are first aggregated to monthly-scale images. The two climate datasets were selected primarily because they have at least \~10 km spatial resolution, which makes them ideal for showing climate gradients over small distances. The `minimal_classification.js` script makes use of the global WorldClim dataset that, in the GEE catalog, is already monthly averaged for a 31-year period [@hijmans2005]. This reduces the pre-processing steps needed to prepare the inputs, such that the script primarily shows code that can be applied in the same way to other input datasets. As such, this script is a minimal example for general applications. A more detailed Python notebook that makes use of the geekgcc package, `multi-dataset-notebook.ipynb`, prepares the inputs for five different climate datasets and allows maps to be downloaded and visualized. The `geekgcc_test.ipynb` notebook further allows the functionality of geekgcc to be tested.
+The [GEE-KGCC](https://github.com/ARS-SWRC/GEE-KGCC) codebase includes a Python package for creating KGCC maps using the GEE API and related scripts for processing different high-resolution, monthly-scale climate datasets freely available on the GEE catalog. Other datasets may be similarly applied including datasets with other temporal resolutions, such daily-scale, if they are first aggregated to monthly-scale images. The two climate datasets were selected primarily because they have at least \~10 km spatial resolution, which makes them ideal for showing climate gradients over small distances. The `minimal_classification.js` script makes use of the global WorldClim dataset that, in the GEE catalog, is already monthly averaged for a 31-year period [@hijmans2005]. This reduces the pre-processing steps needed to prepare the inputs, such that the script primarily shows code that can be applied in the same way to other input datasets. As such, this script is a minimal example for general applications. A more detailed Python notebook that makes use of the geekgcc package, `multi-dataset-notebook.ipynb`, prepares the inputs for five different climate datasets and allows maps to be downloaded and visualized. The `geekgcc_test.ipynb` notebook further allows the functionality of geekgcc to be tested.
 
 # Determining KGCC by processing climate images
 
@@ -87,7 +87,7 @@ The first and second-order divisions for B involve thresholds for a seasonal dry
 
 # Spatial analysis with KGCC maps
 
-The `gee-kgcc.js` codebase includes `spatial_analysis_trends.js`, which creates charts for two basic spatial analyses that are useful for obtaining information from KGCC maps in the context of climate change. Shown in Figure 2, the purpose of this analysis is to show the timeline of transitions in climate type occurring within a given area. In this case, the entire coverage area of NEX-DCP30 is analyzed (being the contiguous US) and includes the outputs of one GCM and four climate scenarios. Note that it is possible to change the processing extent in `spatial_analysis_trends.js` so that the same analysis can be repeated for a selected area of interest. Overall totals for KGCC transitions are shown in the top panel of Figure 2.
+The `GEE-KGCC` codebase includes `spatial_analysis_trends.js`, which creates a chart of a basic spatial analysis that for obtaining information from KGCC maps in the context of climate change. Shown in Figure 2, the purpose of this analysis is to show the timeline of transitions in climate type occurring within a given area. In this case, the entire coverage area of NEX-DCP30 is analyzed (being the contiguous US) and includes the outputs of one GCM and four climate scenarios. Note that it is possible to change the processing extent in `spatial_analysis_trends.js` so that the same analysis can be repeated for a selected area of interest. Overall totals for KGCC transitions are shown in the top panel of Figure 2.
 
 By providing a range of trends according to different emission scenarios known as Representative Concentration Pathways (RCPs), uncertainty bounds can be reasonably estimated, aiding the understanding of the range of outcomes. Note that in the top panel of Figure 2, these values are substantially greater than reported in the main results of @beck2023 in their global analysis of KGCC for climate projections because their analysis considered a different dataset and showed change occurring across only the 5 major climate types instead of across any of the 30 sub-order types. It is also possible that the US experiences greater rates of change in climate type than what occurs globally due to the high diversity of climates. Although, in the eastern US, some have noted lack of specificity in KGCC definitions for temperate and humid climates, and modified climate classifications, such as the Köppen–Trewartha climate classification, have been developed to address this issue [@belda2014].
 
@@ -106,13 +106,12 @@ The following are the main features included in the app:
 - View classification uncertainty.
 - View classification timelines.
 
-
 # Figures
 
 ![BSk-Demo](BSk-Demo.png)
-Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
+Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, (c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
 
-![KGCC-Timeseries](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/af7ed417e36435cd28c4a552a676d56d01745550/Paper/SA-Trend.png)
+![KGCC-Timeseries](SA-Trend.png)
 Figure 2: Rates of change in land area classifications for a 140 year reference period with different RCPs represented. Timeline of change in any climate type in the KGCC including sub-orders.
 
 # Acknowledgements
