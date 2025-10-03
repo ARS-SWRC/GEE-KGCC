@@ -89,4 +89,38 @@ The first and second-order divisions for B involve thresholds for a seasonal dry
 
 The `GEE-KGCC` codebase includes `spatial_analysis_trends.js`, which creates a chart of a basic spatial analysis that for obtaining information from KGCC maps in the context of climate change. Shown in Figure 2, the purpose of this analysis is to show the timeline of transitions in climate type occurring within a given area. In this case, the entire coverage area of NEX-DCP30 is analyzed (being the contiguous US) and includes the outputs of one GCM and four climate scenarios [@thrasher2013]. Note that it is possible to change the processing extent in `spatial_analysis_trends.js` so that the same analysis can be repeated for a selected area of interest. Overall totals for KGCC transitions are shown in the top panel of Figure 2.
 
-By providing a range of trends according to different emission scenarios known as Representative Concentration Pathways (RCPs), uncertainty bounds can be reasonably estimated, aiding the understanding of the range of outcomes. Note that in the top panel of Figure 2, these values are substantially greater than reported in the main results of @beck2023 in their global analysis of KGCC for climate projections because their analysis considered a different dataset and showed change occurring across only the 5 major climate types instead of across any of the 30 sub-order types. It is also possible that the US experiences greater rates of change in climate type than what occurs globally due to the high diversity of climates. Although, in the eastern US, some have noted lack of specificity in KGCC definitions for temperate and humid climates, and modified climate classifications, such as the KC6ppenb
+By providing a range of trends according to different emission scenarios known as Representative Concentration Pathways (RCPs), uncertainty bounds can be reasonably estimated, aiding the understanding of the range of outcomes. Note that in the top panel of Figure 2, these values are substantially greater than reported in the main results of @beck2023 in their global analysis of KGCC for climate projections because their analysis considered a different dataset and showed change occurring across only the 5 major climate types instead of across any of the 30 sub-order types. It is also possible that the US experiences greater rates of change in climate type than what occurs globally due to the high diversity of climates. Although, in the eastern US, some have noted lack of specificity in KGCC definitions for temperate and humid climates, and modified climate classifications, such as the Köppen–Trewartha climate classification, have been developed to address this issue [@belda2014].
+
+# Web application
+
+The GEE online code editor platform has basic widgets in its API for creating an Earth Engine hosted web application. Included code demonstrates this possiblility and was used to produce the following application:
+
+[https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map](https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map). 
+
+This application visualizes U.S. ensemble climate change projections in the NEX-DCP30 dataset. An instance of the application can also be launched in the online GEE code editor, giving the user the ability to modify the code to adapt other climate datasets or features. The app features are aimed at enabling the user to do basic analysis for an area of interest and understanding the GCM ensemble and related uncertainties.
+
+The following are the main features included in the app:
+- Visualization of NEX-DCP30 U.S. Ensemble Climate Projections.
+- Ability to select GCM and climate trajectory. 
+- Ability to select date range windows.
+- View classification uncertainty.
+- View classification timelines.
+
+# Figures
+
+![BSk-Demo](BSk-Demo.png)
+Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, (c) `b_im`, (d) `bs_im`, (e) `bsk_im`, and (f) `type_im`, the final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
+
+![KGCC-Timeseries](SA-Trend.png)
+Figure 2: Rates of change in land area classifications for a 140 year reference period with different RCPs represented. Timeline of change in any climate type in the KGCC including sub-orders.
+
+# Acknowledgements
+
+We acknowledge providers of open-access climate data, which were relied on to produce this work.
+
+# References
+
+
+
+
+
