@@ -109,7 +109,7 @@ The following are the main features included in the app:
 # Figures
 
 ![BSk-Demo](BSk-Demo.png)
-Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, (c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
+Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, (c) `b_im`, (d) `bs_im`, (e) `bsk_im`, and (f) `type_im`, the final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
 
 ![KGCC-Timeseries](SA-Trend.png)
 Figure 2: Rates of change in land area classifications for a 140 year reference period with different RCPs represented. Timeline of change in any climate type in the KGCC including sub-orders.
@@ -119,3 +119,4 @@ Figure 2: Rates of change in land area classifications for a 140 year reference 
 We acknowledge providers of open-access climate data, which were relied on to produce this work.
 
 # References
+
