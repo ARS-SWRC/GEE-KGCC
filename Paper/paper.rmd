@@ -109,7 +109,7 @@ The following are the main features included in the app:
 
 # Figures
 
-![BSk-Demo](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/f0ce3153b0995ebdf4e46364f0f3100b083763aa/Paper/BSk-Demo.png)
+![BSk-Demo](BSk-Demo.png)
 Figure 1: KGCC delineation using the example of BSk climate, including intermediate binary maps and a final KGCC map. The panels are as follows: (a) map coverage area, (b) `e_im`, c) `b_im`, (d) `bs_im`, (e) `bsk_im`, (f) final KGCC map showing the BSk classification as tan colored regions along with other KGCC types in the coverage area. The binary images represent conditions that isolate BSk going from higher order to lower order classifications.
 
 ![KGCC-Timeseries](https://raw.githubusercontent.com/ARS-SWRC/GEE-KGCC/af7ed417e36435cd28c4a552a676d56d01745550/Paper/SA-Trend.png)
