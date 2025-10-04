@@ -55,8 +55,8 @@ The user must provide `ee.ImageCollection` objects of long-term average monthly 
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| p_ic | ee.ImageCollection | 12 monthly precipitation images |
-| t_ic | ee.ImageCollection | 12 monthly mean temperature images |
+| p_ic | ee.ImageCollection | 12 monthly precipitation images (mm) |
+| t_ic | ee.ImageCollection | 12 monthly mean temperature images (°C) |
 | hemi | string | "north" or "south" hemisphere |
 
 Returns a classified `ee.Image` object. Possible output values are in the range from 1 to 30.
