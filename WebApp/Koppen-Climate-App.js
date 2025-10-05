@@ -300,19 +300,20 @@ function createInfoPanelContent(){
   
   return [
     makeHeader('Overview'),
-    makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the Contiguous United States. The default selections are RCP4.5 / CCSM4 / 2000-2029.'),
+    makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the Contiguous United States. The applied climate dataset is NEX-DCP30 (Trasher, 2013).'),
     makeHeader('Definitions'),
     makeDefinitionItem('KGCC:', 'A climate classification scheme based on seasonal precipitation and temperature.'),
     makeDefinitionItem('CMIP5:', 'An ensemble of Global Climate Models (GCMs) representing standard climate projections.'),
     makeDefinitionItem('NEX-DCP30:', 'A highly downscaled (~800m) monthly climate dataset for the US.'),
     makeHeader('Usage'),
-    makeParagraph('There is no consensus on which projection scenario is most likely. However, RCP4.5 is often considered a "middle-ground" scenario. For risk assessment, RCP6.0 can be a plausible "worst-case" scenario. The CCSM4 GCM is recommended as its outcome is typical of the CMIP5 ensemble.'),
+    makeParagraph('There is no consensus on which projection scenario is most likely. However, RCP4.5 is often considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that is considered less plausible. The CCSM4 GCM is recommended when considering only a single GCM because the CCSM4 outcome is typical of the CMIP5 ensemble. Note that not all GCMs are available for each emissions scenario. Therefore, class uncertainties that consider % of ensemble agreement have different total GCM counts depending on the scenario. RCP2.6 has 23, RCP4.5 has 33, RCP6.0 has 17, RCP8.5 has 31'),
     makeHeader('Citations'),
     makeParagraph('• Beck, H. E., et al. (2018). Present and future Köppen-Geiger climate classification maps at 1-km resolution.'),
     makeParagraph('• Peel, M. C., et al. (2007). Updated world map of the Köppen-Geiger climate classification.'),
     makeParagraph('• Thrasher, B., et al. (2013). Downscaled climate projections suitable for resource management.'),
     makeHeader('Additional Notes'),
     makeParagraph('For an in-depth description of each climate type, see wikipedia.org/wiki/Köppen_climate_classification'),
+    makeParagraph('The codebase for this project is available at https://github.com/ARS-SWRC/GEE-KGCC'),
   ];
 }
 
@@ -417,8 +418,8 @@ var dateBDrop = ui.Select({
   style:dropStyle});
 
 // Other control widgets
-var appTitle = ui.Label({value:'Koppen Climate Viewer', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'2px', textAlign:'left', fontSize:'20px', fontWeight:'bold' }});
-var appSubTitle = ui.Label({value:'Köppen-Geiger Climate Classifications/NEX-DCP30 Climate Viewer', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'1px 2px 10px 2px', textAlign:'left', fontSize:'12px', width: '230px',whiteSpace: 'normal' }});
+var appTitle = ui.Label({value:'Köppen Climate Viewer', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'2px', textAlign:'left', fontSize:'20px', fontWeight:'bold' }});
+var appSubTitle = ui.Label({value:'Köppen-Geiger Climate Classifications Viewer (NEX-DCP30 dataset)', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'1px 2px 10px 2px', textAlign:'left', fontSize:'12px', width: '230px',whiteSpace: 'normal' }});
 var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) {infoPanel.style().set('shown', checked);}});
 var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) {legendPanel.style().set('shown', checked);}});
 //var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid'], value:'roadmap', onChange:function(value){mainMap.setOptions(value); splitMap.setOptions(value);}, style:dropStyle});
@@ -747,7 +748,7 @@ var controlPanelA = ui.Panel({
     appTitle,appSubTitle,
     ui.Label({value:'About/Legend', style:dropheaderlabelStyle}), infoCheckbox, legendCheckbox,
     ui.Label({value:'Click Tools', style:dropheaderlabelStyle}), inspectCheckbox, timelineCheckbox,
-    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), uncertSelect,
+    ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), ui.Label('(for selected emissions and date range)'), uncertSelect,
     ui.Label({value:'Compare', style:dropheaderlabelStyle}), compareCheckbox,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
@@ -787,3 +788,5 @@ ui.root.add(infoPanel);
 ui.root.add(legendPanel);
 ui.root.add(loadingOverlay); // Add the loading panel to the root so it can float over everything
 ui.root.add(timelineLoadingPanel);
+
+
