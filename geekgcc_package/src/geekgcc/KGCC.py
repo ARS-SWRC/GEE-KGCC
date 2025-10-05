@@ -2,8 +2,8 @@ import ee
 
 class KGCC:
 
-  @classmethod
-  def classify(cls, p_ic=None, t_ic=None, hemi=None):
+  @staticmethod
+  def classify(p_ic=None, t_ic=None, hemi=None):
 
     ndays_months = ee.List([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
 
@@ -401,8 +401,8 @@ class KGCC:
   
     return type_im
 
-  @classmethod
-  def download(cls, type_image=None, geo=None, scale=None, file_name='KG_map'):
+  @staticmethod
+  def download(type_image=None, geo=None, scale=None, file_name='KG_map'):
     type_im = type_image.toDouble()
     task = ee.batch.Export.image.toDrive(
       image=type_im,
@@ -413,8 +413,8 @@ class KGCC:
       maxPixels=1e13)
     task.start()
 
-  @classmethod
-  def get_vis_params(cls):
+  @staticmethod
+  def get_vis_params():
     typePalette = [
       '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
       '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
@@ -423,8 +423,8 @@ class KGCC:
       '#B2B2B2', '#666666']
     return {'min':1, 'max':30, 'palette':typePalette}
   
-  @classmethod
-  def get_class_index(cls):
+  @staticmethod
+  def get_class_index():
     typeLabels = [
       'Af - Tropical, Rainforest', 'Am - Tropical, Monsoon', 'Aw - Tropical, Savanna', 'Bwh - Arid, Desert, Hot', 'Bwk - Arid, Desert, Cold', 'Bsh - Semi-Arid, Steppe, Hot', 'Bsk - Semi-Arid, Steppe, Cold',
       'Csa - Temperate, Dry Summer, Hot Summer', 'Csb - Temperate, Dry Summer, Warm Summer', 'Csc - Temperate, Dry Summer, Cold Summer', 'Cwa - Temperate, Dry Winter, Hot Summer', 'Cwb - Temperate, Dry Winter, Warm Summer', 'Cwc - Temperate, Dry Winter, Cold Summer',
