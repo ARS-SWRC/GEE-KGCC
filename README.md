@@ -35,10 +35,17 @@ https://geemap.org/
 **To authenticate ee and import necessary libraries, use the following steps.** Start by importing, authenticating, and initializing ee, then import geekgcc.
 ```python
 import ee
+
 #This will open a web browser for log-in steps.
 ee.Authenticate()
-geeusername = 'yourusername' #Enter your GEE username.
-ee.Initialize(project='ee-' + geeusername)
+geeusername = 'yourusername' #Enter your GEE user name.
+geeproject = 'ee-yourusername' #Enter your GEE project name.
+ee.Initialize(project=geeproject)
+#The user must have an existing project.
+#Default project names are in the format: "ee-yourusername".
+#The web browser log-in steps assist with creating a project
+#or one may be created at https://code.earthengine.google.com/
+
 #ee should be initialized before importing geekgcc.
 import geekgcc
 ```
