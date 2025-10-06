@@ -7,7 +7,7 @@ GEE-KGCC is a code base for calculating the Köppen-Geiger Climate Classificatio
 https://deductive-water-293819.projects.earthengine.app/view/koppen-climate-map
 
 ## Description
-A Python-based package creates KGCC maps from monthly climate images prepared by the user. The gee dependency handles these images as Earth Engine image collection objects. Besides loading resulting KGCC maps to memory, the package can download KGCC geotif maps to Google Drive. Additionally, when the geemap library is installed, the maps may be visualized. 
+A Python-based package creates KGCC maps from monthly climate images prepared by the user. The earthengine-api (ee) dependency handles these images as image collection objects. Besides loading resulting KGCC maps to memory, the package can download KGCC geotif maps to Google Drive. Additionally, when the geemap library is installed, the maps may be visualized with only a few lines of code.
 
 ## Requirements
 - Google Account
