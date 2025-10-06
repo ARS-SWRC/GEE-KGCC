@@ -1,3 +1,5 @@
+//Paste this JavaScript code into the online code editor
+//https://code.earthengine.google.com
 //Produces timelines of the percent land area that changes climate type
 //for 4 different Representative Concentration Pathways (RCPs).
 //Only a chart output will appear in the console of the Online Code Editor for GEE.
