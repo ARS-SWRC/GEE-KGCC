@@ -1,7 +1,7 @@
 //Paste this JavaScript code into the online code editor
 //https://code.earthengine.google.com
 //Produces timelines of the percent land area that changes climate type
-//for 4 different Representative Concentration Pathways (RCPs).
+//for 4 different Representative Concentration Pathways (RCPs) in the NEX-DCP30 dataset.
 //Only a chart output will appear in the console of the Online Code Editor for GEE.
 //The processing can be done for different regions in the US by changing bbox_geo accordingly.
 
