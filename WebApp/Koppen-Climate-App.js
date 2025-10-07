@@ -739,7 +739,6 @@ function renderUncertainty(class_str_obj){
   clrgrad_panel.add(thumbnail);
   clrgrad_panel.add(clrgradminLabel);
   mainMap.add(clrgrad_panel);
-  
 }
 
 /*******************************************************
