@@ -1,3 +1,4 @@
+[![CodeQL Advanced](https://github.com/ARS-SWRC/GEE-KGCC/actions/workflows/codeql.yml/badge.svg)](https://github.com/ARS-SWRC/GEE-KGCC/actions/workflows/codeql.yml)
 # GEE-KGCC
 
 ![](Images/LandingImage.png)
