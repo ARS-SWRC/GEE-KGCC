@@ -411,7 +411,7 @@ modelBDrop.items().reset(scenarioModelDict[scenarioB.scenario]); // set initial 
 var dateBDrop = ui.Select({
   items:dateRng_list.getInfo(),
   value:'2000-2029',
-  onChange:function(val) {
+  onChange:function(val){
     loadingOverlay.style().set('shown', true);
     scenarioB.year = parseInt(val.split('-')[0]);
     updateSplitMap(hideLoading);},
@@ -422,7 +422,6 @@ var appTitle = ui.Label({value:'Köppen Climate Viewer', style:{ position:'botto
 var appSubTitle = ui.Label({value:'Köppen-Geiger Climate Classifications Viewer (NEX-DCP30 dataset)', style:{ position:'bottom-center', whiteSpace:'preserve nowrap', padding:'0px 0px', margin:'1px 2px 10px 2px', textAlign:'left', fontSize:'12px', width: '230px',whiteSpace: 'normal' }});
 var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) {infoPanel.style().set('shown', checked);}});
 var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) {legendPanel.style().set('shown', checked);}});
-//var basemapSelect = ui.Select({items:['roadmap', 'satellite', 'terrain', 'hybrid'], value:'roadmap', onChange:function(value){mainMap.setOptions(value); splitMap.setOptions(value);}, style:dropStyle});
 var uncertSelect = ui.Select({items:class_list.getInfo(), placeholder:'Select Uncertainty', onChange:renderUncertainty, style:dropStyle});
 var compareCheckbox = ui.Checkbox({label:'Compare Scenarios', onChange:createCompareSplitUI, value:false});
 var timelineCheckbox = ui.Checkbox({label:'Timeline On Click', onChange:renderTimelinebox, style:timelineboxStyle});
@@ -662,6 +661,9 @@ function renderUncertainty(class_str_obj){
   mainMap.layers().reset();
   mainMap.widgets().reset();
 
+  loadingOverlay.style().set('shown', true);
+  ui.util.setTimeout(function(){loadingOverlay.style().set('shown', false);}, 10000);
+
   var model_list = scenarioModelDict[scenarioA.scenario];
   var selections = [];
   for (var i = 0; i < model_list.length; i++){
@@ -704,12 +706,12 @@ function renderUncertainty(class_str_obj){
   }
   
   var uncert_ic = ee.ImageCollection(class_seq_list.map(uncert_fn));
-  mainMap.addLayer(ee.Image(uncert_ic.toList(999).get(selected_class_num)).sldStyle(uncertGrad));
+  mainMap.addLayer(ee.Image(uncert_ic.toList(uncert_ic.size()).get(selected_class_num)).sldStyle(uncertGrad));
 
   var clrgrad_panel = ui.Panel({style:clrgradpanelStyle});
   
   var clrgradTitle = ui.Label({
-    value:'% of GCM Ensemble',
+    value:'% of GCM Ensemble Agreement',
     style:clrgradlabelStyle
   });
   
@@ -737,6 +739,7 @@ function renderUncertainty(class_str_obj){
   clrgrad_panel.add(thumbnail);
   clrgrad_panel.add(clrgradminLabel);
   mainMap.add(clrgrad_panel);
+  
 }
 
 /*******************************************************
@@ -788,5 +791,3 @@ ui.root.add(infoPanel);
 ui.root.add(legendPanel);
 ui.root.add(loadingOverlay); // Add the loading panel to the root so it can float over everything
 ui.root.add(timelineLoadingPanel);
-
-
