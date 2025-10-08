@@ -435,8 +435,8 @@ class KGCC:
           Bounding box geometry (from ee.Geometry.BBox).
     scale : float
             Scale/resolution of downloaded image.
-    hemi : string
-           Should be "north" or "south" for the hemisphere containing the map coverage.
+    filename : string
+               Downloaded file name.
 
     Returns
     -------
@@ -460,7 +460,7 @@ class KGCC:
   @staticmethod
   def get_vis_params():
     """
-    Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
+    Visualization parameters for use with geemap.
 
     Parameters
     ----------
@@ -484,6 +484,18 @@ class KGCC:
   
   @staticmethod
   def get_class_index():
+    """
+    Look-up dictionary that relates class values to class names and letter labels.
+
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    dict of class values, class names, and letter labels. 
+    
+    """
     typeLabels = [
       'Af - Tropical, Rainforest', 'Am - Tropical, Monsoon', 'Aw - Tropical, Savanna', 'Bwh - Arid, Desert, Hot', 'Bwk - Arid, Desert, Cold', 'Bsh - Semi-Arid, Steppe, Hot', 'Bsk - Semi-Arid, Steppe, Cold',
       'Csa - Temperate, Dry Summer, Hot Summer', 'Csb - Temperate, Dry Summer, Warm Summer', 'Csc - Temperate, Dry Summer, Cold Summer', 'Cwa - Temperate, Dry Winter, Hot Summer', 'Cwb - Temperate, Dry Winter, Warm Summer', 'Cwc - Temperate, Dry Winter, Cold Summer',
