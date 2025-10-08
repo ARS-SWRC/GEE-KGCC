@@ -459,6 +459,21 @@ class KGCC:
 
   @staticmethod
   def get_vis_params():
+    """
+    Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
+
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    dict of visualization parameters including the minimum value (1), maximum value (30), and a commonly used color scheme for KGCC. 
+    
+    Notes
+    -----
+    -Only needed when visualizing with geemaps.
+    """
     typePalette = [
       '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
       '#FFFF00', '#C8C800', '#969600', '#96FF96', '#64C864', '#329632',
