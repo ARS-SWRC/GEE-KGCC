@@ -493,8 +493,7 @@ class KGCC:
     
     Returns
     -------
-    dict of class values, class names, and letter labels. 
-    
+    dict of class values, class names, and letter labels.
     """
     typeLabels = [
       'Af - Tropical, Rainforest', 'Am - Tropical, Monsoon', 'Aw - Tropical, Savanna', 'Bwh - Arid, Desert, Hot', 'Bwk - Arid, Desert, Cold', 'Bsh - Semi-Arid, Steppe, Hot', 'Bsk - Semi-Arid, Steppe, Cold',
@@ -504,4 +503,3 @@ class KGCC:
       'Et - Polar Tundra', 'Ef - Polar Ice Cap'] 
     return dict(zip(range(1, 31), typeLabels))
   
-
