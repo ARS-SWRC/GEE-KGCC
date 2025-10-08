@@ -424,6 +424,29 @@ class KGCC:
 
   @staticmethod
   def download(type_image=None, geo=None, scale=None, file_name='KG_map'):
+    """
+    Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
+
+    Parameters
+    ----------
+    type_im : ee.Image
+              Classified image.
+    geo : ee.Geometry
+          Bounding box geometry (from ee.Geometry.BBox).
+    scale : float
+            Scale/resolution of downloaded image.
+    hemi : string
+           Should be "north" or "south" for the hemisphere containing the map coverage.
+
+    Returns
+    -------
+    None
+    
+    Notes
+    -----
+    - Assumes WGS84 coordinate system.
+    - Assumes overlapping input images that exist only within selected hemisphere.
+    """
     type_im = type_image.toDouble()
     task = ee.batch.Export.image.toDrive(
       image=type_im,
