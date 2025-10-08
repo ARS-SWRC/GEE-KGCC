@@ -4,7 +4,28 @@ class KGCC:
 
   @staticmethod
   def classify(p_ic=None, t_ic=None, hemi=None):
+    """
+    Produces a classified image with value ranges of 1 to 30.
 
+    Parameters
+    ----------
+    p_ic : ee.ImageCollection
+           12 monthly precipitation images (Units of mm).
+    t_ic : ee.ImageCollection
+           12 monthly mean temperature images (Units of Celsius).
+    hemi : string
+           Should be "north" or "south" for the hemisphere of the map coverage.
+
+    Returns
+    -------
+    type_im : ee.Image
+              Classified image loaded to memory.
+
+    Notes
+    -----
+    - Assumes WGS84 coordinate system.
+    - Assumes overlapping input images that exist only within selected hemisphere.
+    """
     ndays_months = ee.List([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
 
     if hemi == 'north':
