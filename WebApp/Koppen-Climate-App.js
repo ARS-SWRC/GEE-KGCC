@@ -301,7 +301,7 @@ function createInfoPanelContent(){
   
   return [
     makeHeader('Overview'),
-    makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the Contiguous United States. The applied climate dataset is NEX-DCP30 (Trasher, 2013).'),
+    makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the Contiguous United States. The applied climate dataset is NEX-DCP30 (Thrasher, 2013).'),
     makeHeader('Definitions'),
     makeDefinitionItem('KGCC:', 'A climate classification scheme based on seasonal precipitation and temperature.'),
     makeDefinitionItem('CMIP5:', 'An ensemble of Global Climate Models (GCMs) representing standard climate projections.'),
