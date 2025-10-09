@@ -94,7 +94,7 @@ var paragraphlabelStyle = {margin:'0 0 8px 8px'};
 var termlabelStyle = {fontWeight:'bold'};
 
 var infopanelStyle = {
-  width:'35%', 
+  width:'38%', 
   position:'top-center', 
   margin:'5% 0 0 0', 
   shown:false, 
@@ -296,6 +296,7 @@ function createInfoPanelContent(){
   // Helper functions to create styled UI elements
   var makeHeader = function(text) {return ui.Label({value:text, style:headerlabelStyle});};
   var makeParagraph = function(text) {return ui.Label({value:text, style:paragraphlabelStyle});};
+  var makeParagraphWithLink = function(text,link) {return ui.Panel([ui.Label(text, paragraphlabelStyle), ui.Label({ value: link, targetUrl: link, style: {color: 'blue', textDecoration: 'underline',margin:'-2px 0px 0px 2px'} })], ui.Panel.Layout.flow('horizontal'));};
   var makeDefinitionItem = function(term, definition) { return ui.Panel([ui.Label(term, termlabelStyle), ui.Label(definition)], ui.Panel.Layout.flow('horizontal')); };
   
   return [
@@ -312,8 +313,8 @@ function createInfoPanelContent(){
     makeParagraph('• Peel, M. C., et al. (2007). Updated world map of the Köppen-Geiger climate classification.'),
     makeParagraph('• Thrasher, B., et al. (2013). Downscaled climate projections suitable for resource management.'),
     makeHeader('Additional Notes'),
-    makeParagraph('For an in-depth description of each climate type, see wikipedia.org/wiki/Köppen_climate_classification'),
-    makeParagraph('The codebase for this project is available at https://github.com/ARS-SWRC/GEE-KGCC'),
+    makeParagraphWithLink('For an in-depth description of each climate type, see','https://wikipedia.org/wiki/Köppen_climate_classification'),
+    makeParagraphWithLink('The codebase for this project is available at ', 'https://github.com/ARS-SWRC/GEE-KGCC'),
   ];
 }
 
@@ -739,6 +740,8 @@ function renderUncertainty(class_str_obj){
   clrgrad_panel.add(thumbnail);
   clrgrad_panel.add(clrgradminLabel);
   mainMap.add(clrgrad_panel);
+  
+  timelineLoadingPanel.style().set('shown', false); // show loading panel immediately
 }
 
 /*******************************************************
