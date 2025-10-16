@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geekgcc"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
   { name="Andrew Fullhart", email="andrew.fullhart@gmail.com" },
 ]
