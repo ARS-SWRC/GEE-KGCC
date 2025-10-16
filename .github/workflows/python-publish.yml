@@ -18,6 +18,9 @@ permissions:
 jobs:
   release-build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: geekgcc_package
 
     steps:
       - uses: actions/checkout@v4
