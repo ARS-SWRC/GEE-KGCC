@@ -18,6 +18,11 @@ var scenario_list = Object.keys(scenarioModelDict);
 
 var dateRng_list = ee.List(['1970-1999', '1980-2009', '1990-2019', '2000-2029', '2010-2039', '2020-2049', '2030-2059', '2040-2069', '2050-2079', '2060-2089', '2070-2099']);
 var class_list = ee.List(['Af', 'Am', 'Aw', 'BWh', 'BWk', 'BSh', 'BSk', 'Csa', 'Csb', 'Csc', 'Cwa', 'Cwb', 'Cwc', 'Cfa', 'Cfb', 'Cfc', 'Dsa', 'Dsb', 'Dsc', 'Dsd', 'Dwa', 'Dwb', 'Dwc', 'Dwd', 'Dfa', 'Dfb', 'Dfc', 'Dfd', 'ET', 'EF']);
+var name_list = ee.List(['Af - Tropical, Rainforest', 'Am - Tropical, Monsoon', 'Aw - Tropical, Savanna', 'Bwh - Arid, Desert, Hot', 'Bwk - Arid, Desert, Cold', 'Bsh - Semi-Arid, Steppe, Hot', 'Bsk - Semi-Arid, Steppe, Cold',
+    'Csa - Temperate, Dry Summer, Hot Summer', 'Csb - Temperate, Dry Summer, Warm Summer', 'Csc - Temperate, Dry Summer, Cold Summer', 'Cwa - Temperate, Dry Winter, Hot Summer', 'Cwb - Temperate, Dry Winter, Warm Summer', 'Cwc - Temperate, Dry Winter, Cold Summer',
+    'Cfa - Temperate, No Dry Season, Hot Summer', 'Cfb - Temperate, No Dry Season, Warm Summer', 'Cfc - Temperate, No Dry Season, Cold Summer', 'Dsa - Cold, Dry Summer, Hot Summer', 'Dsb - Cold, Dry Summer, Warm Summer', 'Dsc - Cold, Dry Summer, Cold Summer', 'Dsd - Cold, Dry Summer, Very Cold Winter',
+    'Dwa - Cold, Dry Winter, Hot Summer', 'Dwb - Cold, Dry Winter, Warm Summer', 'Dwc - Cold, Dry Winter, Cold Summer', 'Dwd - Cold, Dry Winter, Very Cold Winter', 'Dfa - Cold, No Dry Season, Hot Summer', 'Dfb - Cold, No Dry Season, Warm summer', 'Dfc - Cold, No Dry season, Cold Summer', 'Dfd - Cold, No Dry Season, Very Cold Winter',
+    'Et - Polar Tundra', 'Ef - Polar Ice Cap']);
 
 var selection_list = ee.List([[2000, 'CCSM4', 'rcp45']]);
 
@@ -211,16 +216,16 @@ var clrgradthumbStyle = {
 
 var pixellabelStyle = {
   height:'80px',
-  width:'80px',
+  width:'180px',
   padding:'0px',
-  margin:'0px',
-  position:'top-center',
+  margin:'5px',
+  position:'bottom-center',
   fontSize:'16px',
   fontWeight: 'bold'};
 
 var pixelpanelStyle = {
   height:'100px',
-  width:'100px',
+  width:'200px',
   position:'bottom-center',
   margin:'1px 1px'};
 
@@ -301,13 +306,13 @@ function createInfoPanelContent(){
   
   return [
     makeHeader('Overview'),
-    makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the Contiguous United States. The applied climate dataset is NEX-DCP30 (Thrasher, 2013).'),
+    makeParagraph('This app is built using the Google Earth Engine cloud platform to do on-the-fly calculation of Köppen-Geiger Climate Classifications (KGCC) and to display outcomes for the contiguous United States. The applied climate dataset is NEX-DCP30 (Thrasher, 2013), which provides climate projections for the CMIP5 ensemble of global climate models (GCMs) with four major trajectories referred to as representative concentration pathways (RCPs). For a typical GCM, the percent land area that transitions any KGCC type by the end of the 1960-2099 time window is 28% for RCP2.6, 40% for RCP4.5, 41% for RCP6.0, and 51% for RCP8.5.'),
     makeHeader('Definitions'),
-    makeDefinitionItem('KGCC:', 'A climate classification scheme based on seasonal precipitation and temperature.'),
-    makeDefinitionItem('CMIP5:', 'An ensemble of Global Climate Models (GCMs) representing standard climate projections.'),
-    makeDefinitionItem('NEX-DCP30:', 'A highly downscaled (~800m) monthly climate dataset for the US.'),
+    makeDefinitionItem('KGCC:', 'A global climate classification scheme based on seasonal precipitation and temperature.'),
+    makeDefinitionItem('CMIP5:', 'An ensemble of GCMs that project standard global climate scenarios.'),
+    makeDefinitionItem('NEX-DCP30:', 'A highly downscaled (~800m) monthly climate projection dataset for the contiguous US.'),
     makeHeader('Usage'),
-    makeParagraph('There is no consensus on which projection scenario is most likely. However, RCP4.5 is often considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that is considered less plausible. The CCSM4 GCM is recommended when considering only a single GCM because the CCSM4 outcome is typical of the CMIP5 ensemble. Note that not all GCMs are available for each emissions scenario. Therefore, class uncertainties that consider % of ensemble agreement have different total GCM counts depending on the scenario. RCP2.6 has 23, RCP4.5 has 33, RCP6.0 has 17, RCP8.5 has 31'),
+    makeParagraph('There is no consensus on which projection scenario is most likely. However, RCP4.5 is often considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that is considered less plausible. The CCSM4 GCM is recommended when considering only a single GCM because the CCSM4 outcome is typical of the CMIP5 ensemble. However, when considering climate change along elevational gradients in the western US, the MIROC5 GCM was found to have spatial patterns for precipitation trends that are more similar to those seen in the historical PRISM dataset. Not all GCMs are available for each emissions scenario, and therefore, class uncertainties that consider % of ensemble agreement have different total GCM counts depending on the scenario. RCP2.6 has 23, RCP4.5 has 33, RCP6.0 has 17, and RCP8.5 has 31 GMCs. Note the features in the top-right that allow layers to be toggeled on/off, setting layer transparency, and changing the basemap.'),
     makeHeader('Citations'),
     makeParagraph('• Beck, H. E., et al. (2018). Present and future Köppen-Geiger climate classification maps at 1-km resolution.'),
     makeParagraph('• Peel, M. C., et al. (2007). Updated world map of the Köppen-Geiger climate classification.'),
@@ -595,9 +600,9 @@ function makepixelLabel(point_geo){
     var sys_index_idx = prop_names.getInfo().indexOf('system:index');
     var prop_idx = 1 - sys_index_idx;
     var prop_val = ee.Number(prop_ft.get(prop_names.get(prop_idx)));
-    var prop_val = class_list.get(prop_val.subtract(1));
+    var prop_val = name_list.get(prop_val.subtract(1));
     var pixel_label = ui.Label({
-      value:'Pixel Value:'.concat('\n').concat(prop_val.getInfo()),
+      value:prop_val.getInfo(),
       style:pixellabelStyle
     });
     return pixel_label;
