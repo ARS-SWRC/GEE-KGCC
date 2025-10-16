@@ -91,3 +91,6 @@ Returns a `dict` of visualization parameters including the minimum value (1), ma
 | - | - | - |
 
 Returns a `dict` that relates class values to class names and letter labels corresponding to 30 climate classes.
+
+## GitHub Repository
+https://github.com/ARS-SWRC/GEE-KGCC/tree/main
