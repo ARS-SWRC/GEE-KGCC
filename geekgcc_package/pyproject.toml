@@ -8,7 +8,7 @@ version = "0.1.0"
 authors = [
   { name="Andrew Fullhart", email="andrew.fullhart@gmail.com" },
 ]
-description="Koppen-Geiger Climate Classification in Google Earth Engine"
+description="Köppen-Geiger Climate Classification in Google Earth Engine"
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
