@@ -1,5 +1,5 @@
 ## Description
-A Python-based package creates KGCC maps from monthly climate images prepared by the user. The earthengine-api (ee) dependency handles these images as image collection objects. Besides loading resulting KGCC maps to memory, the package can download KGCC geotif maps to Google Drive. Additionally, when the geemap library is installed, the maps may be visualized with only a few lines of code.
+A Python-based package that creates Köppen-Geiger Climate Classification (KGCC) maps from monthly climate images prepared by the user. The earthengine-api (ee) dependency handles these images as image collection objects. Besides loading resulting KGCC maps to memory, the package can download KGCC geotif maps to Google Drive. Additionally, when the geemap library is installed, the maps may be visualized with only a few lines of code.
 
 ## Requirements
 - Google Account
