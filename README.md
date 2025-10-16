@@ -114,7 +114,7 @@ The Earth Engine hosted website linked at the top was developed using entirely b
 This makes it possible for a user to paste the code from this website into the editor and launch their own instance of the app, perhaps with modifications to adapt a different climate dataset, or even with modifications to the app's features.
 
 The main features are:
-- Visualization of NEX-DCP30 U.S. Ensemble Climate Projections.
+- Visualization of NEX-DCP30 U.S. ensemble climate projections.
 - Ability to select GCM and climate trajectory. 
 - Ability to select date range windows.
 - View classification uncertainty.
