@@ -470,22 +470,46 @@ var scale = ic.first().projection().nominalScale().getInfo();
 function any_scenario_fn(selection_obj){
   var selection_inside_list = ee.List(selection_obj);
   var scenario_ic = ee.ImageCollection(selection_inside_list.map(main_fn));
-  var scenario_ic_list = scenario_ic.toList(999).slice(1);
-  var ref_im = ee.Image(scenario_ic.first());
+  var scenario_ic_list = scenario_ic.toList(scenario_ic.size());
+  var ref_im = scenario_ic.first()
+  var pixelArea = ee.Image.pixelArea();
   var nonNull_im = ref_im.gt(0.0);
-  var ct_dict = nonNull_im.reduceRegion({reducer:ee.Reducer.count(), geometry:bbox_geo, scale:scale, maxPixels:1000000000});
-  var ref_num = ee.Number(ct_dict.get('B1_sum'));
+  var area_im = pixelArea.updateMask(nonNull_im);
+  
+  var area = area_im.reduceRegion({
+    reducer: ee.Reducer.sum(),
+    geometry: bbox_geo,
+    crs: ic.first().projection(),  // DEM coordinate reference system
+    crsTransform: ic.first().projection().getInfo().transform,  // DEM grid alignment
+    maxPixels:1e13
+  });
+
+  var squareMeters = area.getNumber('area');
+  var squareKilometers = squareMeters.divide(1e6);
+  var ref_num = squareKilometers;
   
   function differencing_fn(im_obj){
     var next_im = ee.Image(im_obj);
     var diff_im = next_im.eq(ref_im);
-    var ct_dict = diff_im.reduceRegion({reducer:ee.Reducer.sum(), geometry:bbox_geo, scale:scale, maxPixels:1000000000});
-    var ct_num = ee.Number(ct_dict.get('B1_sum'));
+    var mask_im = diff_im.gt(0);
+    var pixelArea = ee.Image.pixelArea();
+    var diff_area_im = pixelArea.updateMask(mask_im);
+
+    var area = diff_area_im.reduceRegion({
+      reducer: ee.Reducer.sum(),
+      geometry: bbox_geo,
+      crs: ic.first().projection(),
+      crsTransform: ic.first().projection().getInfo().transform,
+      maxPixels: 1e13
+    });
+
+    var squareMeters = area.getNumber('area');
+    var squareKilometers = squareMeters.divide(1e6);
+    var ct_num = squareKilometers
     return ee.Number(ref_num.subtract(ct_num)).divide(ref_num).multiply(100.0);
   }
   
   var counts_list = ee.List(scenario_ic_list.map(differencing_fn));
-  var counts_list = ee.List([0.0]).cat(counts_list);
   return counts_list; 
 }
 
@@ -515,18 +539,40 @@ var scale = ic.first().projection().nominalScale().getInfo();
 function arid_scenario_fn(selection_obj){
   var selection_inside_list = ee.List(selection_obj);
   var scenario_ic = ee.ImageCollection(selection_inside_list.map(main_fn));
-  var scenario_ic_list = scenario_ic.toList(999);
-  var zero_im = scenario_ic.first().select('B1_sum').lt(0.0);
-  var ref_im = ee.Image(scenario_ic.first());
+  var scenario_ic_list = scenario_ic.toList(scenario_ic.size());
+  var ref_im = scenario_ic.first()
+  var pixelArea = ee.Image.pixelArea();
   var nonNull_im = ref_im.gt(0.0);
-  var ct_dict = nonNull_im.reduceRegion({reducer:ee.Reducer.count(), geometry:bbox_geo, scale:scale, maxPixels:1000000000});
-  var ref_num = ee.Number(ct_dict.get('B1_sum'));
+  var area_im = pixelArea.updateMask(nonNull_im);
+  var zero_im = scenario_ic.first().select('B1_sum').lt(0.0);
+  var area = area_im.reduceRegion({
+    reducer: ee.Reducer.sum(),
+    geometry: bbox_geo,
+    crs: ic.first().projection(),
+    crsTransform: ic.first().projection().getInfo().transform, 
+    maxPixels:1e13
+  });
+  var squareMeters = area.getNumber('area');
+  var squareKilometers = squareMeters.divide(1e6);
+  var ref_num = squareKilometers;
 
   function differencing_fn(im_obj){
     var next_im = ee.Image(im_obj);
     var next_im = zero_im.where(next_im.gte(4).and(next_im.lte(7)), 1);
-    var ct_dict = next_im.reduceRegion({reducer:ee.Reducer.sum(), geometry:bbox_geo, scale:scale, maxPixels:1000000000});
-    var ct_num = ee.Number(ct_dict.get('B1_sum'));
+    var mask_im = next_im.gt(0);
+    var pixelArea = ee.Image.pixelArea();
+    var diff_area_im = pixelArea.updateMask(mask_im);
+    var area = diff_area_im.reduceRegion({
+      reducer: ee.Reducer.sum(),
+      geometry: bbox_geo,
+      crs: ic.first().projection(),
+      crsTransform: ic.first().projection().getInfo().transform,
+      maxPixels: 1e13
+    });
+
+    var squareMeters = area.getNumber('area');
+    var squareKilometers = squareMeters.divide(1e6);
+    var ct_num = squareKilometers;
     return ee.Number(ct_num).divide(ref_num).multiply(100.0);
   }
   
@@ -550,4 +596,3 @@ var arid_chart = ui.Chart.array.values(arid_output_list, 1, dateRng_list)
 });
 
 print(arid_chart);
-
