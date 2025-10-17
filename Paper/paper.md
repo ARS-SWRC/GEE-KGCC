@@ -6,7 +6,7 @@ tags:
 - "KC6ppen-Geiger climate classification"
 - climate
 - ecosystem
-date: "13 August 2017"
+date: "16 October 2025"
 output:
   html_document:
     df_print: paged
@@ -119,6 +119,7 @@ Figure 2: Rates of change in land area classifications for a 140 year reference 
 We acknowledge providers of open-access climate data, which were relied on to produce this work.
 
 # References
+
 
 
 
