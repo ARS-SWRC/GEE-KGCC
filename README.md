@@ -1,6 +1,5 @@
 [![CodeQL Advanced](https://github.com/ARS-SWRC/GEE-KGCC/actions/workflows/codeql.yml/badge.svg)](https://github.com/ARS-SWRC/GEE-KGCC/actions/workflows/codeql.yml)
 ![PyPI](https://img.shields.io/pypi/v/geekgcc?label=pypi%20package)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/geekgcc)
 # GEE-KGCC
 
 ![](Images/LandingImage.png)
