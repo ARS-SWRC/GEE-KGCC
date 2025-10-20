@@ -312,7 +312,7 @@ function createInfoPanelContent(){
     makeDefinitionItem('CMIP5:', 'An ensemble of GCMs that project standard global climate scenarios.'),
     makeDefinitionItem('NEX-DCP30:', 'A highly downscaled (~800m) monthly climate projection dataset for the contiguous US.'),
     makeHeader('Usage'),
-    makeParagraph('There is no consensus on which projection scenario is most likely. However, RCP4.5 is often considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that is considered less plausible. The CCSM4 GCM is recommended when considering only a single GCM because the CCSM4 outcome is typical of the CMIP5 ensemble. However, when considering climate change along elevational gradients in the western US, the MIROC5 GCM was found to have spatial patterns for precipitation trends that are more similar to those seen in the historical PRISM dataset. Not all GCMs are available for each emissions scenario, and therefore, class uncertainties that consider % of ensemble agreement have different total GCM counts depending on the scenario. RCP2.6 has 23, RCP4.5 has 33, RCP6.0 has 17, and RCP8.5 has 31 GMCs. Note the features in the top-right that allow layers to be toggeled on/off, setting layer transparency, and changing the basemap.'),
+    makeParagraph('There is no consensus on which projection scenario is most likely. However, RCP4.5 is considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that may be considered less plausible. The CCSM4 GCM is recommended when considering only a single GCM because the CCSM4 outcome is typical of the CMIP5 ensemble. However, when considering climate change along elevational gradients in the western US, the MIROC5 GCM was found to have spatial patterns for precipitation trends that are more similar to those seen in the historical PRISM dataset. Not all GCMs are available for each emissions scenario, and therefore, class uncertainties that consider % of ensemble agreement have different total GCM counts depending on the scenario. RCP2.6 has 23, RCP4.5 has 33, RCP6.0 has 17, and RCP8.5 has 31 GMCs. Note the features in the top-right that allow layers to be toggeled on/off, setting layer transparency, and changing the basemap.'),
     makeHeader('Citations'),
     makeParagraph('• Beck, H. E., et al. (2018). Present and future Köppen-Geiger climate classification maps at 1-km resolution.'),
     makeParagraph('• Peel, M. C., et al. (2007). Updated world map of the Köppen-Geiger climate classification.'),
@@ -783,6 +783,7 @@ var masterPanel = ui.Panel({widgets:[mainControlPanel, mainMap], layout:ui.Panel
 
 // Set up logic for comparison checkbox
 function createCompareSplitUI(bool_obj){
+  updateMainMap(hideLoading);
   controlPanelB.style().set('shown', bool_obj);
   masterPanel.widgets().set(1, bool_obj ? splitPanel : mainMap);
 };
