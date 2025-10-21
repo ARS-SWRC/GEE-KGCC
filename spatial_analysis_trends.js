@@ -479,8 +479,7 @@ function any_scenario_fn(selection_obj){
   var area = area_im.reduceRegion({
     reducer: ee.Reducer.sum(),
     geometry: bbox_geo,
-    crs: ic.first().projection(),  // DEM coordinate reference system
-    crsTransform: ic.first().projection().getInfo().transform,  // DEM grid alignment
+    crs: ic.first().projection(),
     maxPixels:1e13
   });
 
@@ -499,7 +498,6 @@ function any_scenario_fn(selection_obj){
       reducer: ee.Reducer.sum(),
       geometry: bbox_geo,
       crs: ic.first().projection(),
-      crsTransform: ic.first().projection().getInfo().transform,
       maxPixels: 1e13
     });
 
@@ -549,7 +547,6 @@ function arid_scenario_fn(selection_obj){
     reducer: ee.Reducer.sum(),
     geometry: bbox_geo,
     crs: ic.first().projection(),
-    crsTransform: ic.first().projection().getInfo().transform, 
     maxPixels:1e13
   });
   var squareMeters = area.getNumber('area');
@@ -566,7 +563,6 @@ function arid_scenario_fn(selection_obj){
       reducer: ee.Reducer.sum(),
       geometry: bbox_geo,
       crs: ic.first().projection(),
-      crsTransform: ic.first().projection().getInfo().transform,
       maxPixels: 1e13
     });
 
