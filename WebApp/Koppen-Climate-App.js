@@ -429,8 +429,8 @@ var appSubTitle = ui.Label({value:'Köppen-Geiger Climate Classifications Viewer
 var infoCheckbox = ui.Checkbox({label:'Show/Hide App Information', value:false, onChange:function(checked) {infoPanel.style().set('shown', checked);}});
 var legendCheckbox = ui.Checkbox({label:'Show/Hide Legend', value:true, onChange:function(checked) {legendPanel.style().set('shown', checked);}});
 var uncertSelect = ui.Select({items:class_list.getInfo(), placeholder:'Select Uncertainty', onChange:renderUncertainty, style:dropStyle});
-var compareCheckbox = ui.Checkbox({label:'Compare Scenarios', onChange:createCompareSplitUI, value:false});
-var timelineCheckbox = ui.Checkbox({label:'Timeline On Click', onChange:renderTimelinebox, style:timelineboxStyle});
+var compareCheckbox = ui.Checkbox({label:'Compare Scenarios A and B', onChange:createCompareSplitUI, value:false});
+var timelineCheckbox = ui.Checkbox({label:'Timeline On Click (for selected emissions and GCM)', onChange:renderTimelinebox, style:timelineboxStyle});
 var inspectCheckbox = ui.Checkbox({label:'Pixel Value On Click', onChange:renderPixelInspector});
 
 /*******************************************************
@@ -755,11 +755,10 @@ function renderUncertainty(class_str_obj){
 
 var controlPanelA = ui.Panel({
   widgets:[
-    appTitle,appSubTitle,
+    appTitle, appSubTitle,
     ui.Label({value:'About/Legend', style:dropheaderlabelStyle}), infoCheckbox, legendCheckbox,
-    ui.Label({value:'Click Tools', style:dropheaderlabelStyle}), inspectCheckbox, timelineCheckbox,
+    ui.Label({value:'Map Tools', style:dropheaderlabelStyle}), ui.Label('(check only one at a time and uncheck when done)'), inspectCheckbox, timelineCheckbox, compareCheckbox,
     ui.Label({value:'Class Uncertainty', style:dropheaderlabelStyle}), ui.Label('(for selected emissions and date range)'), uncertSelect,
-    ui.Label({value:'Compare', style:dropheaderlabelStyle}), compareCheckbox,
     ui.Label({value:'Scenario A', style:dropheaderlabelStyle}),
     ui.Label('Emissions Scenario:'), scenarioADrop,
     ui.Label('GCM Model:'), modelADrop,
