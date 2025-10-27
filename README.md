@@ -59,7 +59,7 @@ import geekgcc
 ## Usage Notes
 The user must provide `ee.ImageCollection` objects of long-term average monthly precipitation and temperature (12 images each). These should be overlapping images and should exist enitrely within a hemisphere (i.e., not in both hemispheres, such that at least two operations are needed to produce global coverage). WGS84 coordinate system is assumed in geekgcc. Climate images should be reprojected if they are in some other coordinate system.
 
-**The following methods are included in geekgcc**: `classify()`, `download()`, `get_class_index()`, and `get_vis_params()`.
+**The following methods are included in geekgcc**: `classify()`, `download()`, `get_vis_params()`, and `get_class_index()`.
 
 **Classification from monthly precipitation and temperature raster images:**
 
