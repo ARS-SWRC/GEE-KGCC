@@ -205,8 +205,8 @@ var clrgradlabelStyle = {
   margin:'0 0 4px 0',
   padding:'0'};
 
-var clrgradpanelStyle = {width:'100px',
- height:'300px',
+var clrgradpanelStyle = {width:'110px',
+ height:'350px',
  position:'bottom-left', 
  padding:'8px 15px'};
 
@@ -316,7 +316,7 @@ function createInfoPanelContent(){
     makeHeader('Usage'),
     makeParagraph('• MAP TOOLS: Checking these boxes will change the behavior of the cursor so that it retrieves information at a location the user clicks on, or in the case of the scenario comparison, a split panel slider will appear. Unchecking the boxes will return the cursor to the default behavior where the user can pan the map by dragging it.'),
     makeParagraph('• CLASS UNCERTAINTY: This will load an uncertainty map for the selected climate type in the drop-down menu that also depends on the selected emissions scenario and date range under Scenario A. For a selected scenario, the rendered uncertainty layer will show % agreement that a selected climate type exists based on all available GCMs. Uncertainty maps will load slower due to the larger amount of processing.'),
-    makeParagraph('• SCENARIOS: There is no consensus on which projection scenario is most likely. However, RCP4.5 is considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that may be considered less plausible. '),
+    makeParagraph('• EMISSION SCENARIOS: There is no consensus on which projection scenario is most likely. However, RCP4.5 is considered a "middle-ground" scenario. For risk assessment, RCP6.0 is a plausible "worst-case" scenario, while RCP8.5 is an extreme scenario that may be considered less plausible. '),
     makeParagraph('• GCM MODELS: The CCSM4 GCM is recommended when considering only a single GCM because the CCSM4 outcome is typical of the CMIP5 ensemble. However, when considering climate change along elevational gradients in the western US, the MIROC5 GCM was found to have spatial patterns for precipitation trends that are more similar to those seen in the historical PRISM dataset. Not all GCMs are available for each emissions scenario, and therefore, class uncertainties that consider % of ensemble agreement have different total GCM counts depending on the scenario. RCP2.6 has 23, RCP4.5 has 33, RCP6.0 has 17, and RCP8.5 has 31 GMCs. '),
     makeParagraph('• BUILT-IN MAP TOOLS: Note the features in the top-right that allow layers to be toggeled on/off, setting layer transparency, and changing the basemap.'),
     makeHeader('Citations'),
@@ -718,12 +718,12 @@ function renderUncertainty(class_str_obj){
   }
   
   var uncert_ic = ee.ImageCollection(class_seq_list.map(uncert_fn));
-  mainMap.addLayer(ee.Image(uncert_ic.toList(uncert_ic.size()).get(selected_class_num)).sldStyle(uncertGrad));
+  mainMap.addLayer(ee.Image(uncert_ic.toList(uncert_ic.size()).get(selected_class_num)).sldStyle(uncertGrad), null, "Uncertainty Layer");
 
   var clrgrad_panel = ui.Panel({style:clrgradpanelStyle});
   
   var clrgradTitle = ui.Label({
-    value:'% of GCM Ensemble Agreement',
+    value:'Class Uncertainty: % of GCM Ensemble Agreement',
     style:clrgradlabelStyle
   });
   
