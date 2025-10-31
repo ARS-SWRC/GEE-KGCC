@@ -124,7 +124,7 @@ The main features are:
 Launching an instance of the app in the online code editor can be done in a two-step process. In the editor, paste the contents of Koppen-Climate-App.js and Koppen-Climate-MainFunc.js from the WebApp folder into the editor as separate scripts and save them using these file names. The latter script is imported by the former script, and therefore, a line in Koppen-Climate-App.js should be modified to have a custom path. The line that needs modified is currently:
 
 ```js
-line 38: var kcModule = require('users/gerardo/default:KOPPEN/Koppen-Climate-MainFunc');
+line 43: var kcModule = require('users/gerardo/default:KOPPEN/Koppen-Climate-MainFunc');
 ```
 
 The path argument should be changed to the following format `users/yourusername/repo:path`. For example, if the two scripts are saved to user's repo called KOPPEN, the path should be `users/yourusername/KOPPEN:Koppen-Climate-MainFunc`.
