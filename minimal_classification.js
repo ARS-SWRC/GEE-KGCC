@@ -8,7 +8,7 @@
 //monthly averaged for a reference period of 1960-1990.
 //Therefore, there are only 12 multi-band images.
 //Also, monthly Tavg is already given as a variable.
-//For temperature variables, the raw WORDCLIM values
+//For temperature variables, the raw WORLDCLIM values
 //have a scaling factor of 10.
 //The output of this script is only for the northern hemisphere;
 //otherwise, the summer and winter months need to be flipped,
