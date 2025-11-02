@@ -86,8 +86,6 @@ var pwintrw_im = pwintr_ic.reduce(ee.Reducer.max());
 var pwintrd_im = pwintr_ic.reduce(ee.Reducer.min());
 var psummrw_im = psummr_ic.reduce(ee.Reducer.max());
 var psummrd_im = psummr_ic.reduce(ee.Reducer.min());
-var pd_in_summr_im = psummrd_im.lt(pwintrd_im);
-var pd_in_wintr_im = pwintrd_im.lt(psummrd_im);
 
 var test_im = ee.Image(pann_im.multiply(0.70));
 var conA_im = pwintr_im.gte(test_im);
