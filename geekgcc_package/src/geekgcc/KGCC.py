@@ -88,8 +88,6 @@ class KGCC:
     dry_wintrB_im = zero_im.where(psummrw_im.gt(pwintrd_im.multiply(10.0)), 1)
     mix_im = dry_wintrA_im.add(dry_wintrB_im)
     dry_wintr_im = mix_im.eq(2.0)
-  
-    hot_summr_im = zero_im.where(tw_im.gte(22.0), 1)
 
     def count_warm_months_fn(t_im):
       warm_im = ee.Image(t_im.gte(10.0))
