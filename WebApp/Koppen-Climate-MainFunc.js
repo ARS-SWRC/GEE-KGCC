@@ -91,8 +91,7 @@ exports.main_fn = function(selection_obj,ic, order_months,ndays_months,summr_mon
   var dry_wintr_im = mix_im.eq(2.0);
   
   var hot_summr_im = zero_im.where(tw_im.gte(22.0), 1);
-  var sin_hot_summr_im = hot_summr_im.eq(0); 
-  
+
   function count_warm_months_fn(t_im){
     var warm_im = ee.Image(t_im.gte(10.0));
     return warm_im;
