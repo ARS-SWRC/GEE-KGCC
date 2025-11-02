@@ -66,9 +66,7 @@ class KGCC:
     pwintrd_im = pwintr_ic.reduce(ee.Reducer.min())
     psummrw_im = psummr_ic.reduce(ee.Reducer.max())
     psummrd_im = psummr_ic.reduce(ee.Reducer.min())
-    pd_in_summr_im = psummrd_im.lt(pwintrd_im)
-    pd_in_wintr_im = pwintrd_im.lt(psummrd_im)
-  
+
     test_im = ee.Image(pann_im.multiply(0.70))
     conA_im = pwintr_im.gte(test_im)
     conB_im = psummr_im.gte(test_im)
