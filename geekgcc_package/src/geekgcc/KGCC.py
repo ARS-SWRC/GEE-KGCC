@@ -3,7 +3,7 @@ import ee
 class KGCC:
 
   @staticmethod
-  def classify(p_ic=None, t_ic=None, hemi=None):
+  def classify(p_ic=None, t_ic=None, hemi='north'):
     """
     Produces a classified image with value ranges of 1 to 30.
 
@@ -418,7 +418,7 @@ class KGCC:
     return type_im
 
   @staticmethod
-  def download(type_image=None, geo=None, scale=None, file_name='KG_map'):
+  def download(type_image=None, geo=ee.Geometry.BBox(-180.00, 0.00, 179.99, 89.99), scale=None, crs='EPSG:4326', file_name='KG_map'):
     """
     Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
@@ -430,6 +430,8 @@ class KGCC:
           Bounding box geometry (from ee.Geometry.BBox).
     scale : float
             Scale/resolution of downloaded image.
+    crs : string
+          Coordinatate reference system code
     filename : string
                Downloaded file name.
 
@@ -439,7 +441,9 @@ class KGCC:
     
     Notes
     -----
-    - Assumes WGS84 coordinate system.
+    - Default scale is None, in which case, a scale equivalent to 1 arc deg of latitude at the equator is used.
+    - Default crs is WGS84 coordinate reference system.
+    - Default geo region is northern hemisphere.
     - Assumes overlapping input images that exist only within selected hemisphere.
     """
     type_im = type_image.toDouble()
@@ -448,7 +452,7 @@ class KGCC:
       description=file_name,
       region=geo,
       scale=scale,
-      crs='EPSG:4326',
+      crs=crs,
       maxPixels=1e13)
     task.start()
 
@@ -467,7 +471,7 @@ class KGCC:
     
     Notes
     -----
-    -Only needed when visualizing with geemaps.
+    - Only needed when visualizing.
     """
     typePalette = [
       '#0000FF', '#0078FF', '#46AAFA', '#FF0000', '#FF9696', '#F5A500', '#FFDC64',
