@@ -49,7 +49,7 @@ import geekgcc
 ## Usage Notes
 The user must provide `ee.ImageCollection` objects of long-term average monthly precipitation and temperature (12 images each). These should be overlapping images and should exist enitrely within a hemisphere (i.e., not in both hemispheres, such that at least two operations are needed to produce global coverage). WGS84 coordinate system is assumed in geekgcc. Climate images should be reprojected if they are in some other coordinate system.
 
-**The following methods are included in geekgcc**: `classify()`, `download()`, `get_class_index()`, and `get_vis_params()`.
+**The following methods are included in geekgcc**: `classify()`, `download()`, `get_vis_params()`, and `get_class_index()`.
 
 **Classification from monthly precipitation and temperature raster images:**
 
@@ -65,16 +65,17 @@ Returns a classified `ee.Image` object. Possible output values are in the range 
 
 **Download classified image to Google Drive:**
 
-`geekgcc.KGCC.download(type_image, geo, scale, filename)`
+`geekgcc.KGCC.download(type_image, geo, scale, crs, filename)`
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | type_image | ee.Image | classified image |
-| geo | ee.Geometry | bounding box geometry |
+| geo | ee.Geometry.BBox | bounding box geometry |
 | scale | float | scale/resolution of downloaded image |
-| filename | string | downloaded file name |
+| crs | string | coordinate reference system code |
+| filename | string | download file name |
 
-Returns `None`. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
+Returns `None`. Spawns a download task to Google Drive of the classified image in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
 **Get visualization parameters:**
 
@@ -95,6 +96,9 @@ Returns a `dict` of visualization parameters including the minimum value (1), ma
 | - | - | - |
 
 Returns a `dict` that relates class values to class names and letter labels corresponding to 30 climate classes.
+
+## Test Example
+The `geekgcc_test.ipynb` notebook is available for testing functionality of geekgcc at the GitHub repository linked below. The monthly WorldClim dataset is used in this example because it requires minimal pre-processing.
 
 ## GitHub Repository
 https://github.com/ARS-SWRC/GEE-KGCC/tree/main
