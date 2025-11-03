@@ -19,7 +19,7 @@ class KGCC:
     Returns
     -------
     type_im : ee.Image
-              Classified image loaded to memory.
+              Server-side image.
 
     Notes
     -----
