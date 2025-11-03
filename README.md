@@ -75,14 +75,14 @@ Returns a classified `ee.Image` object. Possible output values are in the range 
 
 **Download classified image to Google Drive:**
 
-`geekgcc.KGCC.download(type_image, geo, scale, filename)`
+`geekgcc.KGCC.download(type_image, geo, scale, crs, filename)`
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | type_image | ee.Image | classified image |
 | geo | ee.Geometry.BBox | bounding box geometry |
 | scale | float | scale/resolution of downloaded image |
-| crs | float | coordinate reference system |
+| crs | string | coordinate reference system code |
 | filename | string | download file name |
 
 Returns `None`. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
