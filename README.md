@@ -85,7 +85,7 @@ Returns a classified `ee.Image` object. Possible output values are in the range 
 | crs | string | coordinate reference system code |
 | filename | string | download file name |
 
-Returns `None`. Spawns a download task to Google Drive in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
+Returns `None`. Spawns a download task to Google Drive of the classified image in geotif format. Download progress may be monitored in the Earth Engine Online Code Editor.
 
 **Get visualization parameters:**
 
