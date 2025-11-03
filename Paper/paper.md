@@ -6,7 +6,7 @@ tags:
 - "KC6ppen-Geiger climate classification"
 - climate
 - ecosystem
-date: "16 October 2025"
+date: "3 November 2025"
 output:
   html_document:
     df_print: paged
@@ -119,6 +119,7 @@ Figure 2: Rates of change in land area classifications for a 140 year reference 
 This work is a contribution of the USDA Southwest Climate Hub. Manuscript development was supported by the USDA, Agricultural Research Service, Rangeland Management Research Unit based at the Jornada Experimental Range with funding by the USDA (CRIS Project # 3050-11210-007D) and the Southwest Climate Hub (CRIS Project # 3050-12610-001-000D). This material is also based upon work supported by the US Department of Agriculture, Agricultural Research Service, under Agreement No. 58-2022-0-009. Any opinions, findings, conclusions, or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the view of the US Department of Agriculture. We acknowledge providers of open-access climate data, which were relied on to produce this work.
 
 # References
+
 
 
 
